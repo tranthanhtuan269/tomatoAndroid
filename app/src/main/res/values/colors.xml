@@ -10,4 +10,6 @@
     <color name="gradient_start_gg">#DD4B39</color>
     <color name="gradient_end_gg">#DD4B39</color>
     <color name="titlebar_bg">#DD4B39</color>
+    <color name="navigation_disable">#9A9A9A</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

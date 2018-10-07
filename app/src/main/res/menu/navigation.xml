@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/navigation_location"
+        android:icon="@drawable/hspiconenable"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:title="Đăng việc"/>
+
+    <item
+        android:id="@+id/navigation_log"
+        android:icon="@drawable/logenable"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:title="Việc đã đăng"/>
+
+    <item
+        android:id="@+id/navigation_user"
+        android:icon="@drawable/userenable"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:title="Tài khoản"/>
+
+    <item
+        android:id="@+id/navigation_hsp"
+        android:icon="@drawable/hspiconenable"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:title="HSP của tôi"/>
+</menu>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    android:paddingTop="12dp"
+    android:background="@drawable/gradient"
+    tools:showIn="@layout/activity_main" >
+
+    <Button
+        android:id="@+id/locationBtn"
+        android:text="Đăng việc"
+        android:drawableTop="@drawable/locationenable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/logBtn"
+        android:text="Việc đã đăng"
+        android:drawableTop="@drawable/logenable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/userBtn"
+        android:text="Tài khoản"
+        android:drawableTop="@drawable/userenable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/hspBtn"
+        android:text="HSP của tôi"
+        android:drawableTop="@drawable/hspiconenable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</android.support.v7.widget.Toolbar>
