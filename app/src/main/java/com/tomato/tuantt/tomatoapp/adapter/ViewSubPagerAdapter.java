@@ -32,7 +32,7 @@ public class ViewSubPagerAdapter extends FragmentPagerAdapter {
         bundle.putString("jsonDataSub", mFragmentJSONObjectSub.toString());
         Fragment fragment = mFragmentListSub.get(position);
         if (mapFragment.get( position) == null){
-            mapFragment.put(position, DetailFragment.newInstance(position, mFragmentJSONObjectSub,  position != 0));
+//            mapFragment.put(position, DetailFragment.newInstance(position, mFragmentJSONObjectSub,  position != 0));
         }
         return mapFragment.get(position);
     }
@@ -46,13 +46,6 @@ public class ViewSubPagerAdapter extends FragmentPagerAdapter {
         mFragmentListSub.add(fragment);
         mFragmentTitleListSub.add(title);
         mFragmentJSONObjectSub = jsonObject;
-    }
-
-    public void reloadDataDetails(int position){
-        if (mapFragment.get(position) != null){
-            //
-            mapFragment.get(position).reloadData(position);
-        }
     }
 
     @Override

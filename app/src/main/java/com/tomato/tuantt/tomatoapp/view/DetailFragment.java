@@ -46,8 +46,6 @@ public class DetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isReload = getArguments().getBoolean("KEY_POSITION_PAGE");
-        mPackages = lstPackage
     }
 
 

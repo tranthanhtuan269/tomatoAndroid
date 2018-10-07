@@ -80,7 +80,7 @@ public class OneFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 // todo  get object .
-                adapter.reloadDataDetails(position);
+//                adapter.reloadDataDetails(position);
             }
 
             @Override

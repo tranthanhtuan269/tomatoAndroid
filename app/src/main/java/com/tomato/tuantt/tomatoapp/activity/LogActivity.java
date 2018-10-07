@@ -84,7 +84,7 @@ public class LogActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray jsonArray = jsonObject.getJSONObject("orders").getJSONArray("data");
                     if(jsonArray.length() == 0){
-                        textView.setText("Bạn chưa tạo một công việc nào!");
+//                        textView.setText("Bạn chưa tạo một công việc nào!");
                     }else{
 
                     }

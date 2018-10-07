@@ -44,16 +44,6 @@ public class ServiceActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int id = intent.getExtras().getInt("ServiceId");
         url_service = "http://api.timtruyen.online/api/services/"+id+"/subservice";
-//        nameTv = (TextView) findViewById(R.id.serviceName);
-//        thumbnailIv = (ImageView) findViewById(R.id.serviceThumbnail);
-//
-//        Intent intent = getIntent();
-//        int id = intent.getExtras().getInt("ServiceId");
-//        String name = intent.getExtras().getString("ServiceName");
-//        String thumbnail = intent.getExtras().getString("ServiceThumbnail");
-//
-//        nameTv.setText(id + "");
-//        Picasso.with(this).load(defaultUrlImage + thumbnail).fit().centerInside().into(thumbnailIv);
 
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);

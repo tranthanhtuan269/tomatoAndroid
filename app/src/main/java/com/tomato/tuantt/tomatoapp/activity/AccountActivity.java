@@ -5,11 +5,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,34 +18,33 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.facebook.accountkit.Account;
-import com.facebook.accountkit.AccountKit;
-import com.facebook.accountkit.AccountKitCallback;
-import com.facebook.accountkit.AccountKitError;
-import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
+import com.squareup.picasso.Picasso;
 import com.tomato.tuantt.tomatoapp.R;
-import com.tomato.tuantt.tomatoapp.adapter.RecyclerViewServiceAdapter;
+import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 import com.tomato.tuantt.tomatoapp.model.Service;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+public class AccountActivity extends AppCompatActivity {
 
-public class MenuActivity extends AppCompatActivity {
+    private String url_service = "http://api.timtruyen.online/api/users?phone=+84973619398";
+    private String defaultUrlImage = "http://api.timtruyen.online/public/images/";
 
-    String url_service = "http://api.timtruyen.online/api/services/0/subservice";
-    List<Service> lstService;
-    RecyclerView mrc;
-    RecyclerViewServiceAdapter myAdapter;
+    private int userid;
+    private String username;
+    private String userimage;
+
+    private TextView usernameLbl, userlinkLbl;
+    private ImageView userimageImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.activity_account);
 
+        // setting top
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
@@ -64,28 +62,29 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        lstService = new ArrayList<>();
-        mrc = (RecyclerView) findViewById(R.id.recyclerview_id);
-        myAdapter = new RecyclerViewServiceAdapter(this, lstService);
-        mrc.setLayoutManager(new GridLayoutManager(this, 2));
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(MenuActivity.this);
+        // main
+
+        userimageImg = (ImageView) findViewById(R.id.userAvatarImg);
+        usernameLbl = (TextView) findViewById(R.id.userNameLbl);
+        userlinkLbl = (TextView) findViewById(R.id.userLinkLbl);
+
+
+        final RequestQueue requestQueue = Volley.newRequestQueue(AccountActivity.this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url_service, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    JSONObject jsonObject2 = jsonObject.getJSONObject("service");
-                    JSONArray jsonArray = jsonObject2.getJSONArray("data");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jo = jsonArray.getJSONObject(i);
-                        int id = jo.getInt("id");
-                        String name = jo.getString("name");
-                        String urlImage = jo.getString("icon");
-                        lstService.add(new Service(id, name, urlImage));
-                    }
+                    if(jsonObject.getInt("status_code") == 200){
+                        JSONObject jsonObject2 = jsonObject.getJSONObject("users").getJSONObject("data");
+                        userid = jsonObject2.getInt("id");
+                        username = jsonObject2.getString("name");
+                        userimage = jsonObject2.getString("avatar");
 
-                    mrc.setAdapter(myAdapter);
+                        usernameLbl.setText(username);
+                        Picasso.with(AccountActivity.this).load(defaultUrlImage + userimage).fit().centerInside().into(userimageImg);
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -103,6 +102,7 @@ public class MenuActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
 
+        // setting bottom
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
         BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -110,43 +110,26 @@ public class MenuActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.navigation_location:
-                        Toast.makeText(MenuActivity.this, "Click Location", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AccountActivity.this, "Click Location", Toast.LENGTH_SHORT).show();
                         break;
 
                     case R.id.navigation_log:
-                        Intent intent = new Intent(MenuActivity.this, LogActivity.class);
+                        Intent intent = new Intent(AccountActivity.this, LogActivity.class);
                         startActivity(intent);
                         break;
 
                     case R.id.navigation_user:
-                        Intent accountIntent = new Intent(MenuActivity.this, AccountActivity.class);
+                        Intent accountIntent = new Intent(AccountActivity.this, LogActivity.class);
                         startActivity(accountIntent);
                         break;
 
                     case R.id.navigation_hsp:
-                        Toast.makeText(MenuActivity.this, "Click hsp", Toast.LENGTH_SHORT).show();
-                        Intent intentHSP = new Intent(MenuActivity.this, HSPActivity.class);
+                        Toast.makeText(AccountActivity.this, "Click hsp", Toast.LENGTH_SHORT).show();
+                        Intent intentHSP = new Intent(AccountActivity.this, HSPActivity.class);
                         startActivity(intentHSP);
                         break;
                 }
                 return true;
-            }
-        });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
-            @Override
-            public void onSuccess(Account account) {
-
-            }
-
-            @Override
-            public void onError(AccountKitError accountKitError) {
-
             }
         });
     }
