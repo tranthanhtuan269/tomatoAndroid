@@ -1,4 +1,4 @@
-package com.tomato.tuantt.tomatoapp;
+package com.tomato.tuantt.tomatoapp.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -7,20 +7,19 @@ import android.content.pm.Signature;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.accountkit.AccountKitLoginResult;
 import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.accountkit.ui.LoginType;
+import com.tomato.tuantt.tomatoapp.R;
+import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -38,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
         preferenceConfig = new SharedPreferenceConfig(getApplicationContext());
 
         if (preferenceConfig.readLoginStatus()){
+//            preferenceConfig.writeLoginStatus(false);
+//            startActivity(new Intent(this, MainActivity.class));
+//            finish();
             Intent intent = new Intent(MainActivity.this, MenuActivity.class);
             startActivity(intent);
             finish();
@@ -46,18 +48,13 @@ public class MainActivity extends AppCompatActivity {
 
         ImageButton chondichvuBtn = (ImageButton) findViewById(R.id.chondichvuBtn);
         Button loginBtn = (Button) findViewById(R.id.loginBtn);
-        Button loginFacebookBtn = (Button) findViewById(R.id.loginFacebookBtn);
-        Button loginGoogleBtn = (Button) findViewById(R.id.loginGoogleBtn);
-
-        TextView registerTxt = (TextView) findViewById(R.id.registerTxt);
-        String text = "Chưa có tài khoản? <font color='#4ABCE6'>Đăng ký ngay</font>";
-        registerTxt.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
 
         chondichvuBtn.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Click chondichvu", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -65,34 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Click login", Toast.LENGTH_SHORT).show();
                 startLoginPage(LoginType.PHONE);
-            }
-        });
-
-        loginFacebookBtn.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Click loginFb", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        loginGoogleBtn.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Click loginGg", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        registerTxt.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Click register", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
-                startActivity(intent);
             }
         });
     }
@@ -119,6 +89,13 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Cancel", Toast.LENGTH_SHORT).show();
                 return;
             }else{
+                if(result.getAccessToken() != null){
+//                    Toast.makeText(this, "getAccessToken! " + result.getAccessToken().getAccountId(), Toast.LENGTH_SHORT).show();
+                    Log.d("getAccessToken", result.getAccessToken().getAccountId());
+                }else{
+//                    Toast.makeText(this, "getAuthorizationCode! " + result.getAuthorizationCode(), Toast.LENGTH_SHORT).show();
+                    Log.d("getAuthorizationCode", result.getAccessToken().getAccountId());
+                }
                 preferenceConfig.writeLoginStatus(true);
                 Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                 startActivity(intent);

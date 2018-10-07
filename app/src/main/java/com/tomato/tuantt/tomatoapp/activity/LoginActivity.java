@@ -1,4 +1,4 @@
-package com.tomato.tuantt.tomatoapp;
+package com.tomato.tuantt.tomatoapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.tomato.tuantt.tomatoapp.R;
 
 public class LoginActivity extends AppCompatActivity {
 
