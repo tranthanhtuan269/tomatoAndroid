@@ -45,7 +45,12 @@
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.ForgotPasswordActivity" />
         <activity android:name=".adapter.RecyclerViewServiceAdapter$MenuActivity" />
-        <activity android:name=".activity.ServiceActivity" />
+        <activity android:name=".activity.ServiceActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+            </intent-filter>
+        </activity>
         <activity android:name=".activity.LogActivity" />
         <activity android:name=".activity.HSPActivity" />
         <activity android:name=".activity.MenuActivity"></activity>

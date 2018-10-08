@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.activity.ServiceActivity;
-import com.tomato.tuantt.tomatoapp.model.Service;
+import com.tomato.tuantt.tomatoapp.model.Services.Service;
 
 import java.util.List;
 
@@ -38,11 +38,9 @@ public class RecyclerViewServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public void onBindViewHolder(MyViewServiceHolder holder, final int position) {
-
         holder.tv_service_name.setText(mData.get(position).getName());
-        Picasso.with(mContext).load(defaultUrlImage + mData.get(position).getIcon()).fit().centerInside().into(holder.img_service_thumbnail);
-
-
+        Picasso.with(mContext).load(defaultUrlImage + mData.get(position).getIcon()).fit().
+                centerInside().into(holder.img_service_thumbnail);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

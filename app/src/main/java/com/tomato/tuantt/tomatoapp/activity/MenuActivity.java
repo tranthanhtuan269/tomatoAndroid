@@ -26,7 +26,7 @@ import com.facebook.accountkit.AccountKitError;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.adapter.RecyclerViewServiceAdapter;
-import com.tomato.tuantt.tomatoapp.model.Service;
+import com.tomato.tuantt.tomatoapp.model.Services.Service;
 
 import org.json.JSONArray;
 import org.json.JSONException;

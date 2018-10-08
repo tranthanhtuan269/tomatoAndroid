@@ -35,7 +35,7 @@ public class HSPActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    JSONObject jsonObject2 = jsonObject.getJSONObject("service");
+                    JSONObject jsonObject2 = jsonObject.getJSONObject("serviceData");
                     JSONArray jsonArray = jsonObject2.getJSONArray("data");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jo = jsonArray.getJSONObject(i);

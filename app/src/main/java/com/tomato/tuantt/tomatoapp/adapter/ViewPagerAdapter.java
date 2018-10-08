@@ -1,10 +1,11 @@
 package com.tomato.tuantt.tomatoapp.adapter;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
+
+import com.tomato.tuantt.tomatoapp.model.Services.DataNoteOne;
+import com.tomato.tuantt.tomatoapp.view.OneFragment;
 
 import org.json.JSONObject;
 
@@ -15,33 +16,31 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
     private JSONObject mFragmentJSONObject;
+    private List<DataNoteOne> listCategory = new ArrayList<>();
 
-    public ViewPagerAdapter(FragmentManager manager) {
+    public ViewPagerAdapter(FragmentManager manager, List<DataNoteOne> listCategory) {
         super(manager);
+        this.listCategory = listCategory;
+    }
+
+    public void addListCategory(List<DataNoteOne> listCategory){
+        this.listCategory.clear();
+        this.listCategory.addAll(listCategory);
+        notifyDataSetChanged();
     }
 
     @Override
     public Fragment getItem(int position) {
-        Bundle bundle = new Bundle();
-        bundle.putString("jsonData", mFragmentJSONObject.toString());
-        Fragment fragment = mFragmentList.get(position);
-        fragment.setArguments(bundle);
-        return fragment;
+        return OneFragment.newInstance(listCategory.get(position));
     }
 
     @Override
     public int getCount() {
-        return mFragmentList.size();
-    }
-
-    public void addFrag(Fragment fragment, String title, JSONObject jsonObject) {
-        mFragmentList.add(fragment);
-        mFragmentTitleList.add(title);
-        mFragmentJSONObject = jsonObject;
+        return listCategory.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mFragmentTitleList.get(position);
+        return listCategory.get(position).nameService;
     }
 }

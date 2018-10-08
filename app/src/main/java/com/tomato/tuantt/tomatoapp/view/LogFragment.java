@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.adapter.RecyclerViewLogAdapter;
 import com.tomato.tuantt.tomatoapp.model.Log;
-import com.tomato.tuantt.tomatoapp.model.Package;
 
 import org.json.JSONArray;
 import org.json.JSONException;

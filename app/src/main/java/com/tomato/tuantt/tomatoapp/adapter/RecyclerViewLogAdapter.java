@@ -6,13 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.model.Log;
-import com.tomato.tuantt.tomatoapp.model.Package;
 
 import java.util.List;
 

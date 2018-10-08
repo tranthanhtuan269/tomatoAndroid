@@ -1,5 +1,7 @@
 package com.tomato.tuantt.tomatoapp.model;
 
+import com.tomato.tuantt.tomatoapp.model.Services.Package;
+
 public class Log {
     private String address;
     private String note;

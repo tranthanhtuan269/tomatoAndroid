@@ -1,7 +1,6 @@
 package com.tomato.tuantt.tomatoapp.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.tomato.tuantt.tomatoapp.R;
-import com.tomato.tuantt.tomatoapp.model.Package;
+import com.tomato.tuantt.tomatoapp.model.Services.Package;
 
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class RecyclerViewPackageAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(MyViewPackageHolder holder, final int position) {
 
         holder.tv_package_name.setText(mData.get(position).getName());
-        holder.tv_package_price.setText(mData.get(position).getPrice().toString());
+        holder.tv_package_price.setText(mData.get(position).getPrice());
         Picasso.with(mContext).load(defaultUrlImage + mData.get(position).getIcon()).fit().centerInside().into(holder.img_pageage_thumbnail);
 
     }

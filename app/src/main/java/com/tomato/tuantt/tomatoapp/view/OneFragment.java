@@ -3,35 +3,37 @@ package com.tomato.tuantt.tomatoapp.view;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.adapter.ViewSubPagerAdapter;
-import com.tomato.tuantt.tomatoapp.model.Package;
-import com.tomato.tuantt.tomatoapp.model.Service;
+import com.tomato.tuantt.tomatoapp.model.Services.DataNoteOne;
+import com.tomato.tuantt.tomatoapp.model.Services.ServiceNoteOne;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OneFragment extends Fragment {
-
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewSubPagerAdapter adapter;
-    private List<Service> lstService;
+    private View view;
+    private DataNoteOne dataNoteOne;
 
     public OneFragment() {
         // Required empty public constructor
+    }
+
+    public static OneFragment newInstance(DataNoteOne dataNoteOne) {
+        OneFragment fragment = new OneFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("KEY_POSITION_CATEGORY", (Serializable) dataNoteOne);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -40,37 +42,32 @@ public class OneFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_one, container, false);
-
-        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        String arrayJsonString = getArguments().getString("jsonData");
-
-        adapter = new ViewSubPagerAdapter(getChildFragmentManager());
-        try {
-            JSONObject jsonObject = new JSONObject(arrayJsonString);
-            JSONArray jsonArray = jsonObject.getJSONArray("data");
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jo = jsonArray.getJSONObject(i);
-                int id = jo.getInt("id");
-                String name = jo.getString("name");
-                adapter.addFrag(new DetailFragment(), name, jo.getJSONArray("packages"));
-            }
-            viewPager.setAdapter(adapter);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        tabLayout = (TabLayout) view.findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_one, container, false);
+        setupChildViewPager();
+        getDataFromBundle();
         setActionForView();
-
         return view;
     }
 
-    private void setActionForView(){
+    private void setupChildViewPager() {
+        adapter = new ViewSubPagerAdapter(getChildFragmentManager());
+        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        viewPager.setAdapter(adapter);
+        tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void getDataFromBundle() {
+        try {
+            dataNoteOne = (DataNoteOne) getArguments().getSerializable("KEY_POSITION_CATEGORY");
+            adapter.addListServiceChildData(dataNoteOne.serviceNoteTwo.listService);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setActionForView() {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

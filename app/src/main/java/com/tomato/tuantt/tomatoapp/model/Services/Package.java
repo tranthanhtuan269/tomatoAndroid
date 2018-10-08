@@ -1,17 +1,23 @@
-package com.tomato.tuantt.tomatoapp.model;
+package com.tomato.tuantt.tomatoapp.model.Services;
+
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Package {
+public class Package  implements Serializable{
+    @SerializedName("id")
     private int Id;
+    @SerializedName("name")
     private String Name;
-    private int Price;
+    @SerializedName("price")
+    private String Price;
+    @SerializedName("image")
     private String Icon;
 
     public Package() {
     }
 
-    public Package(int id, String name, int price, String icon) {
+    public Package(int id, String name, String price, String icon) {
         Id = id;
         Name = name;
         Price = price;
@@ -34,11 +40,11 @@ public class Package {
         Name = name;
     }
 
-    public Integer getPrice() {
+    public String getPrice() {
         return Price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(String price) {
         Price = price;
     }
 

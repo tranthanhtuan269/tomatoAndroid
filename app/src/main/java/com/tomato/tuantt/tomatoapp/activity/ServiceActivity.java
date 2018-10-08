@@ -22,11 +22,12 @@ import com.android.volley.toolbox.Volley;
 import com.tomato.tuantt.tomatoapp.adapter.ViewPagerAdapter;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 import com.tomato.tuantt.tomatoapp.R;
-import com.tomato.tuantt.tomatoapp.view.OneFragment;
+import com.tomato.tuantt.tomatoapp.helper.Utils;
+import com.tomato.tuantt.tomatoapp.model.Services.DataNoteOne;
+import com.tomato.tuantt.tomatoapp.model.Services.ResponseServices;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServiceActivity extends AppCompatActivity {
 
@@ -35,12 +36,13 @@ public class ServiceActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
+    private List<DataNoteOne> listCategory = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
-
+        setupViewPager();
         Intent intent = getIntent();
         int id = intent.getExtras().getInt("ServiceId");
         url_service = "http://api.timtruyen.online/api/services/"+id+"/subservice";
@@ -56,9 +58,7 @@ public class ServiceActivity extends AppCompatActivity {
 //        Picasso.with(this).load(defaultUrlImage + thumbnail).fit().centerInside().into(thumbnailIv);
 
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+
 
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
@@ -82,23 +82,24 @@ public class ServiceActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONObject jsonObject2 = jsonObject.getJSONObject("service");
-                    JSONArray jsonArray = jsonObject2.getJSONArray("data");
 
-                    adapter = new ViewPagerAdapter(getSupportFragmentManager());
+                    ResponseServices responseServices = Utils.parserObject(response, ResponseServices.class);
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    JSONObject jsonObject2 = jsonObject.getJSONObject("serviceData");
+//                    JSONArray jsonArray = jsonObject2.getJSONArray("data");
+//
+//
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject jo = jsonArray.getJSONObject(i);
+//                        int id = jo.getInt("id");
+//                        String name = jo.getString("name");
+//                        String urlImage = jo.getString("icon");
+//                        adapter.addFrag(new OneFragment(), name, jo.getJSONObject("services"));
+//                    }
+                    adapter.addListCategory(responseServices.serviceNoteOne.listDataNoteOne);
+                    //viewPager.setAdapter(adapter);
 
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jo = jsonArray.getJSONObject(i);
-                        int id = jo.getInt("id");
-                        String name = jo.getString("name");
-                        String urlImage = jo.getString("icon");
-                        adapter.addFrag(new OneFragment(), name, jo.getJSONObject("services"));
-                    }
-
-                    viewPager.setAdapter(adapter);
-
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -112,8 +113,6 @@ public class ServiceActivity extends AppCompatActivity {
         });
 
         requestQueue.add(stringRequest);
-
-
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
         BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -142,5 +141,13 @@ public class ServiceActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void setupViewPager(){
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), listCategory);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
     }
 }
