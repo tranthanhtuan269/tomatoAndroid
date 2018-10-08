@@ -49,7 +49,12 @@
         <activity android:name=".activity.LogActivity" />
         <activity android:name=".activity.HSPActivity" />
         <activity android:name=".activity.MenuActivity" />
-        <activity android:name=".activity.AccountActivity"></activity>
+        <activity android:name=".activity.AccountActivity" />
+        <activity android:name=".activity.HSPInfoActivity" />
+        <activity android:name=".activity.InviteActivity" />
+        <activity android:name=".activity.CouponActivity" />
+        <activity android:name=".activity.HistoryActivity" />
+        <activity android:name=".activity.ConfigActivity"></activity>
     </application>
 
 </manifest>

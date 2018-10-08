@@ -24,10 +24,10 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="92dp"
+            android:layout_height="match_parent"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -44,8 +44,8 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:textColor="#000"
                 android:text="Username"
+                android:textColor="#272727"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/userAvatarImg"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -55,25 +55,138 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:textColor="#2380C0"
                 android:text="Xem thông tin tài khoản"
+                android:textColor="#2380C0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.404"
                 app:layout_constraintStart_toEndOf="@+id/userAvatarImg"
                 app:layout_constraintTop_toBottomOf="@+id/userNameLbl" />
+
+            <ImageView
+                android:id="@+id/infoHSPImg"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="36dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/userAvatarImg"
+                app:srcCompat="@drawable/hspiconenable" />
+
+            <TextView
+                android:id="@+id/infoHSPLbl"
+                android:layout_width="0dp"
+                android:layout_height="21dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="36dp"
+                android:text="Thông tin từ HSP"
+                android:textColor="#272727"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/infoHSPImg"
+                app:layout_constraintTop_toBottomOf="@+id/userAvatarImg" />
+
+            <ImageView
+                android:id="@+id/inviteFriendImg"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/infoHSPImg"
+                app:srcCompat="@drawable/userplus" />
+
+            <TextView
+                android:id="@+id/inviteFriendLbl"
+                android:layout_width="0dp"
+                android:layout_height="21dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:text="Mời bạn bè"
+                android:textColor="#272727"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/inviteFriendImg"
+                app:layout_constraintTop_toBottomOf="@+id/infoHSPLbl" />
+
+            <ImageView
+                android:id="@+id/couponImg"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inviteFriendImg"
+                app:srcCompat="@drawable/gift" />
+
+            <TextView
+                android:id="@+id/couponLbl"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:text="Khuyến mại và quà tặng"
+                android:textColor="#272727"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/couponImg"
+                app:layout_constraintTop_toBottomOf="@+id/inviteFriendLbl" />
+
+            <ImageView
+                android:id="@+id/historyImg"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/couponImg"
+                app:srcCompat="@drawable/filetext" />
+
+            <TextView
+                android:id="@+id/historyLbl"
+                android:layout_width="0dp"
+                android:layout_height="21dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:text="Lịch sử"
+                android:textColor="#272727"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/historyImg"
+                app:layout_constraintTop_toBottomOf="@+id/couponLbl" />
+
+            <ImageView
+                android:id="@+id/configImg"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/historyImg"
+                app:srcCompat="@drawable/settings" />
+
+            <TextView
+                android:id="@+id/configLbl"
+                android:layout_width="0dp"
+                android:layout_height="21dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:text="Cài đặt"
+                android:textColor="#272727"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/configImg"
+                app:layout_constraintTop_toBottomOf="@+id/historyLbl" />
+
         </android.support.constraint.ConstraintLayout>
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
     </android.support.constraint.ConstraintLayout>
 
     <android.support.design.widget.BottomNavigationView

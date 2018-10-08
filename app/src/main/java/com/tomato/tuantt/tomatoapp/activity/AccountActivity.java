@@ -27,7 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AccountActivity extends AppCompatActivity {
+public class AccountActivity extends AppCompatActivity implements View.OnClickListener{
 
     private String url_service = "http://api.timtruyen.online/api/users?phone=+84973619398";
     private String defaultUrlImage = "http://api.timtruyen.online/public/images/";
@@ -35,9 +35,10 @@ public class AccountActivity extends AppCompatActivity {
     private int userid;
     private String username;
     private String userimage;
+    private String usercode;
 
-    private TextView usernameLbl, userlinkLbl;
-    private ImageView userimageImg;
+    private TextView usernameLbl, userlinkLbl, infoHSPLbl, inviteFriendLbl, couponLbl, historyLbl, configLbl;
+    private ImageView userimageImg, infoHSPImg, inviteFriendImg, couponImg, historyImg, configImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +65,34 @@ public class AccountActivity extends AppCompatActivity {
 
 
         // main
-
-        userimageImg = (ImageView) findViewById(R.id.userAvatarImg);
         usernameLbl = (TextView) findViewById(R.id.userNameLbl);
         userlinkLbl = (TextView) findViewById(R.id.userLinkLbl);
+
+        infoHSPLbl = (TextView) findViewById(R.id.infoHSPLbl);
+        inviteFriendLbl = (TextView) findViewById(R.id.inviteFriendLbl);
+        couponLbl = (TextView) findViewById(R.id.couponLbl);
+        historyLbl = (TextView) findViewById(R.id.historyLbl);
+        configLbl = (TextView) findViewById(R.id.configLbl);
+
+        userimageImg = (ImageView) findViewById(R.id.userAvatarImg);
+        infoHSPImg = (ImageView) findViewById(R.id.infoHSPImg);
+        inviteFriendImg = (ImageView) findViewById(R.id.inviteFriendImg);
+        couponImg = (ImageView) findViewById(R.id.couponImg);
+        historyImg = (ImageView) findViewById(R.id.historyImg);
+        configImg = (ImageView) findViewById(R.id.configImg);
+
+        infoHSPLbl.setOnClickListener(this);
+        inviteFriendLbl.setOnClickListener(this);
+        couponLbl.setOnClickListener(this);
+        historyLbl.setOnClickListener(this);
+        configLbl.setOnClickListener(this);
+
+        infoHSPImg.setOnClickListener(this);
+        inviteFriendImg.setOnClickListener(this);
+        couponImg.setOnClickListener(this);
+        historyImg.setOnClickListener(this);
+        configImg.setOnClickListener(this);
+
 
 
         final RequestQueue requestQueue = Volley.newRequestQueue(AccountActivity.this);
@@ -81,6 +106,7 @@ public class AccountActivity extends AppCompatActivity {
                         userid = jsonObject2.getInt("id");
                         username = jsonObject2.getString("name");
                         userimage = jsonObject2.getString("avatar");
+                        usercode = jsonObject2.getString("usercode");
 
                         usernameLbl.setText(username);
                         Picasso.with(AccountActivity.this).load(defaultUrlImage + userimage).fit().centerInside().into(userimageImg);
@@ -132,5 +158,44 @@ public class AccountActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.infoHSPLbl:
+            case R.id.infoHSPImg:
+                Intent intentHSPINFO = new Intent(AccountActivity.this, HSPInfoActivity.class);
+                startActivity(intentHSPINFO);
+                break;
+
+            case R.id.inviteFriendLbl:
+            case R.id.inviteFriendImg:
+                Intent intentINVITE = new Intent(AccountActivity.this, InviteActivity.class);
+                startActivity(intentINVITE);
+                break;
+
+            case R.id.couponLbl:
+            case R.id.couponImg:
+                Intent intentCOUPON = new Intent(AccountActivity.this, CouponActivity.class);
+                startActivity(intentCOUPON);
+                break;
+
+            case R.id.historyLbl:
+            case R.id.historyImg:
+                Intent intentHISTORY = new Intent(AccountActivity.this, HistoryActivity.class);
+                startActivity(intentHISTORY);
+                break;
+
+            case R.id.configLbl:
+            case R.id.configImg:
+                Intent intentCONFIG = new Intent(AccountActivity.this, ConfigActivity.class);
+                startActivity(intentCONFIG);
+                break;
+
+            default:
+                break;
+        }
     }
 }

@@ -28,7 +28,6 @@ public class OneFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewSubPagerAdapter adapter;
-    private List<Service> lstService;
 
     public OneFragment() {
         // Required empty public constructor
@@ -65,28 +64,7 @@ public class OneFragment extends Fragment {
 
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        setActionForView();
 
         return view;
-    }
-
-    private void setActionForView(){
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                // todo  get object .
-//                adapter.reloadDataDetails(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
     }
 }
