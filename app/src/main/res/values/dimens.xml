@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="icon_size">40dp</dimen>
+
+    <dimen name="text_location_lv_1">14dp</dimen>
+    <dimen name="text_location_lv_2">16dp</dimen>
 </resources>

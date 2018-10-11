@@ -12,4 +12,5 @@
     <color name="titlebar_bg">#DD4B39</color>
     <color name="navigation_disable">#9A9A9A</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
 </resources>

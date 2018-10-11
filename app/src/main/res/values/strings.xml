@@ -6,4 +6,9 @@
 
     <string name="login_preference">com.tomato.tuantt.tomatoapp</string>
     <string name="login_status_preference">login_status_preference</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="select_location_work">Chọn vị trí làm việc</string>
+    <string name="select_location">Chọn vị trí này</string>
+    <string name="msg_wait_load_location">Đang lấy địa chỉ tại tọa độ hiện tại</string>
 </resources>
