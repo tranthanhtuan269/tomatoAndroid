@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -46,7 +47,7 @@ public class ViewTwo extends LinearLayout {
     }
 
     private void init(){
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_detail,this);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.view_two,this);
         lstPackage = new ArrayList<>();
         mrc = (RecyclerView) view.findViewById(R.id.recyclerview_id);
         mrc.setLayoutManager(new GridLayoutManager(getContext(), 2));
@@ -67,12 +68,28 @@ public class ViewTwo extends LinearLayout {
                 //int price = jo.getInt("price");
                 String price = jo.getString("price");
                 String urlImage = jo.getString("image");
-                lstPackage.add(new Package(id, name, price, urlImage));
+                Package p = new Package(id, name, price, urlImage);
+                if (OrderWorking.currentOrder !=null) {
+                    if (OrderWorking.currentOrder.get(p.getId()) !=null) {
+                        p.number = OrderWorking.currentOrder.get(p.getId()).number;
+                    }
+                }
+                lstPackage.add(p);
             }
             mrc.setAdapter(myAdapter);
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void resetData(int id) {
+        for (Package p : lstPackage) {
+            if (p.getId() == id) {
+                p.number = 0;
+                myAdapter.notifyDataSetChanged();
+                break;
+            }
         }
     }
 

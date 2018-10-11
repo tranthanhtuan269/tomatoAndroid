@@ -43,14 +43,19 @@ public class RecyclerViewPackageAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(final MyViewPackageHolder holder, final int position) {
         Package pac = mData.get(position);
         holder.tv_package_name.setText(pac.getName());
-        String price =pac.getPrice();
+        String price =new String(pac.getPrice());
         if (!price.contains(",")) {
             if (price.contains(".")) {
-                price.replace(".",",");
+                price = price.replace(".",",");
             }else {
                 DecimalFormat formatter = new DecimalFormat("#,###,###");
-                int number = Integer.valueOf(price);
-                price = formatter.format(number);
+                try {
+                    long number = Long.valueOf(price);
+                    price = formatter.format(number);
+                } catch (Exception e) {
+                    throw new IllegalStateException("loiii :" + pac.getId() + " " + pac.getName() + " " + price + "; " + pac.getPrice());
+                }
+
             }
         }
         holder.tv_package_price.setText(price +" VND");
@@ -82,7 +87,7 @@ public class RecyclerViewPackageAdapter extends RecyclerView.Adapter<RecyclerVie
                     v.setVisibility(View.VISIBLE);
                 }
                 if (listener !=null) {
-                    listener.onChange(p.getId(),p.getName(),p.number);
+                    listener.onChange(p);
                 }
             }
         });
@@ -95,7 +100,7 @@ public class RecyclerViewPackageAdapter extends RecyclerView.Adapter<RecyclerVie
                 holder.tvNumber.setText(String.valueOf(p.number));
                 holder.icMinus.setVisibility(View.VISIBLE);
                 if (listener !=null) {
-                    listener.onChange(p.getId(),p.getName(),p.number);
+                    listener.onChange(p);
                 }
             }
         });

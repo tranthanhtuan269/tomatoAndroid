@@ -40,7 +40,7 @@ public class ViewOne extends ConstraintLayout {
     private ViewTwoAdapter adapter;
     private String title;
     private void init(){
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_one,this);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.view_one,this);
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
     }
@@ -74,6 +74,12 @@ public class ViewOne extends ConstraintLayout {
             drawable.setSize(2, 1);
             ((LinearLayout) root).setDividerPadding(10);
             ((LinearLayout) root).setDividerDrawable(drawable);
+        }
+    }
+
+    public void resetData(int id) {
+        for (ViewTwo t : adapter.getViewTwos()) {
+            t.resetData(id);
         }
     }
 

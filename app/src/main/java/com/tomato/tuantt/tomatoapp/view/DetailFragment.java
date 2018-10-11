@@ -86,7 +86,7 @@ public class DetailFragment extends Fragment implements ChangePackageListener {
     }
 
     @Override
-    public void onChange(int id, String name, int number) {
+    public void onChange(Package p) {
 
     }
 }

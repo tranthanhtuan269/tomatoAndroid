@@ -16,6 +16,10 @@ public class ViewOneAdapter extends PagerAdapter {
 
     List<ViewOne> viewOnes = new ArrayList<>();
 
+    public List<ViewOne> getViewOnes(){
+        return this.viewOnes;
+    }
+
     @Override
     public int getCount() {
         return viewOnes.size();

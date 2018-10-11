@@ -24,6 +24,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -59,6 +60,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
+import com.tomato.tuantt.tomatoapp.activity.ServiceActivity;
+import com.tomato.tuantt.tomatoapp.model.LocationInfo;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,6 +80,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 100;
     private static final int REQUEST_CHECK_SETTINGS = 102;
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 101;
+    public static final String CALL_FROM_SERVICE = "CALL_FROM_SERVICE";
+
+    public static Intent createIntent(Context context,boolean callFromService) {
+        Intent intent = new Intent(context, MapsActivity.class);
+        intent.putExtra(CALL_FROM_SERVICE, callFromService);
+        return intent;
+    }
 
     private GoogleMap mMap;
     private TextView tvAddress;
@@ -88,6 +99,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ProgressDialog dialog;
     private View mapView;
     private View imgLocation;
+    private boolean callFromService;
+    private LatLng currentLatlng;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +109,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapView = mapFragment.getView();
-
+        callFromService = getIntent().getBooleanExtra(CALL_FROM_SERVICE,false);
         mapFragment.getMapAsync(this);
         findViewById(R.id.imgBack).setOnClickListener(this);
         findViewById(R.id.imgClear).setOnClickListener(this);
@@ -279,6 +292,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 break;
             case R.id.btnChoose:
+                if (currentLatlng == null || currentLatlng.latitude == 0 || currentLatlng.longitude == 0) {
+                    Toast.makeText(this,R.string.msg_alert_select_location,Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                LocationInfo info = new LocationInfo();
+                info.lat = currentLatlng.latitude;
+                info.lgn = currentLatlng.longitude;
+                info.name = tvAddress.getText().toString();
+                if (callFromService) {
+                    Intent intent = EditOrderActivity.createIntent(this,info);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(EditOrderActivity.LOCATION,info);
+                    intent.putExtras(bundle);
+                    setResult(RESULT_OK,intent);
+                }
+                finish();
                 break;
             case R.id.imgLocation:
                 moveToCurrent();
@@ -373,6 +405,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (currentMarket !=null) {
             currentMarket.remove();
         }
+
+        currentLatlng = latLng;
 
         MarkerOptions markerOptions = new MarkerOptions();
 
