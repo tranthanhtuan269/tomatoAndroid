@@ -46,10 +46,11 @@ public class RecyclerViewServiceAdapter extends RecyclerView.Adapter<RecyclerVie
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, ServiceActivity.class);
-                intent.putExtra("ServiceId", mData.get(position).getId());
-                intent.putExtra("ServiceName", mData.get(position).getName());
-                intent.putExtra("ServiceThumbnail", mData.get(position).getIcon());
+//                Intent intent = new Intent(mContext, ServiceActivity.class);
+//                intent.putExtra("ServiceId", mData.get(position).getId());
+//                intent.putExtra("ServiceName", mData.get(position).getName());
+//                intent.putExtra("ServiceThumbnail", mData.get(position).getIcon());
+                Intent intent = ServiceActivity.createIntent(mContext, mData.get(position).getId(),mData.get(position).getName(),true);
                 mContext.startActivity(intent);
             }
         });

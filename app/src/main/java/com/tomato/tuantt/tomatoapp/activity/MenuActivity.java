@@ -26,6 +26,7 @@ import com.facebook.accountkit.AccountKitError;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.adapter.RecyclerViewServiceAdapter;
+import com.tomato.tuantt.tomatoapp.helper.GridSpacingItemDecoration;
 import com.tomato.tuantt.tomatoapp.model.Service;
 
 import org.json.JSONArray;
@@ -68,7 +69,9 @@ public class MenuActivity extends AppCompatActivity {
         mrc = (RecyclerView) findViewById(R.id.recyclerview_id);
         myAdapter = new RecyclerViewServiceAdapter(this, lstService);
         mrc.setLayoutManager(new GridLayoutManager(this, 2));
-
+        int spacing = 40; // 50px
+        boolean includeEdge = false;
+        mrc.addItemDecoration(new GridSpacingItemDecoration(2, spacing, includeEdge));
         final RequestQueue requestQueue = Volley.newRequestQueue(MenuActivity.this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url_service, new Response.Listener<String>() {
             @Override

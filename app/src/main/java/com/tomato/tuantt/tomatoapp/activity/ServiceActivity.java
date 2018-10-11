@@ -1,5 +1,6 @@
 package com.tomato.tuantt.tomatoapp.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -20,6 +21,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.tomato.tuantt.tomatoapp.adapter.ViewPagerAdapter;
+import com.tomato.tuantt.tomatoapp.createorder.ChangePackageListener;
+import com.tomato.tuantt.tomatoapp.createorder.ViewOne;
+import com.tomato.tuantt.tomatoapp.createorder.ViewOneAdapter;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.view.OneFragment;
@@ -28,13 +32,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ServiceActivity extends AppCompatActivity {
+public class ServiceActivity extends AppCompatActivity implements ChangePackageListener {
 
+    public static Intent createIntent(Context context, int serviceID, String name,boolean firstCreate) {
+        Intent intent = new Intent(context, ServiceActivity.class);
+        intent.putExtra(SERVICE_ID, serviceID);
+        intent.putExtra(SERVICE_NAME, name);
+        intent.putExtra(FIRST_CREATE, firstCreate);
+        return intent;
+    }
+
+    public static final String SERVICE_ID = "SERVICE_ID";
+    public static final String FIRST_CREATE = "FIRST_CREATE";
+    public static final String SERVICE_NAME = "SERVICE_NAME";
     String url_service = "http://api.timtruyen.online/api/services/0/subservice";
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
+    private boolean firstCreate;
+    private ViewOneAdapter viewOneAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +59,8 @@ public class ServiceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_service);
 
         Intent intent = getIntent();
-        int id = intent.getExtras().getInt("ServiceId");
+        int id = intent.getIntExtra(SERVICE_ID,1);
+        firstCreate = intent.getBooleanExtra(FIRST_CREATE,true);
         url_service = "http://api.timtruyen.online/api/services/"+id+"/subservice";
 
 
@@ -58,12 +76,16 @@ public class ServiceActivity extends AppCompatActivity {
 
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         TextView title = (TextView) toolbar.findViewById(R.id.titleBarTxt);
-        title.setText("HSP");
+        title.setText("Bảng giá");
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
+                if (firstCreate) {
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
+                } else {
+                    finish();
+                }
             }
         });
 
@@ -76,17 +98,25 @@ public class ServiceActivity extends AppCompatActivity {
                     JSONObject jsonObject2 = jsonObject.getJSONObject("service");
                     JSONArray jsonArray = jsonObject2.getJSONArray("data");
 
-                    adapter = new ViewPagerAdapter(getSupportFragmentManager());
+//                    adapter = new ViewPagerAdapter(getSupportFragmentManager());
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject jo = jsonArray.getJSONObject(i);
+//                        int id = jo.getInt("id");
+//                        String name = jo.getString("name");
+//                        String urlImage = jo.getString("icon");
+//                        adapter.addFrag(new OneFragment(), name, jo.getJSONObject("services"));
+//                    }
+//                    viewPager.setAdapter(adapter);
 
+                    viewOneAdapter = new ViewOneAdapter();
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jo = jsonArray.getJSONObject(i);
-                        int id = jo.getInt("id");
                         String name = jo.getString("name");
-                        String urlImage = jo.getString("icon");
-                        adapter.addFrag(new OneFragment(), name, jo.getJSONObject("services"));
+                        ViewOne viewOne = new ViewOne(ServiceActivity.this);
+                        viewOne.setData(jo.getJSONObject("services").toString(),name,ServiceActivity.this);
+                        viewOneAdapter.addView(viewOne);
                     }
-
-                    viewPager.setAdapter(adapter);
+                    viewPager.setAdapter(viewOneAdapter);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -102,35 +132,10 @@ public class ServiceActivity extends AppCompatActivity {
         });
 
         requestQueue.add(stringRequest);
+    }
 
+    @Override
+    public void onChange(int id, String name, int number) {
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
-        BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.navigation_location:
-                        Toast.makeText(ServiceActivity.this, "Click Location", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case R.id.navigation_log:
-                        Intent intent = new Intent(ServiceActivity.this, LogActivity.class);
-                        startActivity(intent);
-                        break;
-
-                    case R.id.navigation_user:
-                        Toast.makeText(ServiceActivity.this, "Click user", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case R.id.navigation_hsp:
-                        Toast.makeText(ServiceActivity.this, "Click hsp", Toast.LENGTH_SHORT).show();
-                        Intent intentHSP = new Intent(ServiceActivity.this, HSPActivity.class);
-                        startActivity(intentHSP);
-                        break;
-                }
-                return true;
-            }
-        });
     }
 }
