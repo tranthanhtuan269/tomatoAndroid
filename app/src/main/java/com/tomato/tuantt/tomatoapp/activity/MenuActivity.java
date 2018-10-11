@@ -23,6 +23,7 @@ import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
 import com.facebook.accountkit.AccountKitCallback;
 import com.facebook.accountkit.AccountKitError;
+import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.adapter.RecyclerViewServiceAdapter;
@@ -60,8 +61,7 @@ public class MenuActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
+                onBackPressed();
             }
         });
 
@@ -152,5 +152,20 @@ public class MenuActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        onBackAction();
+    }
+
+    private void onBackAction(){
+        SharedPreferenceConfig preferenceConfig = new SharedPreferenceConfig(getApplicationContext());
+        if (preferenceConfig.readLoginStatus()){
+            super.onBackPressed();
+        } else {
+            startActivity(new Intent(MenuActivity.this, MainActivity.class));
+            finish();
+        }
     }
 }
