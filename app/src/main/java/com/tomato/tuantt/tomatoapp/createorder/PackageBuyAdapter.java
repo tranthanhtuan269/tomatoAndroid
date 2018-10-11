@@ -80,6 +80,7 @@ public class PackageBuyAdapter extends RecyclerView.Adapter<PackageBuyAdapter.Vi
 
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         price = formatter.format(sum);
+        price = price.replace(",",".");
         holder.tvPrice.setText(price +" VNĐ");
         holder.imgCancel.setTag(position);
         holder.imgCancel.setOnClickListener(new View.OnClickListener() {

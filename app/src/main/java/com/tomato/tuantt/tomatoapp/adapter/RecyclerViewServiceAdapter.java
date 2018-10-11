@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.activity.ServiceActivity;
+import com.tomato.tuantt.tomatoapp.createorder.OrderWorking;
 import com.tomato.tuantt.tomatoapp.model.Service;
 
 import java.util.List;
@@ -50,6 +51,7 @@ public class RecyclerViewServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 //                intent.putExtra("ServiceId", mData.get(position).getId());
 //                intent.putExtra("ServiceName", mData.get(position).getName());
 //                intent.putExtra("ServiceThumbnail", mData.get(position).getIcon());
+                OrderWorking.currentService = mData.get(position).getName();
                 Intent intent = ServiceActivity.createIntent(mContext, mData.get(position).getId(),mData.get(position).getName(),true);
                 mContext.startActivity(intent);
             }

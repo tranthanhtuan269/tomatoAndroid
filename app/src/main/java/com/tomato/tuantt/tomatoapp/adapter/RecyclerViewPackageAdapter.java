@@ -58,6 +58,7 @@ public class RecyclerViewPackageAdapter extends RecyclerView.Adapter<RecyclerVie
 
             }
         }
+        price = price.replace(",",".");
         holder.tv_package_price.setText(price +" VND");
         //Glide.with(mContext).load(defaultUrlImage + mData.get(position).getIcon()).into(holder.img_pageage_thumbnail);
         Picasso.with(mContext).load(defaultUrlImage + pac.getIcon()).into(holder.img_pageage_thumbnail);

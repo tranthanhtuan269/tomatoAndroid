@@ -15,4 +15,5 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
     <color name="colorNumberBuy">#2380C0</color>
+    <color name="color_gray">#9A9A9A</color>
 </resources>

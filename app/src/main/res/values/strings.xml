@@ -14,4 +14,8 @@
     <string name="agree">Đồng ý</string>
     <string name="msg_alert_select_package">Vui lòng chọn tối thiểu 1 dịch vụ!</string>
     <string name="msg_alert_select_location">Vui lòng chọn địa chỉ</string>
+    <string name="next">Tiếp theo</string>
+    <string name="today">Hôm nay</string>
+    <string name="tomorrow">Ngày mai</string>
+    <string name="msg_alert_time_bigger">Vui lòng chọn mốc thời gian sau thời điểm hiện tại!</string>
 </resources>

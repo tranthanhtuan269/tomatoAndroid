@@ -13,4 +13,5 @@ import java.util.Map;
  */
 public class OrderWorking {
     public static Map<Integer, Package> currentOrder = new ArrayMap<>();
+    public static String currentService;
 }
