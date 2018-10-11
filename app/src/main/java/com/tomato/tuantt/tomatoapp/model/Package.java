@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class Package {
     private int Id;
     private String Name;
-    private int Price;
+    private String Price;
     private String Icon;
-
+    public int number = 0;
     public Package() {
     }
 
-    public Package(int id, String name, int price, String icon) {
+    public Package(int id, String name, String price, String icon) {
         Id = id;
         Name = name;
         Price = price;
@@ -34,11 +34,11 @@ public class Package {
         Name = name;
     }
 
-    public Integer getPrice() {
+    public String getPrice() {
         return Price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(String price) {
         Price = price;
     }
 

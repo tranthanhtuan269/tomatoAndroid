@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,9 +24,12 @@ import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
 import com.facebook.accountkit.AccountKitCallback;
 import com.facebook.accountkit.AccountKitError;
+import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
+import com.tomato.tuantt.tomatoapp.createorder.OrderWorking;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.adapter.RecyclerViewServiceAdapter;
+import com.tomato.tuantt.tomatoapp.helper.GridSpacingItemDecoration;
 import com.tomato.tuantt.tomatoapp.model.Service;
 
 import org.json.JSONArray;
@@ -33,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MenuActivity extends AppCompatActivity {
@@ -59,8 +64,7 @@ public class MenuActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
+                onBackPressed();
             }
         });
 
@@ -68,7 +72,9 @@ public class MenuActivity extends AppCompatActivity {
         mrc = (RecyclerView) findViewById(R.id.recyclerview_id);
         myAdapter = new RecyclerViewServiceAdapter(this, lstService);
         mrc.setLayoutManager(new GridLayoutManager(this, 2));
-
+        int spacing = 40; // 50px
+        boolean includeEdge = false;
+        mrc.addItemDecoration(new GridSpacingItemDecoration(2, spacing, includeEdge));
         final RequestQueue requestQueue = Volley.newRequestQueue(MenuActivity.this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url_service, new Response.Listener<String>() {
             @Override
@@ -137,7 +143,11 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        if (OrderWorking.currentOrder == null) {
+            OrderWorking.currentOrder = new ArrayMap<>();
+        }else {
+            OrderWorking.currentOrder.clear();
+        }
         AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
             @Override
             public void onSuccess(Account account) {
@@ -149,5 +159,20 @@ public class MenuActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        onBackAction();
+    }
+
+    private void onBackAction(){
+        SharedPreferenceConfig preferenceConfig = new SharedPreferenceConfig(getApplicationContext());
+        if (preferenceConfig.readLoginStatus()){
+            super.onBackPressed();
+        } else {
+            startActivity(new Intent(MenuActivity.this, MainActivity.class));
+            finish();
+        }
     }
 }

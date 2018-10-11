@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "173600972271",
+    "firebase_url": "https://truyenngontinh-ec9f4.firebaseio.com",
+    "project_id": "truyenngontinh-ec9f4",
+    "storage_bucket": "truyenngontinh-ec9f4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173600972271:android:908fbb3d5f2c78b3",
+        "android_client_info": {
+          "package_name": "com.tomato.tuantt.tomatoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "173600972271-9o5utgjocueqrlpjq0gka12nnr7803jq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tomato.tuantt.tomatoapp",
+            "certificate_hash": "f8d656e49cdfaff1a92f5be52df5a250c3f46a61"
+          }
+        },
+        {
+          "client_id": "173600972271-p8t42iqbouiul7oit29vn7nadkqe4v0j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlDubpxLQPL53oI-ykuNPzbzD6Op3oJqA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "173600972271-p8t42iqbouiul7oit29vn7nadkqe4v0j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

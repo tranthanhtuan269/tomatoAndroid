@@ -18,7 +18,7 @@ import java.util.Map;
 public class ViewSubPagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> mFragmentListSub = new ArrayList<>();
     private final List<String> mFragmentTitleListSub = new ArrayList<>();
-    private JSONArray mFragmentJSONObjectSub;
+    private List<JSONArray> jsonObjects = new ArrayList<>();
 
     private Map<Integer, DetailFragment> mapFragment  = new HashMap<>( );
 
@@ -29,7 +29,7 @@ public class ViewSubPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Bundle bundle = new Bundle();
-        bundle.putString("jsonDataSub", mFragmentJSONObjectSub.toString());
+        bundle.putString("jsonDataSub", jsonObjects.get(position).toString());
         Fragment fragment = mFragmentListSub.get(position);
         fragment.setArguments(bundle);
         return fragment;
@@ -43,7 +43,7 @@ public class ViewSubPagerAdapter extends FragmentPagerAdapter {
     public void addFrag(Fragment fragment, String title, JSONArray jsonObject) {
         mFragmentListSub.add(fragment);
         mFragmentTitleListSub.add(title);
-        mFragmentJSONObjectSub = jsonObject;
+        jsonObjects.add(jsonObject);
     }
 
     @Override

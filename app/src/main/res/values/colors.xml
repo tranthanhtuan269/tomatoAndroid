@@ -11,5 +11,8 @@
     <color name="gradient_end_gg">#DD4B39</color>
     <color name="titlebar_bg">#DD4B39</color>
     <color name="navigation_disable">#9A9A9A</color>
+    <color name="separator">#D9D9D9</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorNumberBuy">#2380C0</color>
 </resources>
