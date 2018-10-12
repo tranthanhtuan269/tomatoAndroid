@@ -1,9 +1,11 @@
 package com.tomato.tuantt.tomatoapp.createorder;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +29,7 @@ import com.tomato.tuantt.tomatoapp.model.Package;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by Anh Nguyen on 10/11/2018.
@@ -240,7 +243,8 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
     private void showDatePicker(){
         final Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.MILLISECOND,0);
-        DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+        Locale.setDefault(new Locale("vi"));
+        DatePickerDialog dialog = new DatePickerDialog(this,R.style.MyDatePickerStyle, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar tmp = Calendar.getInstance();
@@ -257,13 +261,14 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
         dialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
         calendar.add(Calendar.DAY_OF_YEAR,-7);
         dialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+        dialog.setTitle("");
         dialog.show();
     }
 
     private void showTimePicker(){
         final Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.MILLISECOND,0);
-        TimePickerDialog dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+        TimePickerDialog dialog = new TimePickerDialog(this,R.style.MyDatePickerStyle, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 Calendar tmp = Calendar.getInstance();
@@ -277,6 +282,7 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
                 updateTimeData();
             }
         },time.get(Calendar.HOUR_OF_DAY),time.get(Calendar.MINUTE),true);
+        dialog.setTitle("");
         dialog.show();
 
     }
