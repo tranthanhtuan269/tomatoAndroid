@@ -53,6 +53,7 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
     private Calendar time;
     private boolean needCal = true;
     private int sum = 0;
+    private boolean isTmp = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -194,10 +195,10 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
 
     private void createTmpTime(){
         time = Calendar.getInstance();
-        time.add(Calendar.DATE,1);
-        time.set(Calendar.HOUR_OF_DAY, 14);
+        time.add(Calendar.HOUR_OF_DAY,2);
         time.set(Calendar.MINUTE,0);
         time.set(Calendar.MILLISECOND,0);
+        isTmp = true;
         updateTimeData();
     }
 
@@ -249,10 +250,11 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar tmp = Calendar.getInstance();
                 tmp.set(year,month,dayOfMonth,time.get(Calendar.HOUR_OF_DAY),time.get(Calendar.MINUTE),0);
-                if (calendar.getTimeInMillis() > tmp.getTimeInMillis()) {
+                if (!isTmp && (calendar.getTimeInMillis() > tmp.getTimeInMillis())) {
                     Toast.makeText(EditOrderActivity.this,R.string.msg_alert_time_bigger,Toast.LENGTH_SHORT).show();
                     return;
                 }
+                isTmp = false;
                 time.set(year,month,dayOfMonth);
                 updateTimeData();
             }
@@ -277,6 +279,7 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
                     Toast.makeText(EditOrderActivity.this,R.string.msg_alert_time_bigger,Toast.LENGTH_SHORT).show();
                     return;
                 }
+                isTmp = false;
                 time.set(Calendar.HOUR_OF_DAY,hourOfDay);
                 time.set(Calendar.MINUTE,minute);
                 updateTimeData();
@@ -300,7 +303,13 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
             Toast.makeText(this,R.string.msg_alert_package,Toast.LENGTH_SHORT).show();
             return;
         }
-
+        if (time.getTimeInMillis() <= Calendar.getInstance().getTimeInMillis()) {
+            Toast.makeText(EditOrderActivity.this,R.string.msg_alert_time_bigger,Toast.LENGTH_SHORT).show();
+            return;
+        }
+        OrderWorking.info = info;
+        Intent intent = ContactPaymentActivity.createIntent(this,sum);
+        startActivity(intent);
     }
 
     private void hideKeyboard(){

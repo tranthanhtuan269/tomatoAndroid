@@ -48,19 +48,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".activity.RegisterActivity" />
+
         <activity android:name=".activity.LoginActivity" />
+
         <activity android:name=".activity.ForgotPasswordActivity" />
+
         <activity android:name=".adapter.RecyclerViewServiceAdapter$MenuActivity" />
-        <activity android:name=".activity.ServiceActivity" />
+
+        <activity android:name=".activity.ServiceActivity"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".activity.LogActivity" />
+
         <activity android:name=".activity.HSPActivity" />
-        <activity android:name=".activity.MenuActivity" />
+
+        <activity android:name=".activity.MenuActivity"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".activity.AccountActivity" />
+
         <activity android:name=".activity.HSPInfoActivity" />
+
         <activity android:name=".activity.InviteActivity" />
+
         <activity android:name=".activity.CouponActivity" />
+
         <activity android:name=".activity.HistoryActivity" />
+
         <activity android:name=".activity.ConfigActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -75,20 +91,24 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".createorder.MapsActivity">
+            android:name=".createorder.MapsActivity"
+            android:screenOrientation="portrait">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
-        <activity android:name=".createorder.EditOrderActivity">
+        <activity android:name=".createorder.EditOrderActivity"
+            android:screenOrientation="portrait">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
+        <activity android:name=".createorder.ContactPaymentActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

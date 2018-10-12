@@ -4,6 +4,7 @@ import android.util.ArrayMap;
 import android.util.SparseArray;
 
 import com.tomato.tuantt.tomatoapp.activity.ServiceActivity;
+import com.tomato.tuantt.tomatoapp.model.LocationInfo;
 import com.tomato.tuantt.tomatoapp.model.Package;
 
 import java.util.HashMap;
@@ -17,4 +18,5 @@ public class OrderWorking {
     public static String currentService;
     public static int currentServiceId;
     public static ServiceActivity activity;
+    public static LocationInfo info;
 }

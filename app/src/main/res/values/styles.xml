@@ -13,6 +13,6 @@
         <item name="android:calendarTextColor">@color/colorPrimaryDark</item>
         <item name="android:dayOfWeekBackground">@color/colorPrimaryDark</item>
         <item name="android:yearListSelectorColor">@color/colorAccent</item>
-        <item name="android:datePickerMode">calendar</item>
+        <!--<item name="android:datePickerMode">calendar</item>-->
     </style>
 </resources>
