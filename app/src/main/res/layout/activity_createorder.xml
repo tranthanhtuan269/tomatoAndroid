@@ -76,21 +76,26 @@
                 android:layout_height="40dp"
                 android:orientation="horizontal"
                 android:background="@drawable/bkg_border_create_order"
-                android:clickable="true"
                 android:gravity="center_vertical"
                 android:layout_marginTop="5dp"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:paddingRight="10dp"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true" >
 
-                <TextView
+                <com.tomato.tuantt.tomatoapp.createorder.CustomEditText
                     android:id="@+id/tvAddressNumber"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlack"
                     android:textSize="15dp"
+                    android:hint="@string/enter_number_address"
+                    android:textColorHint="@color/color_gray"
+                    android:background="@null"
+                    android:inputType="text"
                     android:maxLines="1"
-                    android:ellipsize="end"
+                    android:imeOptions="actionDone"
                     />
             </LinearLayout>
             <LinearLayout

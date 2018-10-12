@@ -303,6 +303,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (callFromService) {
                     Intent intent = EditOrderActivity.createIntent(this,info);
                     startActivity(intent);
+                    if (OrderWorking.activity !=null) {
+                        OrderWorking.activity.finish();
+                        OrderWorking.activity = null;
+                    }
                 } else {
                     Intent intent = new Intent();
                     Bundle bundle = new Bundle();
@@ -607,6 +611,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             tvAddress.setText(s);
             if (dialog.isShowing()) {
                 dialog.dismiss();
+            }
+            if (TextUtils.isEmpty(s)) {
+                Toast.makeText(MapsActivity.this,R.string.msg_get_address_error,Toast.LENGTH_SHORT).show();
             }
         }
     }

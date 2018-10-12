@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.model.Log;
 import com.tomato.tuantt.tomatoapp.model.Package;
@@ -20,7 +21,7 @@ public class RecyclerViewLogAdapter extends RecyclerView.Adapter<RecyclerViewLog
 
     private Context mContext;
     private List<Log> mData;
-    private String defaultUrlImage = "http://api.timtruyen.online/public/images/";
+    private String defaultUrlImage = Constant.BASE_URL + "http://api.timtruyen.online/public/images/";
 
     public RecyclerViewLogAdapter(Context mContext, List<Log> mData) {
         this.mContext = mContext;

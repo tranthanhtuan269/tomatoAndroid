@@ -7,15 +7,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.tomato.tuantt.tomatoapp.R;
+import com.tomato.tuantt.tomatoapp.activity.ServiceActivity;
 import com.tomato.tuantt.tomatoapp.model.LocationInfo;
 import com.tomato.tuantt.tomatoapp.model.Package;
 
@@ -29,6 +35,7 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
 
     public static final String LOCATION = "LOCATION";
     public static final int CHANGE_LOCATION = 100;
+    public static final int CHANGE_PACKAGE = 101;
     public static Intent createIntent(Context context, LocationInfo locationInfo) {
         Intent intent = new Intent(context,EditOrderActivity.class);
         Bundle bundle = new Bundle();
@@ -37,10 +44,12 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
         return intent;
     }
     private LocationInfo info;
-    private TextView tvAddress,tvAddressNumber,tvDate,tvHour,tvMinute,tvMoney;
+    private TextView tvAddress,tvDate,tvHour,tvMinute,tvMoney;
+    private CustomEditText tvAddressNumber;
     private Button btnChoose;
     private Calendar time;
     private boolean needCal = true;
+    private int sum = 0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +72,6 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
             }
         });
         findViewById(R.id.llAddress).setOnClickListener(this);
-        findViewById(R.id.llAddressNumber).setOnClickListener(this);
         tvDate = findViewById(R.id.tvDate);
         tvDate.setOnClickListener(this);
         findViewById(R.id.llTime).setOnClickListener(this);
@@ -71,9 +79,32 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.llNext).setOnClickListener(this);
 
         tvAddress = findViewById(R.id.tvAddress);
-        tvAddress.setText(info.name);
+        if (info !=null) {
+            tvAddress.setText(info.name);
+        }
+
 
         tvAddressNumber = findViewById(R.id.tvAddressNumber);
+        tvAddressNumber.clearFocus();
+        tvAddressNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    tvAddressNumber.clearFocus();
+                    hideKeyboard();
+                    return true;
+                }
+                // Return true if you have consumed the action, else false.
+                return false;
+            }
+        });
+        tvAddressNumber.setOnKeyBack(new CustomEditText.OnKeyBack() {
+            @Override
+            public void onKeyback() {
+                tvAddressNumber.clearFocus();
+            }
+        });
+
         tvHour = findViewById(R.id.tvHour);
         tvMinute = findViewById(R.id.tvMinute);
         tvMoney = findViewById(R.id.tvMoney);
@@ -86,7 +117,7 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
         super.onResume();
         if (needCal) {
             needCal = false;
-            int sum = 0;
+            sum = 0;
             for (Package p : OrderWorking.currentOrder.values()) {
                 String price = p.getPrice();
                 if (price.contains(",")) {
@@ -112,9 +143,22 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
         if (requestCode == CHANGE_LOCATION) {
             if (resultCode == RESULT_OK) {
                 info = (LocationInfo) data.getExtras().getSerializable(LOCATION);
-                int a = 0;
+                if (info !=null) {
+                    tvAddress.setText(info.name);
+                }
+            }
+        }else if (requestCode == CHANGE_PACKAGE) {
+            if (resultCode == RESULT_OK) {
+                needCal = true;
+            }else {
+                needCal = false;
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        onBackAction();
     }
 
     protected void onBackAction(){
@@ -126,8 +170,8 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
         int id = v.getId();
         switch (id) {
             case R.id.llAddress:
-                break;
-            case R.id.llAddressNumber:
+                Intent intent = MapsActivity.createIntent(this,false);
+                startActivityForResult(intent,CHANGE_LOCATION);
                 break;
             case R.id.tvDate:
                 showDatePicker();
@@ -136,8 +180,11 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
                 showTimePicker();
                 break;
             case R.id.llAddMore:
+                Intent i = ServiceActivity.createIntent(this,OrderWorking.currentServiceId,OrderWorking.currentService,false);
+                startActivityForResult(i,CHANGE_PACKAGE);
                 break;
             case R.id.llNext:
+                nextAction();
                 break;
         }
     }
@@ -202,9 +249,6 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
                     Toast.makeText(EditOrderActivity.this,R.string.msg_alert_time_bigger,Toast.LENGTH_SHORT).show();
                     return;
                 }
-//                time.set(Calendar.YEAR,year);
-//                time.set(Calendar.MONTH,month);
-//                time.set(Calendar.DAY_OF_MONTH,dayOfMonth);
                 time.set(year,month,dayOfMonth);
                 updateTimeData();
             }
@@ -235,5 +279,29 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
         },time.get(Calendar.HOUR_OF_DAY),time.get(Calendar.MINUTE),true);
         dialog.show();
 
+    }
+
+    private void nextAction(){
+        if (info == null || TextUtils.isEmpty(info.name)) {
+            Toast.makeText(this,R.string.msg_alert_address,Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(tvAddressNumber.getText().toString())) {
+            Toast.makeText(this,R.string.msg_alert_number_address,Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (OrderWorking.currentOrder == null || OrderWorking.currentOrder.isEmpty() || sum <= 0) {
+            Toast.makeText(this,R.string.msg_alert_package,Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+    }
+
+    private void hideKeyboard(){
+        InputMethodManager inputManager =
+                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(
+                this.getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }

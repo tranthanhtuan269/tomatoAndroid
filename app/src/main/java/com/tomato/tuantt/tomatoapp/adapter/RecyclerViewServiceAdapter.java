@@ -43,7 +43,6 @@ public class RecyclerViewServiceAdapter extends RecyclerView.Adapter<RecyclerVie
         holder.tv_service_name.setText(mData.get(position).getName());
         Picasso.with(mContext).load(defaultUrlImage + mData.get(position).getIcon()).fit().centerInside().into(holder.img_service_thumbnail);
 
-
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +51,7 @@ public class RecyclerViewServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 //                intent.putExtra("ServiceName", mData.get(position).getName());
 //                intent.putExtra("ServiceThumbnail", mData.get(position).getIcon());
                 OrderWorking.currentService = mData.get(position).getName();
+                OrderWorking.currentServiceId = mData.get(position).getId();
                 Intent intent = ServiceActivity.createIntent(mContext, mData.get(position).getId(),mData.get(position).getName(),true);
                 mContext.startActivity(intent);
             }

@@ -1,6 +1,7 @@
 package com.tomato.tuantt.tomatoapp.activity;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -24,6 +26,7 @@ import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
 import com.facebook.accountkit.AccountKitCallback;
 import com.facebook.accountkit.AccountKitError;
+import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
 import com.tomato.tuantt.tomatoapp.createorder.OrderWorking;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
@@ -42,7 +45,7 @@ import java.util.List;
 
 public class MenuActivity extends AppCompatActivity {
 
-    String url_service = "http://api.timtruyen.online/api/services/0/subservice";
+    String url_service = Constant.BASE_URL + "api/services/0/subservice";
     List<Service> lstService;
     RecyclerView mrc;
     RecyclerViewServiceAdapter myAdapter;
@@ -100,9 +103,22 @@ public class MenuActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
                 Log.d("Error", "Error");
                 error.printStackTrace();
                 requestQueue.stop();
+                if (error instanceof NoConnectionError) {
+                    Toast.makeText(MenuActivity.this,R.string.msg_load_fail,Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MenuActivity.this,R.string.msg_load_fail_server,Toast.LENGTH_SHORT).show();
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        onBackAction();
+                    }
+                },2000);
+
             }
         });
 
@@ -148,6 +164,15 @@ public class MenuActivity extends AppCompatActivity {
         }else {
             OrderWorking.currentOrder.clear();
         }
+        try {
+            if (OrderWorking.activity !=null) {
+                OrderWorking.activity.finish();
+            }
+        } catch (Exception e) {
+        }
+        OrderWorking.activity = null;
+        OrderWorking.currentService = null;
+        OrderWorking.currentServiceId = -1;
         AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
             @Override
             public void onSuccess(Account account) {

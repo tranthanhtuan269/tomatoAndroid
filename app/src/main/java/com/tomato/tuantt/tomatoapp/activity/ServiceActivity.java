@@ -1,6 +1,7 @@
 package com.tomato.tuantt.tomatoapp.activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -22,12 +23,14 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.adapter.ViewPagerAdapter;
 import com.tomato.tuantt.tomatoapp.createorder.ChangePackageListener;
 import com.tomato.tuantt.tomatoapp.createorder.MapsActivity;
@@ -66,8 +69,7 @@ public class ServiceActivity extends AppCompatActivity implements ChangePackageL
     public static final String SERVICE_ID = "SERVICE_ID";
     public static final String FIRST_CREATE = "CALL_FROM_SERVICE";
     public static final String SERVICE_NAME = "SERVICE_NAME";
-    String url_service = "http://api.timtruyen.online/api/services/0/subservice";
-
+    String url_service = Constant.BASE_URL + "api/services/0/subservice";
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
@@ -77,6 +79,7 @@ public class ServiceActivity extends AppCompatActivity implements ChangePackageL
     private PackageBuyAdapter packageBuyAdapter;
     private LinearLayoutManager manager;
     boolean isOnResume = false;
+    private ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,8 +88,15 @@ public class ServiceActivity extends AppCompatActivity implements ChangePackageL
         Intent intent = getIntent();
         int id = intent.getIntExtra(SERVICE_ID,1);
         firstCreate = intent.getBooleanExtra(FIRST_CREATE,true);
-        url_service = "http://api.timtruyen.online/api/services/"+id+"/subservice";
+        if (firstCreate) {
+            OrderWorking.activity = this;
+        }
+        url_service = Constant.BASE_URL + "api/services/"+id+"/subservice";
 
+        if (dialog == null) {
+            dialog = new ProgressDialog(ServiceActivity.this);
+            dialog.setMessage(getString(R.string.msg_wait_load_data));
+        }
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -151,20 +161,34 @@ public class ServiceActivity extends AppCompatActivity implements ChangePackageL
                         viewOneAdapter.addView(viewOne);
                     }
                     viewPager.setAdapter(viewOneAdapter);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
+
+                } finally {
+                    if (dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                }
                 Log.d("Error", "Error");
                 error.printStackTrace();
                 requestQueue.stop();
+                if (error instanceof NoConnectionError) {
+                    Toast.makeText(ServiceActivity.this,R.string.msg_load_fail,Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ServiceActivity.this,R.string.msg_load_fail_server,Toast.LENGTH_SHORT).show();
+                }
+                onBackAction();
             }
         });
 
+        dialog.show();
         requestQueue.add(stringRequest);
     }
 
@@ -198,26 +222,32 @@ public class ServiceActivity extends AppCompatActivity implements ChangePackageL
     }
 
     private void onActionAgree(){
-        if (firstCreate) {
-            boolean isOpenMap = false;
-            if (OrderWorking.currentOrder !=null && OrderWorking.currentOrder.size() > 0) {
-                for (Package p : OrderWorking.currentOrder.values()){
-                    if (p.number > 0) {
-                        isOpenMap = true;
-                        break;
-                    }
+        boolean allowNext = false;
+        if (OrderWorking.currentOrder !=null && OrderWorking.currentOrder.size() > 0) {
+            for (Package p : OrderWorking.currentOrder.values()){
+                if (p.number > 0) {
+                    allowNext = true;
+                    break;
                 }
             }
-            if (isOpenMap) {
+        }
+
+        if (firstCreate) {
+            if (allowNext) {
                 requestPermission();
             } else {
                 Toast.makeText(this,R.string.msg_alert_select_package,Toast.LENGTH_SHORT).show();
             }
 
         } else {
-            Intent resultIntent = new Intent();
-            setResult(RESULT_OK, resultIntent);
-            finish();
+            if (allowNext) {
+                Intent resultIntent = new Intent();
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            } else {
+                Toast.makeText(this,R.string.msg_alert_select_package,Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
     @Override
