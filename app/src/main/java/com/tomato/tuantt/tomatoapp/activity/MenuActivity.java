@@ -33,6 +33,7 @@ import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.adapter.RecyclerViewServiceAdapter;
 import com.tomato.tuantt.tomatoapp.helper.GridSpacingItemDecoration;
+import com.tomato.tuantt.tomatoapp.model.PaymentOrderInfor;
 import com.tomato.tuantt.tomatoapp.model.Service;
 
 import org.json.JSONArray;
@@ -98,6 +99,13 @@ public class MenuActivity extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(MenuActivity.this,R.string.msg_load_fail_server,Toast.LENGTH_SHORT).show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            onBackAction();
+                        }
+                    },2000);
                 }
             }
         }, new Response.ErrorListener() {
@@ -171,8 +179,7 @@ public class MenuActivity extends AppCompatActivity {
         } catch (Exception e) {
         }
         OrderWorking.activity = null;
-        OrderWorking.currentService = null;
-        OrderWorking.currentServiceId = -1;
+        OrderWorking.paymentOrderInfor = new PaymentOrderInfor();
         AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
             @Override
             public void onSuccess(Account account) {
@@ -192,11 +199,10 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void onBackAction(){
-        SharedPreferenceConfig preferenceConfig = new SharedPreferenceConfig(getApplicationContext());
+        SharedPreferenceConfig preferenceConfig = SharedPreferenceConfig.getInstance(getApplicationContext());
         if (preferenceConfig.readLoginStatus()){
             super.onBackPressed();
         } else {
-            startActivity(new Intent(MenuActivity.this, MainActivity.class));
             finish();
         }
     }

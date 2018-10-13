@@ -10,8 +10,11 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application
+        android:name=".Application"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_config"
         android:icon="@mipmap/ic_launcher"
@@ -30,7 +33,8 @@
             android:name="com.facebook.accountkit.ClientToken"
             android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
 
-        <activity android:name="com.facebook.accountkit.ui.AccountKitActivity" />
+        <activity android:name="com.facebook.accountkit.ui.AccountKitActivity" >
+        </activity>
         <activity android:name="com.facebook.accountkit.ui.AccountKitEmailRedirectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -108,6 +112,9 @@
             <!--</intent-filter>-->
         </activity>
         <activity android:name=".createorder.ContactPaymentActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".createorder.ConfirmPaymentActivity"
             android:screenOrientation="portrait"/>
     </application>
 

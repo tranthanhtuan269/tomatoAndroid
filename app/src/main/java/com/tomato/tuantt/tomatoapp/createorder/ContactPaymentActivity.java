@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -22,6 +23,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
 
 /**
  * Created by Anh Nguyen on 10/11/2018.
@@ -38,6 +40,10 @@ public class ContactPaymentActivity extends AppCompatActivity implements View.On
     private CustomEditText edtName,edtPhone,edtEmail,edtPromotion;
     private Spinner spMoneyTYpe,spPhoneType;
     private int sum;
+    //private int phone_type;
+    private int payType;
+    private String namePayType;
+    private String startPhone;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +69,16 @@ public class ContactPaymentActivity extends AppCompatActivity implements View.On
 
         edtName = findViewById(R.id.edtName);
         edtName.clearFocus();
+        edtName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    edtName.clearFocus();
+                }
+                // Return true if you have consumed the action, else false.
+                return false;
+            }
+        });
         edtName.setOnKeyBack(new CustomEditText.OnKeyBack() {
             @Override
             public void onKeyback() {
@@ -71,6 +87,16 @@ public class ContactPaymentActivity extends AppCompatActivity implements View.On
         });
 
         edtPhone = findViewById(R.id.edtPhone);
+        edtPhone.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    edtPhone.clearFocus();
+                }
+                // Return true if you have consumed the action, else false.
+                return false;
+            }
+        });
         edtPhone.setOnKeyBack(new CustomEditText.OnKeyBack() {
             @Override
             public void onKeyback() {
@@ -109,7 +135,7 @@ public class ContactPaymentActivity extends AppCompatActivity implements View.On
 
         spMoneyTYpe = findViewById(R.id.spMoneyTYpe);
         spPhoneType = findViewById(R.id.spPhoneType);
-        String[] moneyType = getResources().getStringArray(R.array.money_type);
+        final String[] moneyType = getResources().getStringArray(R.array.money_type);
         List<String> moneyTypeList = new ArrayList<String>(Arrays.asList(moneyType));
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 R.layout.simple_spinner_item,R.id.textView, moneyTypeList);
@@ -118,7 +144,8 @@ public class ContactPaymentActivity extends AppCompatActivity implements View.On
         spMoneyTYpe.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                payType = position+1;
+                namePayType = moneyType[position];
             }
 
             @Override
@@ -128,7 +155,7 @@ public class ContactPaymentActivity extends AppCompatActivity implements View.On
         });
         spMoneyTYpe.setSelection(0);
 
-        String[] phoneType = getResources().getStringArray(R.array.phone_type);
+        final String[] phoneType = getResources().getStringArray(R.array.phone_type);
         List<String> phoneTypeList = new ArrayList<String>(Arrays.asList(phoneType));
         ArrayAdapter<String> phoneAdapter = new ArrayAdapter<String>(this,
                 R.layout.simple_spinner_item, R.id.textView,phoneTypeList);
@@ -137,7 +164,7 @@ public class ContactPaymentActivity extends AppCompatActivity implements View.On
         spPhoneType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                startPhone = phoneType[position];
             }
 
             @Override
@@ -188,18 +215,52 @@ public class ContactPaymentActivity extends AppCompatActivity implements View.On
             Toast.makeText(this,R.string.msg_alert_phone_number,Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(edtEmail.getText().toString())) {
+        String email = edtEmail.getText().toString().trim();
+        if (!TextUtils.isEmpty(email) && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(this,R.string.msg_alert_email,Toast.LENGTH_SHORT).show();
             return;
         }
+//        if (TextUtils.isEmpty(edtEmail.getText().toString())) {
+//            Toast.makeText(this,R.string.msg_alert_email,Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+        OrderWorking.paymentOrderInfor.name = edtName.getText().toString();
 
+        OrderWorking.paymentOrderInfor.startPhone = startPhone;
+        String belowPhone = edtPhone.getText().toString();
+        OrderWorking.paymentOrderInfor.afterPhone = belowPhone;
+        String[] tmpstart = startPhone.split("\\+");
+        StringBuilder builder = new StringBuilder("+");
+        builder.append(tmpstart[tmpstart.length-1]);
+        if (belowPhone.startsWith("0")) {
+            builder.append(belowPhone.substring(1));
+        }else {
+            builder.append(belowPhone);
+        }
+        OrderWorking.paymentOrderInfor.phone = builder.toString();
+
+        OrderWorking.paymentOrderInfor.email = email;
+
+        OrderWorking.paymentOrderInfor.paymentType = payType;
+
+        OrderWorking.paymentOrderInfor.namePaymentType = namePayType;
+        OrderWorking.paymentOrderInfor.promotion = edtPromotion.getText().toString();
+
+        Intent intent = ConfirmPaymentActivity.createIntent(this);
+        startActivity(intent);
     }
 
     private void hideKeyboard(){
-        InputMethodManager inputManager =
-                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(
-                this.getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
+        if (this.getCurrentFocus() !=null) {
+            try {
+                InputMethodManager inputManager =
+                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(
+                        this.getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+            }catch (Exception e) {
+
+            }
+        }
     }
 }

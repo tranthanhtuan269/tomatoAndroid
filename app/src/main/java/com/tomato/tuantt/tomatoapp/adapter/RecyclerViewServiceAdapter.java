@@ -50,8 +50,9 @@ public class RecyclerViewServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 //                intent.putExtra("ServiceId", mData.get(position).getId());
 //                intent.putExtra("ServiceName", mData.get(position).getName());
 //                intent.putExtra("ServiceThumbnail", mData.get(position).getIcon());
-                OrderWorking.currentService = mData.get(position).getName();
-                OrderWorking.currentServiceId = mData.get(position).getId();
+                OrderWorking.paymentOrderInfor.currentService = mData.get(position).getName();
+                OrderWorking.paymentOrderInfor.currentServiceId = mData.get(position).getId();
+                OrderWorking.paymentOrderInfor.currentServiceUrl = defaultUrlImage + mData.get(position).getIcon();
                 Intent intent = ServiceActivity.createIntent(mContext, mData.get(position).getId(),mData.get(position).getName(),true);
                 mContext.startActivity(intent);
             }
