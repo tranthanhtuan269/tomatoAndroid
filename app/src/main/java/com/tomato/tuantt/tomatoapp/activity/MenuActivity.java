@@ -65,19 +65,24 @@ public class MenuActivity extends AppCompatActivity {
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        //getSupportActionBar().setDisplayShowHomeEnabled(false);
 
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+//        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         TextView title = (TextView) toolbar.findViewById(R.id.titleBarTxt);
         title.setText("HSP");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
+        findViewById(R.id.imgBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-
         lstService = new ArrayList<>();
         mrc = (RecyclerView) findViewById(R.id.recyclerview_id);
         myAdapter = new RecyclerViewServiceAdapter(this, lstService);

@@ -106,8 +106,8 @@ public class ServiceActivity extends AppCompatActivity implements ChangePackageL
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         rvSelect = findViewById(R.id.rvSelect);
         manager = new LinearLayoutManager(this);
@@ -123,13 +123,19 @@ public class ServiceActivity extends AppCompatActivity implements ChangePackageL
                 onActionAgree();
             }
         });
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+        //toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         TextView title = (TextView) toolbar.findViewById(R.id.titleBarTxt);
         title.setText("Bảng giá");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//             onBackAction();
+//            }
+//        });
+        findViewById(R.id.imgBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             onBackAction();
+                onBackPressed();
             }
         });
 

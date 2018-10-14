@@ -592,7 +592,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if (dialog !=null) {
+            if (dialog !=null && !dialog.isShowing()) {
                 dialog.show();
             }
         }
