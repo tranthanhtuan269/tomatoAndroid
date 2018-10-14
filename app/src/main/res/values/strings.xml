@@ -33,5 +33,10 @@
     <string name="msg_alert_name">Vui lòng nhập tên</string>
     <string name="msg_alert_phone_number">Vui lòng nhập số điện thoại</string>
     <string name="msg_alert_email">Vui lòng nhập email!</string>
+    <string name="_18_08_2018">18-08-2018</string>
+    <string name="title">Title</string>
+    <string name="title_activity_news_detail">NewsDetailActivity</string>
+    <string name="textview">TextView</string>
+    <string name="m_gi_i_thi_u_c_a_b_n">Mã giới thiệu của bạn</string>
 
 </resources>
