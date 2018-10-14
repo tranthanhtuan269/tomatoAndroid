@@ -10,8 +10,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -23,6 +25,7 @@ import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.accountkit.ui.LoginType;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
+import com.tomato.tuantt.tomatoapp.createorder.OrderWorking;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -42,6 +45,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (OrderWorking.serviceHeight == 0 ) {
+            calcuServiceHeight();
+        }
 
         preferenceConfig = SharedPreferenceConfig.getInstance(getApplicationContext());
 
@@ -167,5 +174,13 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             new AppSettingsDialog.Builder(this).build().show();
         }
+    }
+
+    private void calcuServiceHeight(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        int screenDp = (int) (metrics.heightPixels / metrics.density);
+        OrderWorking.serviceHeight = (int) (((float)screenDp / (float)640) * 200 * metrics.density);
     }
 }

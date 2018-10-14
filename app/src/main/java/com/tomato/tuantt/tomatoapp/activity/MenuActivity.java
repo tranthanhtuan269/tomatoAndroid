@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.ArrayMap;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +57,10 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        if (OrderWorking.serviceHeight == 0 ) {
+            calcuServiceHeight();
+        }
 
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
@@ -205,5 +211,13 @@ public class MenuActivity extends AppCompatActivity {
         } else {
             finish();
         }
+    }
+
+    private void calcuServiceHeight(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        int screenDp = (int) (metrics.heightPixels / metrics.density);
+        OrderWorking.serviceHeight = (int) (screenDp / 640 * 200 * metrics.density);
     }
 }

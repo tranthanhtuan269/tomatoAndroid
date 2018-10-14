@@ -18,4 +18,5 @@ public class OrderWorking {
     public static Map<Integer, Package> currentOrder = new ArrayMap<>();
     public static ServiceActivity activity;
     public static PaymentOrderInfor paymentOrderInfor = new PaymentOrderInfor();
+    public static int serviceHeight = 0;
 }
