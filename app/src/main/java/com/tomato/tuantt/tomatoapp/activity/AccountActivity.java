@@ -145,8 +145,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                         break;
 
                     case R.id.navigation_user:
-                        Intent accountIntent = new Intent(AccountActivity.this, LogActivity.class);
-                        startActivity(accountIntent);
+                        Toast.makeText(AccountActivity.this, "Click user", Toast.LENGTH_SHORT).show();
                         break;
 
                     case R.id.navigation_hsp:

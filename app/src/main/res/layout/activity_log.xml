@@ -7,62 +7,18 @@
     android:background="#F4F4F4"
     tools:context=".activity.LogActivity">
 
-    <include
-        android:id="@+id/toolBar"
-        layout="@layout/title_bar" />
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout3"
-        android:layout_width="304dp"
-        android:layout_height="475dp"
-        android:orientation="vertical"
-        android:paddingTop="26dp"
-        android:layout_centerInParent="true">
-
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/barLayout"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/button_corner_without_gradient"
-            app:layout_constraintBottom_toTopOf="@id/viewpager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                app:tabGravity="fill"
-                app:tabMode="fixed"
-                app:tabSelectedTextColor="#2380C0"
-                app:tabTextColor="#9A9A9A" />
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:padding="0dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/barLayout" />
-    </android.support.constraint.ConstraintLayout>
+    <fragment
+        android:id="@+id/container"
+        class="com.tomato.tuantt.tomatoapp.view.HistoryFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/navigationView" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
         android:layout_alignParentBottom="true"
+        android:background="?android:attr/windowBackground"
         app:menu="@menu/navigation" />
-
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/navigationView"/>
 </RelativeLayout>

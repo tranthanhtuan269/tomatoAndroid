@@ -11,10 +11,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
+import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
 import com.tomato.tuantt.tomatoapp.adapter.HistoryPagerAdapter;
 import com.tomato.tuantt.tomatoapp.model.OrderData;
 import com.tomato.tuantt.tomatoapp.model.Package;
@@ -28,7 +30,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
 
 public class ListHistoryController {
 
@@ -59,7 +63,8 @@ public class ListHistoryController {
         } else {
             url = Constant.BASE_URL + API_OLD_ORDERS;
         }
-        url = String.format(url, "+84973619398", "dd4b9a0c9f111a9744ebd7680a801fc8");
+        SharedPreferenceConfig preferenceConfig = SharedPreferenceConfig.getInstance(mContext);
+        url = String.format(url, "+84973619398", preferenceConfig.getToken());
         if (mCallback != null) {
             mCallback.showProgress();
         }
@@ -173,13 +178,14 @@ public class ListHistoryController {
         requestQueue.add(stringRequest);
     }
 
-    public void deleteOrder(int id) {
-        String url = Constant.BASE_URL + "api.timtruyen.online/api/orders/" + id + "/phone=%2B84973619398&access_token=dd4b9a0c9f111a9744ebd7680a801fc8";
+    public void deleteOrder(int id, String phoneNumber) {
+        String url = Constant.BASE_URL + "api.timtruyen.online/api/orders/" + id + "/phone=" + phoneNumber + "&access_token=dd4b9a0c9f111a9744ebd7680a801fc8";
         final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
         StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
+                mCallback.hideProgress();
                 Toast.makeText(mContext, R.string.msg_delete_success, Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
@@ -188,9 +194,9 @@ public class ListHistoryController {
                 Log.e(TAG, Log.getStackTraceString(error));
                 requestQueue.stop();
                 if (error instanceof NoConnectionError) {
-                    Toast.makeText(mContext, R.string.msg_load_fail, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.msg_error_network_fail, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(mContext, R.string.msg_load_fail_server, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.msg_delete_fail, Toast.LENGTH_SHORT).show();
                 }
                 if (mCallback != null) {
                     mCallback.hideProgress();
@@ -198,6 +204,36 @@ public class ListHistoryController {
             }
         });
         requestQueue.add(stringRequest);
+    }
+
+    public void updateOrder(int id, HashMap hashMap) {
+        if (mCallback != null) {
+            mCallback.showProgress();
+        }
+        String url = Constant.BASE_URL + "api.timtruyen.online/api/orders/" + id;
+        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        JsonObjectRequest req = new JsonObjectRequest(url, new JSONObject(hashMap), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                mCallback.hideProgress();
+                Toast.makeText(mContext, R.string.msg_update_success, Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, Log.getStackTraceString(error));
+                requestQueue.stop();
+                if (error instanceof NoConnectionError) {
+                    Toast.makeText(mContext, R.string.msg_error_network_fail, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, R.string.msg_delete_fail, Toast.LENGTH_SHORT).show();
+                }
+                if (mCallback != null) {
+                    mCallback.hideProgress();
+                }
+            }
+        });
+        requestQueue.add(req);
     }
 
     public interface ListHistoryCallback {

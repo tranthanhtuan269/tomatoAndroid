@@ -14,7 +14,6 @@ import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.adapter.HistoryAdapter;
 import com.tomato.tuantt.tomatoapp.adapter.HistoryPagerAdapter;
 import com.tomato.tuantt.tomatoapp.controller.ListHistoryController;
-import com.tomato.tuantt.tomatoapp.model.Event;
 import com.tomato.tuantt.tomatoapp.model.MessageEvent;
 import com.tomato.tuantt.tomatoapp.model.OrderData;
 import com.tomato.tuantt.tomatoapp.utils.Utils;
@@ -115,8 +114,17 @@ public class ListHistoryFragment extends Fragment implements ListHistoryControll
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     void onMessageEvent(MessageEvent messageEvent) {
-        if (messageEvent != null && messageEvent.getEvent() == Event.DELETE_ORDER) {
-            mController.deleteOrder(messageEvent.getId());
+        if (messageEvent != null) {
+            switch (messageEvent.getEvent()) {
+                case DELETE_ORDER:
+                    mController.deleteOrder(messageEvent.getId(), messageEvent.getPhoneNumber());
+                    break;
+                case UPDATE_ORDER:
+                    mController.updateOrder(messageEvent.getId(), messageEvent.getHashMap());
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

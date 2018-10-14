@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.tomato.tuantt.tomatoapp.R;
+import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
 import com.tomato.tuantt.tomatoapp.model.Event;
 import com.tomato.tuantt.tomatoapp.model.MessageEvent;
 import com.tomato.tuantt.tomatoapp.model.OrderData;
@@ -31,11 +32,13 @@ import com.tomato.tuantt.tomatoapp.utils.DialogUtils;
 import com.tomato.tuantt.tomatoapp.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONArray;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -43,6 +46,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
+
+    private static final String TAG = HistoryAdapter.class.getSimpleName();
 
     private List<OrderData> mList;
 
@@ -66,7 +71,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final OrderData orderData = mList.get(position);
         if (holder == null || orderData == null) {
             return;
@@ -112,13 +117,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                         public boolean onMenuItemClick(MenuItem item) {
                             switch (item.getItemId()) {
                                 case R.id.action_change_time:
-                                    showDatePicker(orderData.getStart_time(), holder.tvStartTime);
+                                    showDatePicker(orderData.getStart_time(), holder.tvStartTime, position);
                                     return true;
                                 case R.id.action_delete:
                                     DialogUtils.showDialogConfirmDeleteOrder(mContext, new MaterialDialog.SingleButtonCallback() {
                                         @Override
                                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                            EventBus.getDefault().post(new MessageEvent(Event.DELETE_ORDER, orderData.getId()));
+                                            EventBus.getDefault().post(new MessageEvent(Event.DELETE_ORDER, orderData.getId(), orderData.getUser() != null ? orderData.getUser().getPhone() : ""));
                                         }
                                     });
                                     return true;
@@ -133,7 +138,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                     DialogUtils.showDialogConfirmDeleteOrder(mContext, new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            EventBus.getDefault().post(new MessageEvent(Event.DELETE_ORDER, orderData.getId()));
+                            EventBus.getDefault().post(new MessageEvent(Event.DELETE_ORDER, orderData.getId(), orderData.getUser() != null ? orderData.getUser().getPhone() : ""));
                         }
                     });
                 }
@@ -175,7 +180,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         return formatter.format(Long.valueOf(model.getPrice())) + " " + mContext.getString(R.string.txt_vnd);
     }
 
-    private void showDatePicker(final String startTime, final TextView tvStartTime) {
+    private void showDatePicker(final String startTime, final TextView tvStartTime, final int position) {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(Long.parseLong(startTime)));
         calendar.set(Calendar.MILLISECOND, 0);
@@ -191,7 +196,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 }
                 isTmp = false;
                 mTime.set(year, month, dayOfMonth);
-                showTimePicker(startTime, tvStartTime);
+                showTimePicker(startTime, tvStartTime, position);
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         calendar.add(Calendar.DAY_OF_YEAR, 7);
@@ -202,7 +207,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         dialog.show();
     }
 
-    private void showTimePicker(String startTime, final TextView tvStartTime) {
+    private void showTimePicker(String startTime, final TextView tvStartTime, final int position) {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(Long.parseLong(startTime)));
         TimePickerDialog dialog = new TimePickerDialog(mContext, R.style.MyDatePickerStyle, new TimePickerDialog.OnTimeSetListener() {
@@ -217,23 +222,42 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 isTmp = false;
                 mTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 mTime.set(Calendar.MINUTE, minute);
-                updateTimeData(tvStartTime);
+                updateTimeData(tvStartTime, position);
             }
         }, mTime.get(Calendar.HOUR_OF_DAY), mTime.get(Calendar.MINUTE), true);
         dialog.setTitle("");
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
-                updateTimeData(tvStartTime);
+                updateTimeData(tvStartTime, position);
             }
         });
         dialog.show();
 
     }
 
-    private void updateTimeData(TextView tvStartTime) {
+    private void updateTimeData(TextView tvStartTime, int position) {
         if (tvStartTime != null) {
             tvStartTime.setText(getStartTime(mTime.getTime()));
+        }
+
+        if (!Utils.isEmptyList(mList) && mList.size() > position) {
+            OrderData model = mList.get(position);
+            if (model == null) {
+                return;
+            }
+            SharedPreferenceConfig preferenceConfig = SharedPreferenceConfig.getInstance(mContext);
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("address", model.getAddress());
+            params.put("start_time", String.valueOf(mTime.getTimeInMillis()));
+            params.put("end_time", model.getEnd_time());
+            params.put("price", model.getPrice());
+            params.put("phone", model.getUser().getPhone());
+            params.put("access_token", preferenceConfig.getToken());
+            JSONArray jsonArray = new JSONArray(model.getPackages());
+            params.put("list_packages", jsonArray.toString());
+
+            EventBus.getDefault().post(new MessageEvent(Event.UPDATE_ORDER, model.getId(), params));
         }
     }
 
