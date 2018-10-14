@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
@@ -105,8 +106,8 @@ public class ServiceActivity extends AppCompatActivity implements ChangePackageL
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         rvSelect = findViewById(R.id.rvSelect);
         manager = new LinearLayoutManager(this);
@@ -122,13 +123,19 @@ public class ServiceActivity extends AppCompatActivity implements ChangePackageL
                 onActionAgree();
             }
         });
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+        //toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         TextView title = (TextView) toolbar.findViewById(R.id.titleBarTxt);
         title.setText("Bảng giá");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//             onBackAction();
+//            }
+//        });
+        findViewById(R.id.imgBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             onBackAction();
+                onBackPressed();
             }
         });
 
@@ -163,7 +170,7 @@ public class ServiceActivity extends AppCompatActivity implements ChangePackageL
                     viewPager.setAdapter(viewOneAdapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
-
+                    Toast.makeText(ServiceActivity.this,R.string.msg_load_fail_server,Toast.LENGTH_SHORT).show();
                 } finally {
                     if (dialog.isShowing()) {
                         dialog.dismiss();
@@ -292,6 +299,9 @@ public class ServiceActivity extends AppCompatActivity implements ChangePackageL
             DisplayMetrics metrics = new DisplayMetrics();
             WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             windowManager.getDefaultDisplay().getMetrics(metrics);
+            if (height == 0) {
+                height = (int) (30 * metrics.density * 3);
+            }
             params.height = height;
             rvSelect.setLayoutParams(params);
         } else {

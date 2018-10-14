@@ -18,4 +18,6 @@
     <dimen name="spacing_small">10dp</dimen>
     <dimen name="spacing_tiny">4dp</dimen>
     <dimen name="size_avatar">50dp</dimen>
+
+    <dimen name="service_height">200dp</dimen>
 </resources>

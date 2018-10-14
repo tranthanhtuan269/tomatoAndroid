@@ -1,23 +1,19 @@
 package com.tomato.tuantt.tomatoapp.createorder;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -39,14 +35,11 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
     public static final String LOCATION = "LOCATION";
     public static final int CHANGE_LOCATION = 100;
     public static final int CHANGE_PACKAGE = 101;
-    public static Intent createIntent(Context context, LocationInfo locationInfo) {
+    public static Intent createIntent(Context context) {
         Intent intent = new Intent(context,EditOrderActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(LOCATION,locationInfo);
-        intent.putExtras(bundle);
         return intent;
     }
-    private LocationInfo info;
+
     private TextView tvAddress,tvDate,tvHour,tvMinute,tvMoney;
     private CustomEditText tvAddressNumber;
     private Button btnChoose;
@@ -58,7 +51,6 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_createorder);
-        info = (LocationInfo) getIntent().getExtras().getSerializable(LOCATION);
 
         android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
@@ -68,7 +60,7 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
 
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         TextView title = (TextView) toolbar.findViewById(R.id.titleBarTxt);
-        title.setText(OrderWorking.currentService);
+        title.setText(OrderWorking.paymentOrderInfor.currentService);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,8 +75,9 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.llNext).setOnClickListener(this);
 
         tvAddress = findViewById(R.id.tvAddress);
+        LocationInfo info = OrderWorking.paymentOrderInfor.location;
         if (info !=null) {
-            tvAddress.setText(info.name);
+            tvAddress.setText(info.address);
         }
 
 
@@ -146,9 +139,9 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CHANGE_LOCATION) {
             if (resultCode == RESULT_OK) {
-                info = (LocationInfo) data.getExtras().getSerializable(LOCATION);
+                LocationInfo info = OrderWorking.paymentOrderInfor.location;
                 if (info !=null) {
-                    tvAddress.setText(info.name);
+                    tvAddress.setText(info.address);
                 }
             }
         }else if (requestCode == CHANGE_PACKAGE) {
@@ -184,7 +177,9 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
                 showTimePicker();
                 break;
             case R.id.llAddMore:
-                Intent i = ServiceActivity.createIntent(this,OrderWorking.currentServiceId,OrderWorking.currentService,false);
+                hideKeyboard();
+                tvAddressNumber.clearFocus();
+                Intent i = ServiceActivity.createIntent(this,OrderWorking.paymentOrderInfor.currentServiceId,OrderWorking.paymentOrderInfor.currentService,false);
                 startActivityForResult(i,CHANGE_PACKAGE);
                 break;
             case R.id.llNext:
@@ -291,7 +286,7 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void nextAction(){
-        if (info == null || TextUtils.isEmpty(info.name)) {
+        if (TextUtils.isEmpty(tvAddress.getText().toString())) {
             Toast.makeText(this,R.string.msg_alert_address,Toast.LENGTH_SHORT).show();
             return;
         }
@@ -307,16 +302,25 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
             Toast.makeText(EditOrderActivity.this,R.string.msg_alert_time_bigger,Toast.LENGTH_SHORT).show();
             return;
         }
-        OrderWorking.info = info;
+        OrderWorking.paymentOrderInfor.totalMoney = sum;
+        OrderWorking.paymentOrderInfor.numberAddress = tvAddressNumber.getText().toString();
+        OrderWorking.paymentOrderInfor.time = time.getTimeInMillis();
         Intent intent = ContactPaymentActivity.createIntent(this,sum);
         startActivity(intent);
     }
 
     private void hideKeyboard(){
-        InputMethodManager inputManager =
-                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(
-                this.getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
+        if (this.getCurrentFocus() !=null) {
+            try {
+                InputMethodManager inputManager =
+                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(
+                        this.getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+            }catch (Exception e) {
+
+            }
+        }
+
     }
 }

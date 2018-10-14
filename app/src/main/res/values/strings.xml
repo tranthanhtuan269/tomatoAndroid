@@ -32,7 +32,17 @@
     <string name="enter_email">Nhập email</string>
     <string name="msg_alert_name">Vui lòng nhập tên</string>
     <string name="msg_alert_phone_number">Vui lòng nhập số điện thoại</string>
-    <string name="msg_alert_email">Vui lòng nhập email!</string>
+    <string name="msg_alert_email">Vui lòng nhập đúng email!</string>
+
+
+    <string name="confirm_payment_title">Xác nhận thông tin</string>
+    <string name="confirm_finish">Xác nhận và hoàn tất</string>
+
+    <string name="not_find_location">Đang tìm địa chỉ...</string>
+
+    <string name="msg_create_order_fail">Không kết nối đến hệ thống, bạn vui lòng kiểm tra lại kết nối mạng.</string>
+    <string name="msg_create_order_fail_server">Lỗi khi tạo đơn !</string>
+    <string name="msg_create_order_success">Tạo đơn thành công, cảm ơn bạn đã sử dụng dịch vụ !</string>
 
     <!--screen 2.2.1-->
     <string name="txt_start_day">Ngày bắt đầu</string>

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Anh Nguyen on 10/11/2018.
  */
 public class LocationInfo implements Serializable {
-    public String name;
+    public String address;
     public double lat;
     public double lgn;
 }
