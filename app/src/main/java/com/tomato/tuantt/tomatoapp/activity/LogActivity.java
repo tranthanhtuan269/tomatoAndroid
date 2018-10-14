@@ -113,7 +113,8 @@ public class LogActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_location:
-                        Toast.makeText(LogActivity.this, "Click Location", Toast.LENGTH_SHORT).show();
+                        Intent intentMenu = new Intent(LogActivity.this, MenuActivity.class);
+                        startActivity(intentMenu);
                         break;
 
                     case R.id.navigation_log:
@@ -129,7 +130,6 @@ public class LogActivity extends AppCompatActivity {
                         break;
 
                     case R.id.navigation_hsp:
-                        Toast.makeText(LogActivity.this, "Click hsp", Toast.LENGTH_SHORT).show();
                         Intent intentHSP = new Intent(LogActivity.this, HSPActivity.class);
                         startActivity(intentHSP);
                         break;

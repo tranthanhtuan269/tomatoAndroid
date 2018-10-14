@@ -1,19 +1,19 @@
 package com.tomato.tuantt.tomatoapp.activity;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,46 +24,33 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookSdk;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
-import com.squareup.picasso.Picasso;
 import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
-import com.tomato.tuantt.tomatoapp.adapter.RecyclerViewServiceAdapter;
+import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
+import com.tomato.tuantt.tomatoapp.adapter.RecyclerViewNewsAdapter;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
-import com.tomato.tuantt.tomatoapp.helper.GridSpacingItemDecoration;
-import com.tomato.tuantt.tomatoapp.model.Service;
+import com.tomato.tuantt.tomatoapp.model.News;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class InviteActivity extends AppCompatActivity {
+public class NewsDetailActivity extends AppCompatActivity {
 
-    private String url_service = "http://api.timtruyen.online/api/users?phone=+84973619398";
-    private String defaultUrlImage = "http://api.timtruyen.online/public/images/";
+    private String url_service = Constant.BASE_URL + "api/news/";
 
-    private int userid;
-    private String userimage;
-    private String usercode;
-
-    private TextView userlinkLbl;
-    private ImageView userimageImg;
-    private Button shareBtn;
-
-    CallbackManager callbackManager;
-    ShareDialog shareDialog;
+    private TextView titleTv;
+    private TextView yearTv;
+    private TextView contentTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_invite);
+        setContentView(R.layout.activity_news_detail);
 
-        // setting top
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
@@ -76,53 +63,43 @@ public class InviteActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
-            }
-        });
-
-        FacebookSdk.sdkInitialize(this.getApplicationContext());
-
-
-        // main
-        userlinkLbl = (TextView) findViewById(R.id.userLinkLbl);
-        userimageImg = (ImageView) findViewById(R.id.userAvatarImg);
-        shareBtn = (Button) findViewById(R.id.shareBtn);
-
-        callbackManager = CallbackManager.Factory.create();
-        shareDialog = new ShareDialog(this);
-
-
-        shareBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                        .setQuote("This is useful Link")
-                        .setContentUrl(Uri.parse("http://youtube.com"))
-                        .build();
-                if(ShareDialog.canShow(ShareLinkContent.class))
-                {
-                    shareDialog.show(linkContent);
-                }
+                onBackPressed();
             }
         });
 
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(InviteActivity.this);
+        titleTv = (TextView) findViewById(R.id.title_txt);
+        yearTv = (TextView) findViewById(R.id.created_at);
+        contentTv = (TextView) findViewById(R.id.content_txt);
+
+        Intent intent = getIntent();
+        String newsID = intent.getStringExtra("NewsID");
+        Log.d("NewsID", newsID);
+        url_service = url_service + newsID;
+
+
+        Toast.makeText(NewsDetailActivity.this, "Click HSP User", Toast.LENGTH_SHORT).show();
+
+
+
+        final RequestQueue requestQueue = Volley.newRequestQueue(NewsDetailActivity.this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url_service, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
+                    Log.d("dataout", response.toString());
                     JSONObject jsonObject = new JSONObject(response);
-                    if(jsonObject.getInt("status_code") == 200){
-                        JSONObject jsonObject2 = jsonObject.getJSONObject("users").getJSONObject("data");
-                        userid = jsonObject2.getInt("id");
-                        userimage = jsonObject2.getString("avatar");
-                        usercode = jsonObject2.getString("code");
+                    JSONObject jsonObject2 = jsonObject.getJSONObject("news");
+                    JSONObject jo = jsonObject2.getJSONObject("data");
+                    int id = jo.getInt("id");
+                    String title = jo.getString("title");
+                    String year = jo.getString("created_at");
+                    String content = jo.getString("content");
 
-                        userlinkLbl.setText(usercode);
-                        Picasso.with(InviteActivity.this).load(defaultUrlImage + userimage).fit().centerInside().into(userimageImg);
-                    }
+                    titleTv.setText(title);
+                    yearTv.setText(year);
+                    contentTv.setText(content);
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -131,16 +108,29 @@ public class InviteActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
                 Log.d("Error", "Error");
                 error.printStackTrace();
                 requestQueue.stop();
+                if (error instanceof NoConnectionError) {
+                    Toast.makeText(NewsDetailActivity.this,R.string.msg_load_fail,Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(NewsDetailActivity.this,R.string.msg_load_fail_server,Toast.LENGTH_SHORT).show();
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        onBackAction();
+                    }
+                },2000);
+
             }
         });
 
         requestQueue.add(stringRequest);
 
 
-        // setting bottom
+
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
         BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -148,22 +138,22 @@ public class InviteActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.navigation_location:
-                        Intent intentMenu = new Intent(InviteActivity.this, MenuActivity.class);
+                        Intent intentMenu = new Intent(NewsDetailActivity.this, MenuActivity.class);
                         startActivity(intentMenu);
                         break;
 
                     case R.id.navigation_log:
-                        Intent intent = new Intent(InviteActivity.this, LogActivity.class);
+                        Intent intent = new Intent(NewsDetailActivity.this, LogActivity.class);
                         startActivity(intent);
                         break;
 
                     case R.id.navigation_user:
-                        Intent accountIntent = new Intent(InviteActivity.this, AccountActivity.class);
+                        Intent accountIntent = new Intent(NewsDetailActivity.this, AccountActivity.class);
                         startActivity(accountIntent);
                         break;
 
                     case R.id.navigation_hsp:
-                        Intent intentHSP = new Intent(InviteActivity.this, HSPActivity.class);
+                        Intent intentHSP = new Intent(NewsDetailActivity.this, HSPActivity.class);
                         startActivity(intentHSP);
                         break;
                 }
@@ -171,4 +161,20 @@ public class InviteActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        onBackAction();
+    }
+
+    private void onBackAction(){
+        SharedPreferenceConfig preferenceConfig = new SharedPreferenceConfig(getApplicationContext());
+        if (preferenceConfig.readLoginStatus()){
+            super.onBackPressed();
+        } else {
+            startActivity(new Intent(NewsDetailActivity.this, MainActivity.class));
+            finish();
+        }
+    }
+
 }

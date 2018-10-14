@@ -1,59 +1,165 @@
 package com.tomato.tuantt.tomatoapp.activity;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.tomato.tuantt.tomatoapp.R;
+import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+public class HSPActivity extends AppCompatActivity implements View.OnClickListener{
 
-public class HSPActivity extends AppCompatActivity {
-
-    String url_service = "http://api.timtruyen.online/api/services/1/subservice";
-    TextView textView;
+    private TextView whyuseLbl, practiceLbl, faqsLbl, reportLbl, contactLbl, legalLbl, aboutLbl;
+    private ImageView whyuseImg, practiceImg, faqsImg, reportImg, contactImg, legalImg, aboutImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hsp);
 
-        textView = (TextView) findViewById(R.id.textView);
+        // setting top
+        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolBar);
+        setSupportActionBar(toolbar);
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(HSPActivity.this);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url_service, new Response.Listener<String>() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+        TextView title = (TextView) toolbar.findViewById(R.id.titleBarTxt);
+        title.setText("HSP");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONObject jsonObject2 = jsonObject.getJSONObject("service");
-                    JSONArray jsonArray = jsonObject2.getJSONArray("data");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jo = jsonArray.getJSONObject(i);
-                        Log.d("obj", jo.toString());
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Error", "Error");
-                error.printStackTrace();
-                requestQueue.stop();
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
             }
         });
 
-        requestQueue.add(stringRequest);
+
+        // main
+
+        whyuseLbl = (TextView) findViewById(R.id.whyuseLbl);
+        practiceLbl = (TextView) findViewById(R.id.bestpraticeLbl);
+        faqsLbl = (TextView) findViewById(R.id.faqLbl);
+        reportLbl = (TextView) findViewById(R.id.reportLbl);
+        contactLbl = (TextView) findViewById(R.id.contactLbl);
+        legalLbl = (TextView) findViewById(R.id.legalLbl);
+        aboutLbl = (TextView) findViewById(R.id.aboutLbl);
+
+        whyuseImg = (ImageView) findViewById(R.id.whyuseImg);
+        practiceImg = (ImageView) findViewById(R.id.bestpraticeImg);
+        faqsImg = (ImageView) findViewById(R.id.faqImg);
+        reportImg = (ImageView) findViewById(R.id.reportImg);
+        contactImg = (ImageView) findViewById(R.id.contactImg);
+        legalImg = (ImageView) findViewById(R.id.legalImg);
+        aboutImg = (ImageView) findViewById(R.id.aboutImg);
+
+
+        whyuseLbl.setOnClickListener(this);
+        whyuseImg.setOnClickListener(this);
+        practiceLbl.setOnClickListener(this);
+        practiceImg.setOnClickListener(this);
+        faqsLbl.setOnClickListener(this);
+        faqsImg.setOnClickListener(this);
+        reportLbl.setOnClickListener(this);
+        reportImg.setOnClickListener(this);
+        contactLbl.setOnClickListener(this);
+        contactImg.setOnClickListener(this);
+        legalLbl.setOnClickListener(this);
+        legalImg.setOnClickListener(this);
+        aboutLbl.setOnClickListener(this);
+        aboutImg.setOnClickListener(this);
+
+
+
+
+        // setting bottom
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
+        BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.navigation_location:
+                        Intent intentMenu = new Intent(HSPActivity.this, MenuActivity.class);
+                        startActivity(intentMenu);
+                        break;
+
+                    case R.id.navigation_log:
+                        Intent intent = new Intent(HSPActivity.this, LogActivity.class);
+                        startActivity(intent);
+                        break;
+
+                    case R.id.navigation_user:
+                        Intent accountIntent = new Intent(HSPActivity.this, AccountActivity.class);
+                        startActivity(accountIntent);
+                        break;
+
+                    case R.id.navigation_hsp:
+                        Intent intentHSP = new Intent(HSPActivity.this, HSPActivity.class);
+                        startActivity(intentHSP);
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.whyuseLbl:
+            case R.id.whyuseImg:
+                Intent intentWhyUse = new Intent(HSPActivity.this, WhyUseActivity.class);
+                startActivity(intentWhyUse);
+                break;
+
+            case R.id.bestpraticeLbl:
+            case R.id.bestpraticeImg:
+                Intent intentBestPratice = new Intent(HSPActivity.this, BestPractiveActivity.class);
+                startActivity(intentBestPratice);
+                break;
+
+            case R.id.faqLbl:
+            case R.id.faqImg:
+                Intent intentHSPINFO = new Intent(HSPActivity.this, FAQsActivity.class);
+                startActivity(intentHSPINFO);
+                break;
+
+            case R.id.reportLbl:
+            case R.id.reportImg:
+                Intent intentINVITE = new Intent(HSPActivity.this, ReportActivity.class);
+                startActivity(intentINVITE);
+                break;
+
+            case R.id.contactLbl:
+            case R.id.contactImg:
+                Intent intentCOUPON = new Intent(HSPActivity.this, ContactActivity.class);
+                startActivity(intentCOUPON);
+                break;
+
+            case R.id.legalLbl:
+            case R.id.legalImg:
+                Intent intentHISTORY = new Intent(HSPActivity.this, LegalActivity.class);
+                startActivity(intentHISTORY);
+                break;
+
+            case R.id.aboutLbl:
+            case R.id.aboutImg:
+                Intent intentCONFIG = new Intent(HSPActivity.this, AboutActivity.class);
+                startActivity(intentCONFIG);
+                break;
+
+            default:
+                break;
+        }
     }
 }

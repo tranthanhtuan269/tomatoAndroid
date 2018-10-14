@@ -19,4 +19,6 @@
     <color name="transparent">#00000000</color>
     <color name="color_click_button_order">#99D9D9D9</color>
     <color name="text_color_black">#272727</color>
+    <color name="year">#999999</color>
+    <color name="title">#333333</color>
 </resources>
