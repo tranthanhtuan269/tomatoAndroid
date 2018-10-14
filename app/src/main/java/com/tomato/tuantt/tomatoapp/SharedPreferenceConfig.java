@@ -38,6 +38,6 @@ public class SharedPreferenceConfig {
     }
 
     public String getToken(){
-        return sharedPreferences.getString(ACCESS_TOKEN,null);
+        return sharedPreferences.getString(ACCESS_TOKEN,"");
     }
 }
