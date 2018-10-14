@@ -11,14 +11,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tomato.tuantt.tomatoapp.R;
+import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 
-public class CouponActivity extends AppCompatActivity {
+public class ContactActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_coupon);
+        setContentView(R.layout.activity_contact);
 
         // setting top
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolBar);
@@ -29,7 +30,7 @@ public class CouponActivity extends AppCompatActivity {
 
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         TextView title = (TextView) toolbar.findViewById(R.id.titleBarTxt);
-        title.setText("HSP");
+        title.setText("Liên hệ");
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,35 +41,52 @@ public class CouponActivity extends AppCompatActivity {
 
 
 
+
+
         // setting bottom
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
         BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.navigation_location:
-                        Intent intentMenu = new Intent(CouponActivity.this, MenuActivity.class);
+                        Intent intentMenu = new Intent(ContactActivity.this, MenuActivity.class);
                         startActivity(intentMenu);
                         break;
 
                     case R.id.navigation_log:
-                        Intent intent = new Intent(CouponActivity.this, LogActivity.class);
+                        Intent intent = new Intent(ContactActivity.this, LogActivity.class);
                         startActivity(intent);
                         break;
 
                     case R.id.navigation_user:
-                        Intent accountIntent = new Intent(CouponActivity.this, AccountActivity.class);
+                        Intent accountIntent = new Intent(ContactActivity.this, AccountActivity.class);
                         startActivity(accountIntent);
                         break;
 
                     case R.id.navigation_hsp:
-                        Intent intentHSP = new Intent(CouponActivity.this, HSPActivity.class);
+                        Intent intentHSP = new Intent(ContactActivity.this, HSPActivity.class);
                         startActivity(intentHSP);
                         break;
                 }
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        onBackAction();
+    }
+
+    private void onBackAction() {
+        SharedPreferenceConfig preferenceConfig = new SharedPreferenceConfig(getApplicationContext());
+        if (preferenceConfig.readLoginStatus()) {
+            super.onBackPressed();
+        } else {
+            startActivity(new Intent(ContactActivity.this, MainActivity.class));
+            finish();
+        }
     }
 }

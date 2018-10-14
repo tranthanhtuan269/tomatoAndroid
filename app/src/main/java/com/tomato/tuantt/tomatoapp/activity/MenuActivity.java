@@ -132,21 +132,21 @@ public class MenuActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.navigation_location:
-                        Toast.makeText(MenuActivity.this, "Click Location", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case R.id.navigation_log:
-                        Intent intent = new Intent(MenuActivity.this, LogActivity.class);
+                        Intent intent = new Intent(MenuActivity.this, MenuActivity.class);
                         startActivity(intent);
                         break;
 
+                    case R.id.navigation_log:
+                        Intent intentLog = new Intent(MenuActivity.this, LogActivity.class);
+                        startActivity(intentLog);
+                        break;
+
                     case R.id.navigation_user:
-                        Intent accountIntent = new Intent(MenuActivity.this, AccountActivity.class);
-                        startActivity(accountIntent);
+                        Intent intentAccount = new Intent(MenuActivity.this, AccountActivity.class);
+                        startActivity(intentAccount);
                         break;
 
                     case R.id.navigation_hsp:
-                        Toast.makeText(MenuActivity.this, "Click hsp", Toast.LENGTH_SHORT).show();
                         Intent intentHSP = new Intent(MenuActivity.this, HSPActivity.class);
                         startActivity(intentHSP);
                         break;

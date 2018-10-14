@@ -21,9 +21,7 @@ import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
-import com.tomato.tuantt.tomatoapp.model.Service;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,18 +66,18 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         usernameLbl = (TextView) findViewById(R.id.userNameLbl);
         userlinkLbl = (TextView) findViewById(R.id.userLinkLbl);
 
-        infoHSPLbl = (TextView) findViewById(R.id.infoHSPLbl);
-        inviteFriendLbl = (TextView) findViewById(R.id.inviteFriendLbl);
-        couponLbl = (TextView) findViewById(R.id.couponLbl);
-        historyLbl = (TextView) findViewById(R.id.historyLbl);
+        infoHSPLbl = (TextView) findViewById(R.id.faqLbl);
+        inviteFriendLbl = (TextView) findViewById(R.id.reportLbl);
+        couponLbl = (TextView) findViewById(R.id.contactLbl);
+        historyLbl = (TextView) findViewById(R.id.legalLbl);
         configLbl = (TextView) findViewById(R.id.configLbl);
 
         userimageImg = (ImageView) findViewById(R.id.userAvatarImg);
-        infoHSPImg = (ImageView) findViewById(R.id.infoHSPImg);
-        inviteFriendImg = (ImageView) findViewById(R.id.inviteFriendImg);
-        couponImg = (ImageView) findViewById(R.id.couponImg);
-        historyImg = (ImageView) findViewById(R.id.historyImg);
-        configImg = (ImageView) findViewById(R.id.configImg);
+        infoHSPImg = (ImageView) findViewById(R.id.faqImg);
+        inviteFriendImg = (ImageView) findViewById(R.id.reportImg);
+        couponImg = (ImageView) findViewById(R.id.contactImg);
+        historyImg = (ImageView) findViewById(R.id.legalImg);
+        configImg = (ImageView) findViewById(R.id.aboutImg);
 
         infoHSPLbl.setOnClickListener(this);
         inviteFriendLbl.setOnClickListener(this);
@@ -136,7 +134,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.navigation_location:
-                        Toast.makeText(AccountActivity.this, "Click Location", Toast.LENGTH_SHORT).show();
+                        Intent intentMenu = new Intent(AccountActivity.this, MenuActivity.class);
+                        startActivity(intentMenu);
                         break;
 
                     case R.id.navigation_log:
@@ -145,12 +144,11 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                         break;
 
                     case R.id.navigation_user:
-                        Intent accountIntent = new Intent(AccountActivity.this, LogActivity.class);
+                        Intent accountIntent = new Intent(AccountActivity.this, AccountActivity.class);
                         startActivity(accountIntent);
                         break;
 
                     case R.id.navigation_hsp:
-                        Toast.makeText(AccountActivity.this, "Click hsp", Toast.LENGTH_SHORT).show();
                         Intent intentHSP = new Intent(AccountActivity.this, HSPActivity.class);
                         startActivity(intentHSP);
                         break;
@@ -164,32 +162,32 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
 
-            case R.id.infoHSPLbl:
-            case R.id.infoHSPImg:
+            case R.id.faqLbl:
+            case R.id.faqImg:
                 Intent intentHSPINFO = new Intent(AccountActivity.this, HSPInfoActivity.class);
                 startActivity(intentHSPINFO);
                 break;
 
-            case R.id.inviteFriendLbl:
-            case R.id.inviteFriendImg:
+            case R.id.reportLbl:
+            case R.id.reportImg:
                 Intent intentINVITE = new Intent(AccountActivity.this, InviteActivity.class);
                 startActivity(intentINVITE);
                 break;
 
-            case R.id.couponLbl:
-            case R.id.couponImg:
+            case R.id.contactLbl:
+            case R.id.contactImg:
                 Intent intentCOUPON = new Intent(AccountActivity.this, CouponActivity.class);
                 startActivity(intentCOUPON);
                 break;
 
-            case R.id.historyLbl:
-            case R.id.historyImg:
+            case R.id.legalLbl:
+            case R.id.legalImg:
                 Intent intentHISTORY = new Intent(AccountActivity.this, HistoryActivity.class);
                 startActivity(intentHISTORY);
                 break;
 
             case R.id.configLbl:
-            case R.id.configImg:
+            case R.id.aboutImg:
                 Intent intentCONFIG = new Intent(AccountActivity.this, ConfigActivity.class);
                 startActivity(intentCONFIG);
                 break;

@@ -1,6 +1,7 @@
 package com.tomato.tuantt.tomatoapp.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -23,6 +24,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.squareup.picasso.Picasso;
 import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
@@ -50,6 +55,8 @@ public class InviteActivity extends AppCompatActivity {
     private ImageView userimageImg;
     private Button shareBtn;
 
+    CallbackManager callbackManager;
+    ShareDialog shareDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,17 +81,29 @@ public class InviteActivity extends AppCompatActivity {
             }
         });
 
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
+
 
         // main
         userlinkLbl = (TextView) findViewById(R.id.userLinkLbl);
         userimageImg = (ImageView) findViewById(R.id.userAvatarImg);
         shareBtn = (Button) findViewById(R.id.shareBtn);
 
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
+
 
         shareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                        .setQuote("This is useful Link")
+                        .setContentUrl(Uri.parse("http://youtube.com"))
+                        .build();
+                if(ShareDialog.canShow(ShareLinkContent.class))
+                {
+                    shareDialog.show(linkContent);
+                }
             }
         });
 
@@ -129,7 +148,8 @@ public class InviteActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.navigation_location:
-                        Toast.makeText(InviteActivity.this, "Click Location", Toast.LENGTH_SHORT).show();
+                        Intent intentMenu = new Intent(InviteActivity.this, MenuActivity.class);
+                        startActivity(intentMenu);
                         break;
 
                     case R.id.navigation_log:
@@ -138,12 +158,11 @@ public class InviteActivity extends AppCompatActivity {
                         break;
 
                     case R.id.navigation_user:
-                        Intent accountIntent = new Intent(InviteActivity.this, LogActivity.class);
+                        Intent accountIntent = new Intent(InviteActivity.this, AccountActivity.class);
                         startActivity(accountIntent);
                         break;
 
                     case R.id.navigation_hsp:
-                        Toast.makeText(InviteActivity.this, "Click hsp", Toast.LENGTH_SHORT).show();
                         Intent intentHSP = new Intent(InviteActivity.this, HSPActivity.class);
                         startActivity(intentHSP);
                         break;

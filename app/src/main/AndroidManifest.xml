@@ -106,7 +106,18 @@
         <activity
             android:name=".activity.NewsDetailActivity"
             android:label="@string/title_activity_news_detail"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activity.WhyUseActivity" />
+        <activity android:name=".activity.BestPractiveActivity" />
+        <activity android:name=".activity.FAQsActivity" />
+        <activity android:name=".activity.ReportActivity" />
+        <activity android:name=".activity.ContactActivity" />
+        <activity android:name=".activity.LegalActivity" />
+        <activity android:name=".activity.AboutActivity"></activity>
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider750273905312148"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
     </application>
 
 </manifest>

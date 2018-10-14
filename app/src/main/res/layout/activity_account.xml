@@ -67,7 +67,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/userNameLbl" />
 
             <ImageView
-                android:id="@+id/infoHSPImg"
+                android:id="@+id/faqImg"
                 android:layout_width="21dp"
                 android:layout_height="21dp"
                 android:layout_marginStart="16dp"
@@ -77,7 +77,7 @@
                 app:srcCompat="@drawable/hspiconenable" />
 
             <TextView
-                android:id="@+id/infoHSPLbl"
+                android:id="@+id/faqLbl"
                 android:layout_width="0dp"
                 android:layout_height="21dp"
                 android:layout_marginEnd="8dp"
@@ -87,21 +87,21 @@
                 android:textColor="#272727"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/infoHSPImg"
+                app:layout_constraintStart_toEndOf="@+id/faqImg"
                 app:layout_constraintTop_toBottomOf="@+id/userAvatarImg" />
 
             <ImageView
-                android:id="@+id/inviteFriendImg"
+                android:id="@+id/reportImg"
                 android:layout_width="21dp"
                 android:layout_height="21dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/infoHSPImg"
+                app:layout_constraintTop_toBottomOf="@+id/faqImg"
                 app:srcCompat="@drawable/userplus" />
 
             <TextView
-                android:id="@+id/inviteFriendLbl"
+                android:id="@+id/reportLbl"
                 android:layout_width="0dp"
                 android:layout_height="21dp"
                 android:layout_marginEnd="8dp"
@@ -111,21 +111,21 @@
                 android:textColor="#272727"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/inviteFriendImg"
-                app:layout_constraintTop_toBottomOf="@+id/infoHSPLbl" />
+                app:layout_constraintStart_toEndOf="@+id/reportImg"
+                app:layout_constraintTop_toBottomOf="@+id/faqLbl" />
 
             <ImageView
-                android:id="@+id/couponImg"
+                android:id="@+id/contactImg"
                 android:layout_width="21dp"
                 android:layout_height="21dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inviteFriendImg"
+                app:layout_constraintTop_toBottomOf="@+id/reportImg"
                 app:srcCompat="@drawable/gift" />
 
             <TextView
-                android:id="@+id/couponLbl"
+                android:id="@+id/contactLbl"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -135,21 +135,21 @@
                 android:textColor="#272727"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/couponImg"
-                app:layout_constraintTop_toBottomOf="@+id/inviteFriendLbl" />
+                app:layout_constraintStart_toEndOf="@+id/contactImg"
+                app:layout_constraintTop_toBottomOf="@+id/reportLbl" />
 
             <ImageView
-                android:id="@+id/historyImg"
+                android:id="@+id/legalImg"
                 android:layout_width="21dp"
                 android:layout_height="21dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/couponImg"
+                app:layout_constraintTop_toBottomOf="@+id/contactImg"
                 app:srcCompat="@drawable/filetext" />
 
             <TextView
-                android:id="@+id/historyLbl"
+                android:id="@+id/legalLbl"
                 android:layout_width="0dp"
                 android:layout_height="21dp"
                 android:layout_marginEnd="8dp"
@@ -159,17 +159,17 @@
                 android:textColor="#272727"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/historyImg"
-                app:layout_constraintTop_toBottomOf="@+id/couponLbl" />
+                app:layout_constraintStart_toEndOf="@+id/legalImg"
+                app:layout_constraintTop_toBottomOf="@+id/contactLbl" />
 
             <ImageView
-                android:id="@+id/configImg"
+                android:id="@+id/aboutImg"
                 android:layout_width="21dp"
                 android:layout_height="21dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/historyImg"
+                app:layout_constraintTop_toBottomOf="@+id/legalImg"
                 app:srcCompat="@drawable/settings" />
 
             <TextView
@@ -183,8 +183,8 @@
                 android:textColor="#272727"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/configImg"
-                app:layout_constraintTop_toBottomOf="@+id/historyLbl" />
+                app:layout_constraintStart_toEndOf="@+id/aboutImg"
+                app:layout_constraintTop_toBottomOf="@+id/legalLbl" />
 
         </android.support.constraint.ConstraintLayout>
 

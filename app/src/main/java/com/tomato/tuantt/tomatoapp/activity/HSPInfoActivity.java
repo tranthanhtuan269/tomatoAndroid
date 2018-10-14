@@ -67,11 +67,6 @@ public class HSPInfoActivity extends AppCompatActivity {
         });
 
 
-
-
-
-        Toast.makeText(HSPInfoActivity.this, "Click HSP User", Toast.LENGTH_SHORT).show();
-
         lstNews = new ArrayList<>();
         mrc = (RecyclerView) findViewById(R.id.recyclerview_id);
         myAdapter = new RecyclerViewNewsAdapter(this, lstNews);
@@ -131,7 +126,8 @@ public class HSPInfoActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.navigation_location:
-                        Toast.makeText(HSPInfoActivity.this, "Click Location", Toast.LENGTH_SHORT).show();
+                        Intent intentMenu = new Intent(HSPInfoActivity.this, MenuActivity.class);
+                        startActivity(intentMenu);
                         break;
 
                     case R.id.navigation_log:
@@ -145,7 +141,6 @@ public class HSPInfoActivity extends AppCompatActivity {
                         break;
 
                     case R.id.navigation_hsp:
-                        Toast.makeText(HSPInfoActivity.this, "Click hsp", Toast.LENGTH_SHORT).show();
                         Intent intentHSP = new Intent(HSPInfoActivity.this, HSPActivity.class);
                         startActivity(intentHSP);
                         break;
