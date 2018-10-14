@@ -18,4 +18,5 @@
     <color name="color_gray">#9A9A9A</color>
     <color name="transparent">#00000000</color>
     <color name="color_click_button_order">#99D9D9D9</color>
+    <color name="text_color_black">#272727</color>
 </resources>

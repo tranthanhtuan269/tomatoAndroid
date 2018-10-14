@@ -1,29 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4F4F4"
-    tools:context=".activity.LogActivity">
+    android:background="#F4F4F4">
 
-    <include
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:background="@drawable/bg_toolbar" />
+
+    <android.support.v7.widget.Toolbar
         android:id="@+id/toolBar"
-        layout="@layout/title_bar" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/title_hsp"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/font_large" />
+    </android.support.v7.widget.Toolbar>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout3"
-        android:layout_width="304dp"
-        android:layout_height="475dp"
-        android:orientation="vertical"
-        android:paddingTop="26dp"
-        android:layout_centerInParent="true">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolBar"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="@dimen/spacing_normal"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:layout_marginEnd="@dimen/spacing_normal"
+        android:orientation="vertical">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/barLayout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@drawable/button_corner_without_gradient"
+            android:elevation="@dimen/spacing_tiny"
             app:layout_constraintBottom_toTopOf="@id/viewpager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,6 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 app:tabGravity="fill"
+                app:tabIndicatorColor="@color/colorWhite"
                 app:tabMode="fixed"
                 app:tabSelectedTextColor="#2380C0"
                 app:tabTextColor="#9A9A9A" />
@@ -51,18 +70,4 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/barLayout" />
     </android.support.constraint.ConstraintLayout>
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
-        android:layout_alignParentBottom="true"
-        app:menu="@menu/navigation" />
-
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/navigationView"/>
 </RelativeLayout>

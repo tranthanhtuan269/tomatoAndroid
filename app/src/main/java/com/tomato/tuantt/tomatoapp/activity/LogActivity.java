@@ -1,12 +1,14 @@
 package com.tomato.tuantt.tomatoapp.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,10 +23,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.adapter.ViewLogPagerAdapter;
-import com.tomato.tuantt.tomatoapp.adapter.ViewPagerAdapter;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
+import com.tomato.tuantt.tomatoapp.view.HistoryFragment;
 import com.tomato.tuantt.tomatoapp.view.LogFragment;
-import com.tomato.tuantt.tomatoapp.view.OneFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +33,7 @@ import org.json.JSONObject;
 
 public class LogActivity extends AppCompatActivity {
 
+    private static final String TAG = LogActivity.class.getCanonicalName();
     private TextView textView;
     private String url_service = "http://api.timtruyen.online/api/users/oldorders?phone=+84973619398&access_token=dd4b9a0c9f111a9744ebd7680a801fc8";
 
@@ -49,7 +51,7 @@ public class LogActivity extends AppCompatActivity {
         String phone = "+84973619398";
         String accessToken = "dd4b9a0c9f111a9744ebd7680a801fc8";
 
-        url_service = "http://api.timtruyen.online/api/users/oldorders?phone="+phone+"&access_token=" + accessToken;
+        url_service = "http://api.timtruyen.online/api/users/oldorders?phone=" + phone + "&access_token=" + accessToken;
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -83,9 +85,9 @@ public class LogActivity extends AppCompatActivity {
                     // process JSON
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray jsonArray = jsonObject.getJSONObject("orders").getJSONArray("data");
-                    if(jsonArray.length() == 0){
+                    if (jsonArray.length() == 0) {
 //                        textView.setText("Bạn chưa tạo một công việc nào!");
-                    }else{
+                    } else {
 
                     }
                 } catch (JSONException e) {
@@ -104,21 +106,22 @@ public class LogActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
 
-
-
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
         BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.navigation_location:
                         Toast.makeText(LogActivity.this, "Click Location", Toast.LENGTH_SHORT).show();
                         break;
 
                     case R.id.navigation_log:
-                        Intent intent = new Intent(LogActivity.this, LogActivity.class);
-                        startActivity(intent);
+                        Fragment fragment = HistoryFragment.newInstance();
+                        FragmentManager fm = getSupportFragmentManager();
+                        fm.beginTransaction()
+                                .add(R.id.container, fragment, fragment.getClass().getCanonicalName())
+                                .commit();
                         break;
 
                     case R.id.navigation_user:

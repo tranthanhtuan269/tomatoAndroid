@@ -34,4 +34,25 @@
     <string name="msg_alert_phone_number">Vui lòng nhập số điện thoại</string>
     <string name="msg_alert_email">Vui lòng nhập email!</string>
 
+    <!--screen 2.2.1-->
+    <string name="txt_start_day">Ngày bắt đầu</string>
+    <string name="txt_address">Địa chỉ</string>
+    <string name="txt_house_number">Số  nhà</string>
+    <string name="txt_price">Giá tiền</string>
+    <string name="txt_cash">Tiền mặt</string>
+    <string name="txt_note">Ghi chú</string>
+    <string name="txt_name_of_worker">Người thực hiện công việc này</string>
+    <string name="title_hsp">HSP</string>
+    <string name="txt_delete_job">Hủy công việc này</string>
+    <string name="txt_change_time">Thay đổi ngày giờ</string>
+    <string name="title_waite">Chờ làm</string>
+    <string name="title_done">Đã làm</string>
+    <string name="txt_status">Hệ thống sẽ chọn người nhận việc đầu tiên\nChưa có ai nhận việc</string>
+    <string name="msg_delete_order">Bạn có chắc sẽ xóa công việc này chứ?</string>
+    <string name="cancel">Hủy</string>
+    <string name="txt_sure">Có</string>
+    <string name="txt_new_post">Mới đăng</string>
+    <string name="txt_accepted">Đã duyệt</string>
+    <string name="txt_vnd">VNĐ</string>
+    <string name="msg_delete_success">Đã hủy thành công</string>
 </resources>

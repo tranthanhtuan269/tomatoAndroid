@@ -1,13 +1,22 @@
 package com.tomato.tuantt.tomatoapp.model;
 
-import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
 
 public class Package {
+    @SerializedName("id")
     private int Id;
+    @SerializedName("name")
     private String Name;
+    @SerializedName("price")
     private String Price;
+    @SerializedName("image")
     private String Icon;
+    @SerializedName("service_id")
+    private int serviceId;
+    @SerializedName("pivot")
+    private Pivot pivot;
     public int number = 0;
+
     public Package() {
     }
 
@@ -48,5 +57,21 @@ public class Package {
 
     public void setIcon(String icon) {
         Icon = icon;
+    }
+
+    public int getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(int serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    public Pivot getPivot() {
+        return pivot;
+    }
+
+    public void setPivot(Pivot pivot) {
+        this.pivot = pivot;
     }
 }
