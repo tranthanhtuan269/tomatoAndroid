@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 import com.tomato.tuantt.tomatoapp.R;
+import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 
 import org.json.JSONException;
@@ -105,10 +107,16 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                         userid = jsonObject2.getInt("id");
                         username = jsonObject2.getString("name");
                         userimage = jsonObject2.getString("avatar");
-                        usercode = jsonObject2.getString("usercode");
-
+                        usercode = jsonObject2.getString("code");
+                        SharedPreferenceConfig config = SharedPreferenceConfig.getInstance(getApplicationContext());
+                        if (TextUtils.isEmpty(config.getUserCode()) && !TextUtils.isEmpty(usercode)) {
+                            config.saveUserCode(usercode);
+                        }
+                        if (TextUtils.isEmpty(config.getAvatarLink()) && !TextUtils.isEmpty(userimage)) {
+                            config.saveAvatarLink(userimage);
+                        }
                         usernameLbl.setText(username);
-                        Picasso.with(AccountActivity.this).load(defaultUrlImage + userimage).fit().centerInside().into(userimageImg);
+                        Picasso.with(AccountActivity.this).load(defaultUrlImage + userimage).error(R.drawable.ic_avatar_default).fit().centerInside().into(userimageImg);
                     }
 
                 } catch (JSONException e) {

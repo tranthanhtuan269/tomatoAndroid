@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +33,7 @@ import com.squareup.picasso.Picasso;
 import com.tomato.tuantt.tomatoapp.BuildConfig;
 import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
+import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
 import com.tomato.tuantt.tomatoapp.adapter.RecyclerViewServiceAdapter;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 import com.tomato.tuantt.tomatoapp.helper.GridSpacingItemDecoration;
@@ -59,6 +61,7 @@ public class InviteActivity extends AppCompatActivity {
     CallbackManager callbackManager;
     ShareDialog shareDialog;
 
+    private SharedPreferenceConfig config;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,10 +96,23 @@ public class InviteActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         shareDialog = new ShareDialog(this);
 
+        config = SharedPreferenceConfig.getInstance(getApplicationContext());
+        usercode = config.getUserCode();
+        userimage = config.getAvatarLink();
 
+        if (!TextUtils.isEmpty(usercode)) {
+            userlinkLbl.setText(usercode);
+        }
+
+        if (!TextUtils.isEmpty(userimage)) {
+            Picasso.with(InviteActivity.this).load(defaultUrlImage + userimage).error(R.drawable.ic_avatar_default).fit().centerInside().into(userimageImg);
+        }
         shareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (usercode == null) {
+                    usercode = "";
+                }
                 ShareLinkContent linkContent = new ShareLinkContent.Builder()
                         .setQuote(usercode)
                         .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID))
@@ -109,37 +125,47 @@ public class InviteActivity extends AppCompatActivity {
         });
 
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(InviteActivity.this);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url_service, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    if(jsonObject.getInt("status_code") == 200){
-                        JSONObject jsonObject2 = jsonObject.getJSONObject("users").getJSONObject("data");
-                        userid = jsonObject2.getInt("id");
-                        userimage = jsonObject2.getString("avatar");
-                        usercode = jsonObject2.getString("code");
+        if (TextUtils.isEmpty(usercode) || TextUtils.isEmpty(userimage)) {
+            final RequestQueue requestQueue = Volley.newRequestQueue(InviteActivity.this);
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url_service, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if(jsonObject.getInt("status_code") == 200){
+                            JSONObject jsonObject2 = jsonObject.getJSONObject("users").getJSONObject("data");
+                            userid = jsonObject2.getInt("id");
+                            String tmpImage = jsonObject2.getString("avatar");;
+                            String tmpCode = jsonObject2.getString("code");;
 
-                        userlinkLbl.setText(usercode);
-                        Picasso.with(InviteActivity.this).load(defaultUrlImage + userimage).fit().centerInside().into(userimageImg);
+                            if (TextUtils.isEmpty(usercode) && !TextUtils.isEmpty(tmpCode)) {
+                                usercode = tmpCode;
+                                config.saveUserCode(usercode);
+                                userlinkLbl.setText(usercode);
+                            }
+
+                            if (TextUtils.isEmpty(userimage) && !TextUtils.isEmpty(tmpImage)) {
+                                userimage  = tmpImage;
+                                config.saveAvatarLink(userimage);
+                                Picasso.with(InviteActivity.this).load(defaultUrlImage + userimage).error(R.drawable.ic_avatar_default).fit().centerInside().into(userimageImg);
+                            }
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Error", "Error");
-                error.printStackTrace();
-                requestQueue.stop();
-            }
-        });
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("Error", "Error");
+                    error.printStackTrace();
+                    requestQueue.stop();
+                }
+            });
 
-        requestQueue.add(stringRequest);
-
+            requestQueue.add(stringRequest);
+        }
 
         // setting bottom
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);

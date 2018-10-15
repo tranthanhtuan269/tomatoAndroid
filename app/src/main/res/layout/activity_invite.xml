@@ -56,7 +56,8 @@
                 android:textSize="13sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userAvatarImg" />
+                app:layout_constraintTop_toBottomOf="@+id/userAvatarImg"
+                android:gravity="center"/>
 
             <TextView
                 android:id="@+id/userLinkLbl"
