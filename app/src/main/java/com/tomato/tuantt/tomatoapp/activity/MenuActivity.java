@@ -77,12 +77,6 @@ public class MenuActivity extends AppCompatActivity {
 //                onBackPressed();
 //            }
 //        });
-        findViewById(R.id.imgBack).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
         lstService = new ArrayList<>();
         mrc = (RecyclerView) findViewById(R.id.recyclerview_id);
         myAdapter = new RecyclerViewServiceAdapter(this, lstService);
