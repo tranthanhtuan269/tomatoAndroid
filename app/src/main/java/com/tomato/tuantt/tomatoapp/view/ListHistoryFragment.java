@@ -113,7 +113,7 @@ public class ListHistoryFragment extends Fragment implements ListHistoryControll
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    void onMessageEvent(MessageEvent messageEvent) {
+    public void onMessageEvent(MessageEvent messageEvent) {
         if (messageEvent != null) {
             switch (messageEvent.getEvent()) {
                 case DELETE_ORDER:
