@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#F4F4F4"
     tools:context=".activity.AccountActivity">
-    <include layout="@layout/title_bar" android:id="@+id/toolBar" />
+    <include layout="@layout/title_bar_with_icon_no_back" android:id="@+id/toolBar" />
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="304dp"
