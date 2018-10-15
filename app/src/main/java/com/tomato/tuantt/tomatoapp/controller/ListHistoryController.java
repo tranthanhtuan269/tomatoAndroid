@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.tomato.tuantt.tomatoapp.BuildConfig;
 import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
@@ -32,7 +33,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.prefs.PreferenceChangeEvent;
 
 public class ListHistoryController {
 
@@ -64,7 +64,11 @@ public class ListHistoryController {
             url = Constant.BASE_URL + API_OLD_ORDERS;
         }
         SharedPreferenceConfig preferenceConfig = SharedPreferenceConfig.getInstance(mContext);
-        url = String.format(url, "+84973619398", preferenceConfig.getToken());
+        String phoneNumber = SharedPreferenceConfig.getInstance(mContext).getPhoneNumber();
+        if (BuildConfig.DEBUG) {
+            phoneNumber = "+84973619398";
+        }
+        url = String.format(url, phoneNumber, preferenceConfig.getToken());
         if (mCallback != null) {
             mCallback.showProgress();
         }
@@ -178,14 +182,20 @@ public class ListHistoryController {
         requestQueue.add(stringRequest);
     }
 
-    public void deleteOrder(int id, String phoneNumber) {
-        String url = Constant.BASE_URL + "api.timtruyen.online/api/orders/" + id + "/phone=" + phoneNumber + "&access_token=dd4b9a0c9f111a9744ebd7680a801fc8";
+    public void deleteOrder(final int id, String phoneNumber) {
+        if (mCallback != null) {
+            mCallback.showProgress();
+        }
+        String url = Constant.BASE_URL + "api/orders/" + id + "?phone=" + phoneNumber + "&access_token=" + SharedPreferenceConfig.getInstance(mContext).getToken();
         final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
-        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
+        final StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-                mCallback.hideProgress();
+                if (mCallback != null) {
+                    mCallback.deleteItem(id);
+                    mCallback.hideProgress();
+                }
                 Toast.makeText(mContext, R.string.msg_delete_success, Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
@@ -206,16 +216,19 @@ public class ListHistoryController {
         requestQueue.add(stringRequest);
     }
 
-    public void updateOrder(int id, HashMap hashMap) {
+    public void updateOrder(final int id, HashMap hashMap) {
         if (mCallback != null) {
             mCallback.showProgress();
         }
-        String url = Constant.BASE_URL + "api.timtruyen.online/api/orders/" + id;
+        String url = Constant.BASE_URL + "api/orders/" + id;
         final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
         JsonObjectRequest req = new JsonObjectRequest(url, new JSONObject(hashMap), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                mCallback.hideProgress();
+                if (mCallback != null) {
+                    mCallback.saveTimeChanged(id);
+                    mCallback.hideProgress();
+                }
                 Toast.makeText(mContext, R.string.msg_update_success, Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
@@ -229,6 +242,7 @@ public class ListHistoryController {
                     Toast.makeText(mContext, R.string.msg_delete_fail, Toast.LENGTH_SHORT).show();
                 }
                 if (mCallback != null) {
+                    mCallback.reloadHistoryList(id);
                     mCallback.hideProgress();
                 }
             }
@@ -243,5 +257,11 @@ public class ListHistoryController {
         void hideProgress();
 
         void showProgress();
+
+        void deleteItem(int id);
+
+        void reloadHistoryList(int id);
+
+        void saveTimeChanged(int id);
     }
 }

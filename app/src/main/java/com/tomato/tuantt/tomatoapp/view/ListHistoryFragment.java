@@ -112,6 +112,39 @@ public class ListHistoryFragment extends Fragment implements ListHistoryControll
         }
     }
 
+    @Override
+    public void deleteItem(int id) {
+        if (!Utils.isEmptyList(mList)) {
+            for (OrderData model : mList) {
+                if (model != null && model.getId() == id) {
+                    mList.remove(model);
+                    mAdapter.notifyDataSetChanged();
+                    return;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void reloadHistoryList(int id) {
+        if (!Utils.isEmptyList(mList)) {
+            for (int i = 0; i < mList.size(); i++) {
+                OrderData model = mList.get(i);
+                if (model != null && model.getId() == id) {
+                    mAdapter.notifyItemChanged(i);
+                    return;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void saveTimeChanged(int id) {
+        if (mAdapter != null) {
+            mAdapter.saveTimeChanged(id);
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent messageEvent) {
         if (messageEvent != null) {

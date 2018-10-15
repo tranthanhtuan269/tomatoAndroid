@@ -261,6 +261,18 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         }
     }
 
+    public void saveTimeChanged(int id) {
+        if (!Utils.isEmptyList(mList)) {
+            for (int i = 0; i < mList.size(); i++) {
+                OrderData model = mList.get(i);
+                if (model != null && model.getId() == id) {
+                    model.setStart_time(String.valueOf(mTime.getTimeInMillis()));
+                    return;
+                }
+            }
+        }
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.iv_type)

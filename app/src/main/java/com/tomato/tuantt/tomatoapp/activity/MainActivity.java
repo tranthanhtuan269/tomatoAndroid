@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -18,8 +18,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
+import com.facebook.accountkit.AccountKitCallback;
+import com.facebook.accountkit.AccountKitError;
 import com.facebook.accountkit.AccountKitLoginResult;
+import com.facebook.accountkit.PhoneNumber;
 import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.accountkit.ui.LoginType;
@@ -108,7 +112,21 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     preferenceConfig.saveToken(result.getAccessToken().getToken());
 //                    Toast.makeText(this, "getAccessToken! " + result.getAccessToken().getAccountId(), Toast.LENGTH_SHORT).show();
                     Log.d("getAccessToken", result.getAccessToken().getAccountId());
-                }else{
+
+                    AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
+                        @Override
+                        public void onSuccess(final Account account) {
+                            PhoneNumber phoneNumber = account.getPhoneNumber();
+                            String phoneNumberString = phoneNumber.toString();
+                            preferenceConfig.setPhoneNumber(phoneNumberString);
+                        }
+
+                        @Override
+                        public void onError(final AccountKitError error) {
+                            // Handle Error
+                        }
+                    });
+                } else {
 //                    Toast.makeText(this, "getAuthorizationCode! " + result.getAuthorizationCode(), Toast.LENGTH_SHORT).show();
                     //Log.d("getAuthorizationCode", result.getAccessToken().getAccountId());
                 }

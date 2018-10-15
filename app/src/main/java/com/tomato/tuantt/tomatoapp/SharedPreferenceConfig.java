@@ -10,6 +10,7 @@ public class SharedPreferenceConfig {
     public static final String LOGIN_STATUS = "LOGIN_STATUS";
     public static final String USER_CODE = "USER_CODE";
     public static final String AVATAR_LINK = "AVATAR_LINK";
+    private static final String PHONE_NUMBER = "PHONE_NUMBER";
     private SharedPreferences sharedPreferences;
     private static SharedPreferenceConfig config;
     public static SharedPreferenceConfig getInstance(Context context) {
@@ -58,6 +59,15 @@ public class SharedPreferenceConfig {
 
     public String getAvatarLink(){
         return sharedPreferences.getString(AVATAR_LINK,"");
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PHONE_NUMBER, phoneNumber);
+    }
+
+    public String getPhoneNumber() {
+        return sharedPreferences.getString(PHONE_NUMBER, "");
     }
 }
 
