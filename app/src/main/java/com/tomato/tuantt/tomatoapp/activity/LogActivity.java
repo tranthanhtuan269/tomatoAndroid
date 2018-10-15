@@ -15,14 +15,15 @@ import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 public class LogActivity extends AppCompatActivity {
 
     private static final String TAG = LogActivity.class.getCanonicalName();
-
+    BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log);
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.navigationView);
+        bottomNavigationView = findViewById(R.id.navigationView);
         BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_log);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -31,18 +32,22 @@ public class LogActivity extends AppCompatActivity {
                     case R.id.navigation_location:
                         Intent intentMenu = new Intent(LogActivity.this, MenuActivity.class);
                         startActivity(intentMenu);
+                        finish();
                         break;
                     case R.id.navigation_log:
-                        finish();
-                        Intent intent = new Intent(LogActivity.this, LogActivity.class);
-                        startActivity(intent);
+//                        finish();
+//                        Intent intent = new Intent(LogActivity.this, LogActivity.class);
+//                        startActivity(intent);
                         break;
                     case R.id.navigation_user:
-                        Toast.makeText(LogActivity.this, "Click user", Toast.LENGTH_SHORT).show();
+                        Intent accountIntent = new Intent(LogActivity.this, AccountActivity.class);
+                        startActivity(accountIntent);
+                        finish();
                         break;
                     case R.id.navigation_hsp:
                         Intent intentHSP = new Intent(LogActivity.this, HSPActivity.class);
                         startActivity(intentHSP);
+                        finish();
                         break;
                 }
                 return true;

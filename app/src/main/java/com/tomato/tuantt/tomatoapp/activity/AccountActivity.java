@@ -38,6 +38,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private TextView usernameLbl, userlinkLbl, infoHSPLbl, inviteFriendLbl, couponLbl, historyLbl, configLbl;
     private ImageView userimageImg, infoHSPImg, inviteFriendImg, couponImg, historyImg, configImg;
 
+    BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,8 +128,9 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
 
         // setting bottom
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
         BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_user);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -136,21 +138,25 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                     case R.id.navigation_location:
                         Intent intentMenu = new Intent(AccountActivity.this, MenuActivity.class);
                         startActivity(intentMenu);
+                        finish();
                         break;
 
                     case R.id.navigation_log:
                         Intent intent = new Intent(AccountActivity.this, LogActivity.class);
                         startActivity(intent);
+                        finish();
                         break;
 
                     case R.id.navigation_user:
-                        Intent accountIntent = new Intent(AccountActivity.this, AccountActivity.class);
-                        startActivity(accountIntent);
+//                        Intent accountIntent = new Intent(AccountActivity.this, AccountActivity.class);
+//                        startActivity(accountIntent);
+//                        finish();
                         break;
 
                     case R.id.navigation_hsp:
                         Intent intentHSP = new Intent(AccountActivity.this, HSPActivity.class);
                         startActivity(intentHSP);
+                        finish();
                         break;
                 }
                 return true;

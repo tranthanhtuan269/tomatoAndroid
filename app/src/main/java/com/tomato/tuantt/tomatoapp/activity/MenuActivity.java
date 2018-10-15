@@ -157,16 +157,19 @@ public class MenuActivity extends AppCompatActivity {
                     case R.id.navigation_log:
                         Intent intentLog = new Intent(MenuActivity.this, LogActivity.class);
                         startActivity(intentLog);
+                        finish();
                         break;
 
                     case R.id.navigation_user:
                         Intent intentAccount = new Intent(MenuActivity.this, AccountActivity.class);
                         startActivity(intentAccount);
+                        finish();
                         break;
 
                     case R.id.navigation_hsp:
                         Intent intentHSP = new Intent(MenuActivity.this, HSPActivity.class);
                         startActivity(intentHSP);
+                        finish();
                         break;
                 }
                 return true;

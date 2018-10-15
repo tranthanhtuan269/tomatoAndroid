@@ -18,7 +18,7 @@ public class HSPActivity extends AppCompatActivity implements View.OnClickListen
 
     private TextView whyuseLbl, practiceLbl, faqsLbl, reportLbl, contactLbl, legalLbl, aboutLbl;
     private ImageView whyuseImg, practiceImg, faqsImg, reportImg, contactImg, legalImg, aboutImg;
-
+    BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,8 +81,9 @@ public class HSPActivity extends AppCompatActivity implements View.OnClickListen
 
 
         // setting bottom
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
         BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_hsp);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -90,21 +91,22 @@ public class HSPActivity extends AppCompatActivity implements View.OnClickListen
                     case R.id.navigation_location:
                         Intent intentMenu = new Intent(HSPActivity.this, MenuActivity.class);
                         startActivity(intentMenu);
+                        finish();
                         break;
 
                     case R.id.navigation_log:
                         Intent intent = new Intent(HSPActivity.this, LogActivity.class);
                         startActivity(intent);
+                        finish();
                         break;
 
                     case R.id.navigation_user:
                         Intent accountIntent = new Intent(HSPActivity.this, AccountActivity.class);
                         startActivity(accountIntent);
+                        finish();
                         break;
 
                     case R.id.navigation_hsp:
-                        Intent intentHSP = new Intent(HSPActivity.this, HSPActivity.class);
-                        startActivity(intentHSP);
                         break;
                 }
                 return true;
