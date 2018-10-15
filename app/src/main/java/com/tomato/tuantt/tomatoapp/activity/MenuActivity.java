@@ -52,7 +52,7 @@ public class MenuActivity extends AppCompatActivity {
     List<Service> lstService;
     RecyclerView mrc;
     RecyclerViewServiceAdapter myAdapter;
-
+    BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,15 +144,14 @@ public class MenuActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
         BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_location);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.navigation_location:
-                        Intent intent = new Intent(MenuActivity.this, MenuActivity.class);
-                        startActivity(intent);
                         break;
 
                     case R.id.navigation_log:
@@ -212,7 +211,7 @@ public class MenuActivity extends AppCompatActivity {
     private void onBackAction(){
         SharedPreferenceConfig preferenceConfig = SharedPreferenceConfig.getInstance(getApplicationContext());
         if (preferenceConfig.readLoginStatus()){
-            super.onBackPressed();
+            finish();
         } else {
             finish();
         }
