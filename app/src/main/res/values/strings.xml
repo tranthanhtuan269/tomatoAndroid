@@ -49,8 +49,6 @@
     <string name="xem_th_ng_tin_t_i_kho_n">Xem thông tin tài khoản</string>
     <string name="chia_s_m_gi_i_thi_u_cho_b_n_b_b_n_v_ban_c_a_b_n_s_c_t_ng_50_000_vnd_v_o_t_i_kho_n_khuy_n_m_i_c_p_d_ng_khi_c_ng_vi_c_u_ti_n_ho_n_th_nh">Chia sẻ mã giới thiệu cho bạn bè. Bạn và ban của bạn sẽ được tặng 50,000 VND vào tài khoản. Khuyến mãi được áp dụng khi công việc đầu tiên hoàn thành.</string>
     <string name="chia_s_ngay">Chia sẻ ngay</string>
-    <string name="msg_alert_email">Vui lòng nhập đúng email!</string>
-
 
     <string name="confirm_payment_title">Xác nhận thông tin</string>
     <string name="confirm_finish">Xác nhận và hoàn tất</string>
