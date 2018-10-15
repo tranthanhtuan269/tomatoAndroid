@@ -6,9 +6,11 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +24,7 @@ import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
+import com.tomato.tuantt.tomatoapp.createorder.OrderWorking;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 
 import org.json.JSONException;
@@ -46,23 +49,25 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
-        // setting top
+        if (OrderWorking.serviceHeight == 0 ) {
+            calcuServiceHeight();
+        }
+
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        //getSupportActionBar().setDisplayShowHomeEnabled(false);
 
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+//        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         TextView title = (TextView) toolbar.findViewById(R.id.titleBarTxt);
         title.setText("HSP");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
-            }
-        });
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
 
 
         // main
@@ -72,26 +77,22 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         infoHSPLbl = (TextView) findViewById(R.id.faqLbl);
         inviteFriendLbl = (TextView) findViewById(R.id.reportLbl);
         couponLbl = (TextView) findViewById(R.id.contactLbl);
-        historyLbl = (TextView) findViewById(R.id.legalLbl);
         configLbl = (TextView) findViewById(R.id.configLbl);
 
         userimageImg = (ImageView) findViewById(R.id.userAvatarImg);
         infoHSPImg = (ImageView) findViewById(R.id.faqImg);
         inviteFriendImg = (ImageView) findViewById(R.id.reportImg);
         couponImg = (ImageView) findViewById(R.id.contactImg);
-        historyImg = (ImageView) findViewById(R.id.legalImg);
         configImg = (ImageView) findViewById(R.id.aboutImg);
 
         infoHSPLbl.setOnClickListener(this);
         inviteFriendLbl.setOnClickListener(this);
         couponLbl.setOnClickListener(this);
-        historyLbl.setOnClickListener(this);
         configLbl.setOnClickListener(this);
 
         infoHSPImg.setOnClickListener(this);
         inviteFriendImg.setOnClickListener(this);
         couponImg.setOnClickListener(this);
-        historyImg.setOnClickListener(this);
         configImg.setOnClickListener(this);
 
 
@@ -209,5 +210,13 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             default:
                 break;
         }
+    }
+
+    private void calcuServiceHeight(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        int screenDp = (int) (metrics.heightPixels / metrics.density);
+        OrderWorking.serviceHeight = (int) (screenDp / 640 * 200 * metrics.density);
     }
 }

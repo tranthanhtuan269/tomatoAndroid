@@ -10,10 +10,11 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="304dp"
-        android:layout_height="412dp"
+        android:layout_height="472dp"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="2dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/button_corner_without_gradient"
         android:orientation="vertical"
         android:padding="8dp"
@@ -51,13 +52,13 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
+                android:gravity="center"
                 android:text="@string/m_gi_i_thi_u_c_a_b_n"
                 android:textColor="#9A9A9A"
                 android:textSize="13sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userAvatarImg"
-                android:gravity="center"/>
+                app:layout_constraintTop_toBottomOf="@+id/userAvatarImg" />
 
             <TextView
                 android:id="@+id/userLinkLbl"
@@ -110,20 +111,5 @@
         </android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigationView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
-        android:background="?android:attr/windowBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:itemBackground="@color/colorWhite"
-        app:itemIconTint="@drawable/nav_item_color_state"
-        app:itemTextColor="@drawable/nav_item_color_state"
-        app:menu="@menu/navigation"/>
 
 </android.support.constraint.ConstraintLayout>

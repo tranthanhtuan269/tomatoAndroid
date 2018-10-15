@@ -5,13 +5,16 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
+import com.tomato.tuantt.tomatoapp.createorder.OrderWorking;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 
 public class ContactActivity extends AppCompatActivity {
@@ -22,57 +25,26 @@ public class ContactActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contact);
 
         // setting top
+
+        if (OrderWorking.serviceHeight == 0 ) {
+            calcuServiceHeight();
+        }
+
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        //getSupportActionBar().setDisplayShowHomeEnabled(false);
 
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+//        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         TextView title = (TextView) toolbar.findViewById(R.id.titleBarTxt);
         title.setText("Liên hệ");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
-            }
-        });
-
-
-
-
-
-        // setting bottom
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
-        BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_location:
-                        Intent intentMenu = new Intent(ContactActivity.this, MenuActivity.class);
-                        startActivity(intentMenu);
-                        break;
-
-                    case R.id.navigation_log:
-                        Intent intent = new Intent(ContactActivity.this, LogActivity.class);
-                        startActivity(intent);
-                        break;
-
-                    case R.id.navigation_user:
-                        Intent accountIntent = new Intent(ContactActivity.this, AccountActivity.class);
-                        startActivity(accountIntent);
-                        break;
-
-                    case R.id.navigation_hsp:
-                        Intent intentHSP = new Intent(ContactActivity.this, HSPActivity.class);
-                        startActivity(intentHSP);
-                        break;
-                }
-                return true;
-            }
-        });
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
     }
 
     @Override
@@ -80,13 +52,21 @@ public class ContactActivity extends AppCompatActivity {
         onBackAction();
     }
 
-    private void onBackAction() {
+    private void onBackAction(){
         SharedPreferenceConfig preferenceConfig = SharedPreferenceConfig.getInstance(getApplicationContext());
-        if (preferenceConfig.readLoginStatus()) {
+        if (preferenceConfig.readLoginStatus()){
             super.onBackPressed();
         } else {
             startActivity(new Intent(ContactActivity.this, MainActivity.class));
             finish();
         }
+    }
+
+    private void calcuServiceHeight(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        int screenDp = (int) (metrics.heightPixels / metrics.density);
+        OrderWorking.serviceHeight = (int) (screenDp / 640 * 200 * metrics.density);
     }
 }

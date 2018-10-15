@@ -139,52 +139,28 @@
                 app:layout_constraintTop_toBottomOf="@+id/reportLbl" />
 
             <ImageView
-                android:id="@+id/legalImg"
-                android:layout_width="21dp"
-                android:layout_height="21dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/contactImg"
-                app:srcCompat="@drawable/filetext" />
-
-            <TextView
-                android:id="@+id/legalLbl"
-                android:layout_width="0dp"
-                android:layout_height="21dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="20dp"
-                android:text="Lịch sử"
-                android:textColor="#272727"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/legalImg"
-                app:layout_constraintTop_toBottomOf="@+id/contactLbl" />
-
-            <ImageView
                 android:id="@+id/aboutImg"
                 android:layout_width="21dp"
                 android:layout_height="21dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/legalImg"
+                app:layout_constraintTop_toBottomOf="@+id/contactImg"
                 app:srcCompat="@drawable/settings" />
 
             <TextView
                 android:id="@+id/configLbl"
                 android:layout_width="0dp"
                 android:layout_height="21dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
                 android:text="Cài đặt"
                 android:textColor="#272727"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/aboutImg"
-                app:layout_constraintTop_toBottomOf="@+id/legalLbl" />
+                app:layout_constraintTop_toBottomOf="@+id/contactLbl" />
 
         </android.support.constraint.ConstraintLayout>
 

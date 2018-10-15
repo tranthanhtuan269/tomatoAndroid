@@ -7,9 +7,11 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tomato.tuantt.tomatoapp.R;
+import com.tomato.tuantt.tomatoapp.createorder.OrderWorking;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 
 public class LogActivity extends AppCompatActivity {

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tomato.tuantt.tomatoapp.R;
+import com.tomato.tuantt.tomatoapp.createorder.OrderWorking;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 
 public class CouponActivity extends AppCompatActivity {
@@ -21,54 +22,21 @@ public class CouponActivity extends AppCompatActivity {
         setContentView(R.layout.activity_coupon);
 
         // setting top
+
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        //getSupportActionBar().setDisplayShowHomeEnabled(false);
 
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+//        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         TextView title = (TextView) toolbar.findViewById(R.id.titleBarTxt);
         title.setText("HSP");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
-            }
-        });
-
-
-
-        // setting bottom
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
-        BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.navigation_location:
-                        Intent intentMenu = new Intent(CouponActivity.this, MenuActivity.class);
-                        startActivity(intentMenu);
-                        break;
-
-                    case R.id.navigation_log:
-                        Intent intent = new Intent(CouponActivity.this, LogActivity.class);
-                        startActivity(intent);
-                        break;
-
-                    case R.id.navigation_user:
-                        Intent accountIntent = new Intent(CouponActivity.this, AccountActivity.class);
-                        startActivity(accountIntent);
-                        break;
-
-                    case R.id.navigation_hsp:
-                        Intent intentHSP = new Intent(CouponActivity.this, HSPActivity.class);
-                        startActivity(intentHSP);
-                        break;
-                }
-                return true;
-            }
-        });
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
     }
 }

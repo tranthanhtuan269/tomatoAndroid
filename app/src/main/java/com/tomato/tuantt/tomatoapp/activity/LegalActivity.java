@@ -7,9 +7,11 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
+import com.tomato.tuantt.tomatoapp.createorder.OrderWorking;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 
 import org.json.JSONException;
@@ -38,23 +41,25 @@ public class LegalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_legal);
 
-        // setting top
+        if (OrderWorking.serviceHeight == 0 ) {
+            calcuServiceHeight();
+        }
+
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        //getSupportActionBar().setDisplayShowHomeEnabled(false);
 
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+//        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         TextView title = (TextView) toolbar.findViewById(R.id.titleBarTxt);
         title.setText("Pháp lý");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
-            }
-        });
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
 
 
         contentLbl = (TextView) findViewById(R.id.whyuseLbl);
@@ -96,37 +101,6 @@ public class LegalActivity extends AppCompatActivity {
 
         requestQueue.add(stringRequest);
 
-
-        // setting bottom
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigationView);
-        BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.navigation_location:
-                        Intent intentMenu = new Intent(LegalActivity.this, MenuActivity.class);
-                        startActivity(intentMenu);
-                        break;
-
-                    case R.id.navigation_log:
-                        Intent intent = new Intent(LegalActivity.this, LogActivity.class);
-                        startActivity(intent);
-                        break;
-
-                    case R.id.navigation_user:
-                        Intent accountIntent = new Intent(LegalActivity.this, AccountActivity.class);
-                        startActivity(accountIntent);
-                        break;
-
-                    case R.id.navigation_hsp:
-                        Intent intentHSP = new Intent(LegalActivity.this, HSPActivity.class);
-                        startActivity(intentHSP);
-                        break;
-                }
-                return true;
-            }
-        });
     }
 
     @Override
@@ -142,5 +116,13 @@ public class LegalActivity extends AppCompatActivity {
             startActivity(new Intent(LegalActivity.this, MainActivity.class));
             finish();
         }
+    }
+
+    private void calcuServiceHeight(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        int screenDp = (int) (metrics.heightPixels / metrics.density);
+        OrderWorking.serviceHeight = (int) (screenDp / 640 * 200 * metrics.density);
     }
 }
