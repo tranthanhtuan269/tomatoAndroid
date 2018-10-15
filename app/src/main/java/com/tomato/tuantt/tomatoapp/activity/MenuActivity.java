@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.ArrayMap;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.adapter.RecyclerViewServiceAdapter;
 import com.tomato.tuantt.tomatoapp.helper.GridSpacingItemDecoration;
+import com.tomato.tuantt.tomatoapp.model.PaymentOrderInfor;
 import com.tomato.tuantt.tomatoapp.model.Service;
 
 import org.json.JSONArray;
@@ -55,22 +58,31 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        if (OrderWorking.serviceHeight == 0 ) {
+            calcuServiceHeight();
+        }
+
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        //getSupportActionBar().setDisplayShowHomeEnabled(false);
 
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
+//        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         TextView title = (TextView) toolbar.findViewById(R.id.titleBarTxt);
         title.setText("HSP");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
+        findViewById(R.id.imgBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-
         lstService = new ArrayList<>();
         mrc = (RecyclerView) findViewById(R.id.recyclerview_id);
         myAdapter = new RecyclerViewServiceAdapter(this, lstService);
@@ -98,6 +110,13 @@ public class MenuActivity extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(MenuActivity.this,R.string.msg_load_fail_server,Toast.LENGTH_SHORT).show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            onBackAction();
+                        }
+                    },2000);
                 }
             }
         }, new Response.ErrorListener() {
@@ -171,8 +190,7 @@ public class MenuActivity extends AppCompatActivity {
         } catch (Exception e) {
         }
         OrderWorking.activity = null;
-        OrderWorking.currentService = null;
-        OrderWorking.currentServiceId = -1;
+        OrderWorking.paymentOrderInfor = new PaymentOrderInfor();
         AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
             @Override
             public void onSuccess(Account account) {
@@ -192,12 +210,19 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void onBackAction(){
-        SharedPreferenceConfig preferenceConfig = new SharedPreferenceConfig(getApplicationContext());
+        SharedPreferenceConfig preferenceConfig = SharedPreferenceConfig.getInstance(getApplicationContext());
         if (preferenceConfig.readLoginStatus()){
             super.onBackPressed();
         } else {
-            startActivity(new Intent(MenuActivity.this, MainActivity.class));
             finish();
         }
+    }
+
+    private void calcuServiceHeight(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        int screenDp = (int) (metrics.heightPixels / metrics.density);
+        OrderWorking.serviceHeight = (int) (screenDp / 640 * 200 * metrics.density);
     }
 }

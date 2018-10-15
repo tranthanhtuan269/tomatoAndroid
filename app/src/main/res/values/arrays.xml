@@ -3,10 +3,21 @@
     <string-array name="phone_type">
         <item>VN +84</item>
         <item>US +1</item>
+        <item>HK +852</item>
     </string-array>
 
     <string-array name="money_type">
         <item>Tiền mặt</item>
-        <item>Test tiền</item>
+        <item>Tiền mặt 2</item>
+    </string-array>
+
+    <string-array name="week">
+        <item>Chủ nhật</item>
+        <item>Thứ hai</item>
+        <item>Thứ ba</item>
+        <item>Thứ tư</item>
+        <item>Thứ năm</item>
+        <item>Thứ sáu</item>
+        <item>Thứ bảy</item>
     </string-array>
 </resources>

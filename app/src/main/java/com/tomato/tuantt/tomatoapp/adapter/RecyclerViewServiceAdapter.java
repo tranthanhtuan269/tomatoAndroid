@@ -3,11 +3,13 @@ package com.tomato.tuantt.tomatoapp.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -31,9 +33,15 @@ public class RecyclerViewServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public MyViewServiceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
+        CardView view;
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-        view = mInflater.inflate(R.layout.cardview_item_service, parent, false);
+        view = (CardView) mInflater.inflate(R.layout.cardview_item_service, parent, false);
+        if (OrderWorking.serviceHeight > 0) {
+            GridLayoutManager.LayoutParams layoutParams= (GridLayoutManager.LayoutParams) view.getLayoutParams();
+            layoutParams.height= OrderWorking.serviceHeight ;
+            layoutParams.width=CardView.LayoutParams.MATCH_PARENT;
+            view.setLayoutParams(layoutParams);
+        }
         return new MyViewServiceHolder(view);
     }
 
@@ -50,8 +58,9 @@ public class RecyclerViewServiceAdapter extends RecyclerView.Adapter<RecyclerVie
 //                intent.putExtra("ServiceId", mData.get(position).getId());
 //                intent.putExtra("ServiceName", mData.get(position).getName());
 //                intent.putExtra("ServiceThumbnail", mData.get(position).getIcon());
-                OrderWorking.currentService = mData.get(position).getName();
-                OrderWorking.currentServiceId = mData.get(position).getId();
+                OrderWorking.paymentOrderInfor.currentService = mData.get(position).getName();
+                OrderWorking.paymentOrderInfor.currentServiceId = mData.get(position).getId();
+                OrderWorking.paymentOrderInfor.currentServiceUrl = defaultUrlImage + mData.get(position).getIcon();
                 Intent intent = ServiceActivity.createIntent(mContext, mData.get(position).getId(),mData.get(position).getName(),true);
                 mContext.startActivity(intent);
             }

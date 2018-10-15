@@ -23,6 +23,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,7 +61,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
-import com.tomato.tuantt.tomatoapp.activity.ServiceActivity;
 import com.tomato.tuantt.tomatoapp.model.LocationInfo;
 
 import org.json.JSONArray;
@@ -101,6 +101,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private View imgLocation;
     private boolean callFromService;
     private LatLng currentLatlng;
+    private Button btnChoose;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +114,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         findViewById(R.id.imgBack).setOnClickListener(this);
         findViewById(R.id.imgClear).setOnClickListener(this);
-        findViewById(R.id.btnChoose).setOnClickListener(this);
+        btnChoose = findViewById(R.id.btnChoose);
+        btnChoose.setOnClickListener(this);
+
         findViewById(R.id.llAddress).setOnClickListener(this);
         imgLocation = findViewById(R.id.imgLocation);
         imgLocation.setOnClickListener(this);
@@ -121,7 +124,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        geocoder = new Geocoder(this, Locale.getDefault());
+        geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
 
         if (dialog == null) {
             dialog = new ProgressDialog(MapsActivity.this);
@@ -145,11 +148,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         if (!mMap.isMyLocationEnabled()) {
                             mMap.setMyLocationEnabled(true);
                         }
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                new LatLng(mLastKnownLocation.getLatitude(),
-                                        mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                        addMarker(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()),true);
-
+                        if (OrderWorking.paymentOrderInfor == null || OrderWorking.paymentOrderInfor.location == null) {
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                    new LatLng(mLastKnownLocation.getLatitude(),
+                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            addMarker(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()),true);
+                        }
                     }
                 }
             }
@@ -270,6 +274,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
 
+        if (OrderWorking.paymentOrderInfor.location !=null) {
+            LocationInfo info = OrderWorking.paymentOrderInfor.location;
+            tvAddress.setText(info.address);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(info.lat, info.lgn), DEFAULT_ZOOM));
+            addMarker(new LatLng(info.lat, info.lgn),false);
+        }
+
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -292,16 +304,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 break;
             case R.id.btnChoose:
-                if (currentLatlng == null || currentLatlng.latitude == 0 || currentLatlng.longitude == 0) {
+                if (TextUtils.isEmpty(tvAddress.getText().toString().trim()) || currentLatlng == null || currentLatlng.latitude == 0 || currentLatlng.longitude == 0) {
                     Toast.makeText(this,R.string.msg_alert_select_location,Toast.LENGTH_SHORT).show();
                     return;
                 }
                 LocationInfo info = new LocationInfo();
                 info.lat = currentLatlng.latitude;
                 info.lgn = currentLatlng.longitude;
-                info.name = tvAddress.getText().toString();
+                info.address = tvAddress.getText().toString();
+                OrderWorking.paymentOrderInfor.location = info;
+
                 if (callFromService) {
-                    Intent intent = EditOrderActivity.createIntent(this,info);
+                    Intent intent = EditOrderActivity.createIntent(this);
                     startActivity(intent);
                     if (OrderWorking.activity !=null) {
                         OrderWorking.activity.finish();
@@ -309,11 +323,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 } else {
                     Intent intent = new Intent();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(EditOrderActivity.LOCATION,info);
-                    intent.putExtras(bundle);
                     setResult(RESULT_OK,intent);
                 }
+
                 finish();
                 break;
             case R.id.imgLocation:
@@ -580,7 +592,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if (dialog !=null) {
+            if (dialog !=null && !dialog.isShowing()) {
                 dialog.show();
             }
         }
@@ -613,7 +625,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 dialog.dismiss();
             }
             if (TextUtils.isEmpty(s)) {
+                tvAddress.setText(" ");
                 Toast.makeText(MapsActivity.this,R.string.msg_get_address_error,Toast.LENGTH_SHORT).show();
+                btnChoose.setBackgroundResource(R.drawable.button_corner_location_disable);
+            }else{
+                btnChoose.setBackgroundResource(R.drawable.button_corner_location);
             }
         }
     }
