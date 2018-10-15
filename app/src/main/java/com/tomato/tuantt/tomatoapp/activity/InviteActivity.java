@@ -29,6 +29,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.squareup.picasso.Picasso;
+import com.tomato.tuantt.tomatoapp.BuildConfig;
 import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.adapter.RecyclerViewServiceAdapter;
@@ -97,8 +98,8 @@ public class InviteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                        .setQuote("This is useful Link")
-                        .setContentUrl(Uri.parse("http://youtube.com"))
+                        .setQuote(usercode)
+                        .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID))
                         .build();
                 if(ShareDialog.canShow(ShareLinkContent.class))
                 {

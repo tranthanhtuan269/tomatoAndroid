@@ -135,7 +135,7 @@ public class FAQsActivity extends AppCompatActivity {
     }
 
     private void onBackAction(){
-        SharedPreferenceConfig preferenceConfig = new SharedPreferenceConfig(getApplicationContext());
+        SharedPreferenceConfig preferenceConfig = SharedPreferenceConfig.getInstance(getApplicationContext());
         if (preferenceConfig.readLoginStatus()){
             super.onBackPressed();
         } else {

@@ -217,7 +217,7 @@ public class ContactPaymentActivity extends AppCompatActivity implements View.On
         }
         String email = edtEmail.getText().toString().trim();
         if (!TextUtils.isEmpty(email) && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this,R.string.msg_alert_email,Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,R.string.msg_alert_email_fail,Toast.LENGTH_SHORT).show();
             return;
         }
 //        if (TextUtils.isEmpty(edtEmail.getText().toString())) {

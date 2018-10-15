@@ -105,9 +105,6 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".createorder.ContactPaymentActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.NewsDetailActivity"
             android:label="@string/title_activity_news_detail"
             android:theme="@style/AppTheme" />
@@ -122,6 +119,7 @@
         <provider android:authorities="com.facebook.app.FacebookContentProvider750273905312148"
             android:name="com.facebook.FacebookContentProvider"
             android:exported="true"/>
+
         <activity android:name=".createorder.ContactPaymentActivity"
             android:screenOrientation="portrait"/>
 

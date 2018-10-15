@@ -32,7 +32,7 @@
     <string name="enter_email">Nhập email</string>
     <string name="msg_alert_name">Vui lòng nhập tên</string>
     <string name="msg_alert_phone_number">Vui lòng nhập số điện thoại</string>
-    <string name="msg_alert_email">Vui lòng nhập email!</string>
+    <string name="msg_alert_email_fail">Vui lòng nhập đúng email!</string>
     <string name="_18_08_2018">18-08-2018</string>
     <string name="title">Title</string>
     <string name="title_activity_news_detail">NewsDetailActivity</string>
