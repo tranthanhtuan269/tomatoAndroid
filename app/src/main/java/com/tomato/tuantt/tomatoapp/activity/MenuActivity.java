@@ -1,18 +1,18 @@
 package com.tomato.tuantt.tomatoapp.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,12 +28,13 @@ import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
 import com.facebook.accountkit.AccountKitCallback;
 import com.facebook.accountkit.AccountKitError;
+import com.facebook.accountkit.PhoneNumber;
 import com.tomato.tuantt.tomatoapp.Constant;
+import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
+import com.tomato.tuantt.tomatoapp.adapter.RecyclerViewServiceAdapter;
 import com.tomato.tuantt.tomatoapp.createorder.OrderWorking;
 import com.tomato.tuantt.tomatoapp.helper.BottomNavigationViewHelper;
-import com.tomato.tuantt.tomatoapp.R;
-import com.tomato.tuantt.tomatoapp.adapter.RecyclerViewServiceAdapter;
 import com.tomato.tuantt.tomatoapp.helper.GridSpacingItemDecoration;
 import com.tomato.tuantt.tomatoapp.model.PaymentOrderInfor;
 import com.tomato.tuantt.tomatoapp.model.Service;
@@ -43,7 +44,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class MenuActivity extends AppCompatActivity {
@@ -53,12 +53,13 @@ public class MenuActivity extends AppCompatActivity {
     RecyclerView mrc;
     RecyclerViewServiceAdapter myAdapter;
     BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        if (OrderWorking.serviceHeight == 0 ) {
+        if (OrderWorking.serviceHeight == 0) {
             calcuServiceHeight();
         }
 
@@ -104,13 +105,13 @@ public class MenuActivity extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(MenuActivity.this,R.string.msg_load_fail_server,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MenuActivity.this, R.string.msg_load_fail_server, Toast.LENGTH_SHORT).show();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             onBackAction();
                         }
-                    },2000);
+                    }, 2000);
                 }
             }
         }, new Response.ErrorListener() {
@@ -121,16 +122,16 @@ public class MenuActivity extends AppCompatActivity {
                 error.printStackTrace();
                 requestQueue.stop();
                 if (error instanceof NoConnectionError) {
-                    Toast.makeText(MenuActivity.this,R.string.msg_load_fail,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MenuActivity.this, R.string.msg_load_fail, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MenuActivity.this,R.string.msg_load_fail_server,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MenuActivity.this, R.string.msg_load_fail_server, Toast.LENGTH_SHORT).show();
                 }
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         onBackAction();
                     }
-                },2000);
+                }, 2000);
 
             }
         });
@@ -144,7 +145,7 @@ public class MenuActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.navigation_location:
                         break;
 
@@ -176,28 +177,33 @@ public class MenuActivity extends AppCompatActivity {
         super.onResume();
         if (OrderWorking.currentOrder == null) {
             OrderWorking.currentOrder = new ArrayMap<>();
-        }else {
+        } else {
             OrderWorking.currentOrder.clear();
         }
         try {
-            if (OrderWorking.activity !=null) {
+            if (OrderWorking.activity != null) {
                 OrderWorking.activity.finish();
             }
         } catch (Exception e) {
         }
         OrderWorking.activity = null;
         OrderWorking.paymentOrderInfor = new PaymentOrderInfor();
-        AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
-            @Override
-            public void onSuccess(Account account) {
+        if (TextUtils.isEmpty(SharedPreferenceConfig.getInstance(this).getPhoneNumber())) {
+            AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
+                @Override
+                public void onSuccess(final Account account) {
+                    PhoneNumber phoneNumber = account.getPhoneNumber();
+                    String phoneNumberString = phoneNumber.toString();
+                    SharedPreferenceConfig.getInstance(MenuActivity.this).setPhoneNumber(phoneNumberString);
+                }
 
-            }
-
-            @Override
-            public void onError(AccountKitError accountKitError) {
-
-            }
-        });
+                @Override
+                public void onError(final AccountKitError error) {
+                    // Handle Error
+                    Log.e("getCurrentAccount", error.toString());
+                }
+            });
+        }
     }
 
     @Override
@@ -205,16 +211,16 @@ public class MenuActivity extends AppCompatActivity {
         onBackAction();
     }
 
-    private void onBackAction(){
+    private void onBackAction() {
         SharedPreferenceConfig preferenceConfig = SharedPreferenceConfig.getInstance(getApplicationContext());
-        if (preferenceConfig.readLoginStatus()){
+        if (preferenceConfig.readLoginStatus()) {
             finish();
         } else {
             finish();
         }
     }
 
-    private void calcuServiceHeight(){
+    private void calcuServiceHeight() {
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(metrics);

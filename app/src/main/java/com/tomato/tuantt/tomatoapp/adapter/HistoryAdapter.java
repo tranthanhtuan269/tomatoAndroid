@@ -183,7 +183,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     private void showDatePicker(final String startTime, final TextView tvStartTime, final int position) {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(Long.parseLong(startTime)));
-        calendar.set(Calendar.MILLISECOND, 0);
         Locale.setDefault(new Locale("vi"));
         DatePickerDialog dialog = new DatePickerDialog(mContext, R.style.MyDatePickerStyle, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -199,10 +198,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 showTimePicker(startTime, tvStartTime, position);
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        calendar.add(Calendar.DAY_OF_YEAR, 7);
-        dialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-        calendar.add(Calendar.DAY_OF_YEAR, -7);
-        dialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+        Calendar calendar1 = (Calendar) Calendar.getInstance().clone();
+        calendar1.add(Calendar.DAY_OF_YEAR, 7);
+        dialog.getDatePicker().setMaxDate(calendar1.getTimeInMillis());
+        calendar1.add(Calendar.DAY_OF_YEAR, -7);
+        dialog.getDatePicker().setMinDate(calendar1.getTimeInMillis());
         dialog.setTitle("");
         dialog.show();
     }
@@ -267,6 +267,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 OrderData model = mList.get(i);
                 if (model != null && model.getId() == id) {
                     model.setStart_time(String.valueOf(mTime.getTimeInMillis()));
+                    notifyItemChanged(i);
                     return;
                 }
             }

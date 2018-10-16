@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         @Override
                         public void onError(final AccountKitError error) {
                             // Handle Error
+                            Log.e("getCurrentAccount", error.toString());
                         }
                     });
                 } else {
