@@ -60,7 +60,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_search_map"/>
+                    app:srcCompat="@drawable/ic_search_map"/>
             </LinearLayout>
 
             <TextView
@@ -215,7 +215,7 @@
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_addmore_package"
+                    app:srcCompat="@drawable/ic_addmore_package"
                     android:scaleType="fitXY"/>
             </LinearLayout>
 

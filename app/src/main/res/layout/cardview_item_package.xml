@@ -65,7 +65,7 @@
                 android:id="@+id/ivMinus"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_minus"
+                app:srcCompat="@drawable/ic_minus"
                 android:background="@drawable/bkg_out_shadow_oval"
                 android:layout_alignParentLeft="true"
                 android:padding="8dp"/>
@@ -79,7 +79,7 @@
                 android:id="@+id/ivPlus"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_plus"
+                app:srcCompat="@drawable/ic_plus"
                 android:background="@drawable/bkg_out_shadow_oval"
                 android:layout_alignParentRight="true"
                 android:padding="8dp"/>
