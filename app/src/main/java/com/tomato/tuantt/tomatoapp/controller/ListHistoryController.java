@@ -14,7 +14,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.tomato.tuantt.tomatoapp.BuildConfig;
 import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
@@ -65,9 +64,9 @@ public class ListHistoryController {
         }
         SharedPreferenceConfig preferenceConfig = SharedPreferenceConfig.getInstance(mContext);
         String phoneNumber = SharedPreferenceConfig.getInstance(mContext).getPhoneNumber();
-        if (BuildConfig.DEBUG) {
-            phoneNumber = "+84973619398";
-        }
+//        if (BuildConfig.DEBUG) {
+//            phoneNumber = "+84973619398";
+//        }
         url = String.format(url, phoneNumber, preferenceConfig.getToken());
         if (mCallback != null) {
             mCallback.showProgress();

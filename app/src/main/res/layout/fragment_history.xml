@@ -5,9 +5,7 @@
     android:layout_height="match_parent"
     android:background="#F4F4F4">
 
-    <include
-        android:id="@+id/toolBar"
-        layout="@layout/title_bar" />
+    <include layout="@layout/title_bar_with_icon_no_back" android:id="@+id/toolBar" />
 
     <RelativeLayout
         android:id="@+id/constraintLayout3"
