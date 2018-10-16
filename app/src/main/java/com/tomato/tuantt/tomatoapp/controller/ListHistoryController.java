@@ -63,9 +63,8 @@ public class ListHistoryController {
         } else {
             url = Constant.BASE_URL + API_OLD_ORDERS;
         }
-        SharedPreferenceConfig preferenceConfig = SharedPreferenceConfig.getInstance(mContext);
         String phoneNumber = SharedPreferenceConfig.getInstance(mContext).getPhoneNumber();
-        String token = preferenceConfig.getToken();
+        String token = SharedPreferenceConfig.getInstance(mContext).getToken();
 //        if (BuildConfig.DEBUG) {
 //            phoneNumber = "+84973619398";
 //            token = "dd4b9a0c9f111a9744ebd7680a801fc8";
