@@ -63,7 +63,7 @@ public class SharedPreferenceConfig {
 
     public void setPhoneNumber(String phoneNumber) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(PHONE_NUMBER, phoneNumber);
+        editor.putString(PHONE_NUMBER, phoneNumber).commit();
     }
 
     public String getPhoneNumber() {
