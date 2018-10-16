@@ -1,7 +1,10 @@
 package com.tomato.tuantt.tomatoapp.model;
 
-public class User {
-    private int id;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class User implements Parcelable {
+    private int id = -1;
 
     private String address;
 
@@ -140,4 +143,59 @@ public class User {
     public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.address);
+        dest.writeString(this.name);
+        dest.writeString(this.display_name);
+        dest.writeString(this.avatar);
+        dest.writeString(this.email);
+        dest.writeString(this.phone);
+        dest.writeInt(this.city_id);
+        dest.writeInt(this.role_id);
+        dest.writeInt(this.active);
+        dest.writeInt(this.presenter_id);
+        dest.writeString(this.code);
+        dest.writeString(this.created_at);
+        dest.writeString(this.updated_at);
+    }
+
+    public User() {
+    }
+
+    protected User(Parcel in) {
+        this.id = in.readInt();
+        this.address = in.readString();
+        this.name = in.readString();
+        this.display_name = in.readString();
+        this.avatar = in.readString();
+        this.email = in.readString();
+        this.phone = in.readString();
+        this.city_id = in.readInt();
+        this.role_id = in.readInt();
+        this.active = in.readInt();
+        this.presenter_id = in.readInt();
+        this.code = in.readString();
+        this.created_at = in.readString();
+        this.updated_at = in.readString();
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }

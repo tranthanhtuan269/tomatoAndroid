@@ -11,6 +11,8 @@ public class SharedPreferenceConfig {
     public static final String USER_CODE = "USER_CODE";
     public static final String AVATAR_LINK = "AVATAR_LINK";
     private static final String PHONE_NUMBER = "PHONE_NUMBER";
+    private static final String USER_NAME = "USER_NAME";
+    private static final String EMAIL = "EMAIL";
     private SharedPreferences sharedPreferences;
     private static SharedPreferenceConfig config;
     public static SharedPreferenceConfig getInstance(Context context) {
@@ -68,6 +70,24 @@ public class SharedPreferenceConfig {
 
     public String getPhoneNumber() {
         return sharedPreferences.getString(PHONE_NUMBER, "");
+    }
+
+    public void setUserName(String username) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USER_NAME, username).apply();
+    }
+
+    public void setEmail(String email) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(EMAIL, email).apply();
+    }
+
+    public String getUserName() {
+        return sharedPreferences.getString(USER_NAME, "");
+    }
+
+    public String getEmail() {
+        return sharedPreferences.getString(EMAIL, "");
     }
 }
 

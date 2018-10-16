@@ -32,8 +32,7 @@
             android:name="com.facebook.accountkit.ClientToken"
             android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
 
-        <activity android:name="com.facebook.accountkit.ui.AccountKitActivity" >
-        </activity>
+        <activity android:name="com.facebook.accountkit.ui.AccountKitActivity"></activity>
         <activity android:name="com.facebook.accountkit.ui.AccountKitEmailRedirectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -53,8 +52,8 @@
         </activity>
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.ForgotPasswordActivity" />
-        <activity android:name=".adapter.RecyclerViewServiceAdapter$MenuActivity" />
+        <activity android:name=".activity.ForgotPasswordActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.ServiceActivity"
             android:screenOrientation="portrait" />
@@ -113,17 +112,21 @@
         <activity android:name=".activity.ReportActivity" />
         <activity android:name=".activity.ContactActivity" />
         <activity android:name=".activity.LegalActivity" />
-        <activity android:name=".activity.AboutActivity"></activity>
+        <activity android:name=".activity.AboutActivity" />
+        <activity android:name=".activity.ProfileActivity" />
 
-        <provider android:authorities="com.facebook.app.FacebookContentProvider750273905312148"
+        <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
+            android:authorities="com.facebook.app.FacebookContentProvider750273905312148"
+            android:exported="true" />
 
-        <activity android:name=".createorder.ContactPaymentActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".createorder.ContactPaymentActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".createorder.ConfirmPaymentActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".createorder.ConfirmPaymentActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
