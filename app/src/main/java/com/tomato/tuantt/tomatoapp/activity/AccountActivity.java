@@ -150,7 +150,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         super.onResume();
         if (isReloadData) {
             loadData();
-            isReloadData = false;
         }
     }
 
@@ -193,7 +192,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                         usernameLbl.setText(username);
                         Picasso.with(AccountActivity.this).load(defaultUrlImage + userimage).error(R.drawable.ic_avatar_default).fit().centerInside().into(userimageImg);
                     }
-
+                    isReloadData = false;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -71,12 +71,11 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         mUnbinder = ButterKnife.bind(this);
         tvTitle.setText(R.string.txt_my_profile);
-        ivGift.setVisibility(View.GONE);
-        ivBell.setVisibility(View.GONE);
+        ivGift.setVisibility(View.INVISIBLE);
+        ivBell.setVisibility(View.INVISIBLE);
 
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.imgBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
