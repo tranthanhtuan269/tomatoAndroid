@@ -188,7 +188,7 @@ public class ProfileActivity extends AppCompatActivity {
         urlBuilder.append(mUrl)
                 .append("?name=").append(fullName)
                 .append("&email=").append(email)
-//                .append("&presenter_id=").append(code)
+                .append("&presenter_id=").append(code)
                 .append("&phone=").append(SharedPreferenceConfig.getInstance(this).getPhoneNumber())
                 .append("&access_token=").append(SharedPreferenceConfig.getInstance(this).getToken());
         final RequestQueue requestQueue = Volley.newRequestQueue(this);

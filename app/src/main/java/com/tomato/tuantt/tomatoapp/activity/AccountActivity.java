@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
+import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
 import com.tomato.tuantt.tomatoapp.createorder.OrderWorking;
@@ -243,9 +244,9 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(intentCONFIG);
                 break;
             case R.id.userLinkLbl:
-//                Intent intent = new Intent(this, ProfileActivity.class);
-//                intent.putExtra(Constant.USER_INFO, mUser);
-//                startActivity(intent);
+                Intent intent = new Intent(this, ProfileActivity.class);
+                intent.putExtra(Constant.USER_INFO, mUser);
+                startActivity(intent);
                 break;
 
             default:
