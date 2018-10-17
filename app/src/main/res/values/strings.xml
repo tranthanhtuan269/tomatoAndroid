@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">TomatoApp</string>
-    <string name="FACEBOOK_APP_ID">750273905312148</string>
-    <string name="ACCOUNT_KIT_CLIENT_TOKEN">dd4b9a0c9f111a9744ebd7680a801fc8</string>
-    <string name="ak_login_protocol_scheme">akdd4b9a0c9f111a9744ebd7680a801fc8</string>
+    <string name="app_name">HSP</string>
+    <string name="FACEBOOK_APP_ID">732455713785142</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">71eb6a4adc964b69ff6c525503128f37</string>
+    <string name="ak_login_protocol_scheme">ak71eb6a4adc964b69ff6c525503128f37</string>
 
     <string name="login_preference">com.tomato.tuantt.tomatoapp</string>
     <string name="login_status_preference">login_status_preference</string>
