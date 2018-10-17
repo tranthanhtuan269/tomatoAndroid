@@ -53,7 +53,7 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.edt_email)
     CustomEditText edtEmail;
     @BindView(R.id.edt_present)
-    CustomEditText edtCode;
+    CustomEditText edtPresentId;
     @BindView(R.id.tv_save)
     TextView tvSave;
     @BindView(R.id.progressBar)
@@ -85,7 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
         UserTextWatcher textWatcher = new UserTextWatcher();
         edtEmail.addTextChangedListener(textWatcher);
         edtUserName.addTextChangedListener(textWatcher);
-        edtCode.addTextChangedListener(textWatcher);
+        edtPresentId.addTextChangedListener(textWatcher);
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(Constant.USER_INFO)) {
@@ -96,7 +96,7 @@ public class ProfileActivity extends AppCompatActivity {
                 return;
             }
         }
-        edtCode.setText(SharedPreferenceConfig.getInstance(this).getUserCode());
+        edtPresentId.setText(SharedPreferenceConfig.getInstance(this).getPresentId());
         edtEmail.setText(SharedPreferenceConfig.getInstance(this).getEmail());
         edtUserName.setText(SharedPreferenceConfig.getInstance(this).getUserName());
         Picasso.with(this).load(SharedPreferenceConfig.getInstance(this).getAvatarLink()).error(R.drawable.ic_avatar_default).fit().centerInside().into(civAvatar);
@@ -111,7 +111,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         edtUserName.setText(user.getName());
         edtEmail.setText(user.getEmail());
-        edtCode.setText(user.getCode());
+        edtPresentId.setText(user.getPresenter_id());
         Picasso.with(this).load(mUser.getAvatar()).error(R.drawable.ic_avatar_default).fit().centerInside().into(civAvatar);
     }
 
@@ -142,11 +142,11 @@ public class ProfileActivity extends AppCompatActivity {
             }
             String fullName = edtUserName.getText().toString();
             String email = edtEmail.getText().toString();
-            String code = edtCode.getText().toString();
-            if ((!TextUtils.isEmpty(fullName) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(code)) &&
+            String presentId = edtPresentId.getText().toString();
+            if ((!TextUtils.isEmpty(fullName) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(presentId)) &&
                     (!TextUtils.equals(email, mUser.getEmail()) ||
                             !TextUtils.equals(fullName, mUser.getName()) ||
-                            !TextUtils.equals(code, mUser.getCode()))) {
+                            !TextUtils.equals(presentId, mUser.getPresenter_id()))) {
                 setEnableButtonSave(true);
             } else {
                 setEnableButtonSave(false);
@@ -170,8 +170,8 @@ public class ProfileActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.msg_alert_name, Toast.LENGTH_SHORT).show();
             return;
         }
-        final String code = edtCode.getText().toString().trim();
-        if (TextUtils.isEmpty(code)) {
+        final String presentId = edtPresentId.getText().toString().trim();
+        if (TextUtils.isEmpty(presentId)) {
             Toast.makeText(this, R.string.msg_alert_code, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -187,7 +187,7 @@ public class ProfileActivity extends AppCompatActivity {
         urlBuilder.append(mUrl)
                 .append("?name=").append(fullName)
                 .append("&email=").append(email)
-                .append("&presenter_id=").append(code)
+                .append("&presenter_id=").append(presentId)
                 .append("&phone=").append(SharedPreferenceConfig.getInstance(this).getPhoneNumber())
                 .append("&access_token=").append(SharedPreferenceConfig.getInstance(this).getToken());
         final RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -197,7 +197,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Toast.makeText(ProfileActivity.this, R.string.msg_update_success, Toast.LENGTH_SHORT).show();
                 mUser.setName(fullName);
                 mUser.setEmail(email);
-                mUser.setCode(code);
+                mUser.setPresenter_id(presentId);
                 EventBus.getDefault().post(Event.CHANGED_USER_INFO);
                 progressBar.setVisibility(View.GONE);
             }

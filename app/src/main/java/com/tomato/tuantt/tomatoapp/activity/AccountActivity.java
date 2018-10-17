@@ -183,11 +183,14 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                         String email = jsonObject2.getString("email");
                         config.setUserName(username);
                         config.setEmail(email);
+                        String presentId = jsonObject2.getString("presenter_id");
+                        config.setPresentId(presentId);
                         mUser.setId(userid);
                         mUser.setName(username);
                         mUser.setCode(usercode);
                         mUser.setAvatar(defaultUrlImage + userimage);
                         mUser.setEmail(email);
+                        mUser.setPresenter_id(presentId);
 
                         usernameLbl.setText(username);
                         Picasso.with(AccountActivity.this).load(defaultUrlImage + userimage).error(R.drawable.ic_avatar_default).fit().centerInside().into(userimageImg);

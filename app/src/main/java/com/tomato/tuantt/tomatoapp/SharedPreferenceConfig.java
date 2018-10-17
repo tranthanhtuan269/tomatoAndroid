@@ -13,6 +13,7 @@ public class SharedPreferenceConfig {
     private static final String PHONE_NUMBER = "PHONE_NUMBER";
     private static final String USER_NAME = "USER_NAME";
     private static final String EMAIL = "EMAIL";
+    private static final String PRESENT_ID = "PRESENT_ID";
     private SharedPreferences sharedPreferences;
     private static SharedPreferenceConfig config;
     public static SharedPreferenceConfig getInstance(Context context) {
@@ -88,6 +89,15 @@ public class SharedPreferenceConfig {
 
     public String getEmail() {
         return sharedPreferences.getString(EMAIL, "");
+    }
+
+    public void setPresentId(String presentId) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PRESENT_ID, presentId).apply();
+    }
+
+    public String getPresentId() {
+        return sharedPreferences.getString(PRESENT_ID, "");
     }
 }
 

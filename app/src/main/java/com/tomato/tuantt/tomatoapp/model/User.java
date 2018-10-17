@@ -24,7 +24,7 @@ public class User implements Parcelable {
 
     private int active;
 
-    private int presenter_id;
+    private String presenter_id;
 
     private String code;
 
@@ -112,11 +112,11 @@ public class User implements Parcelable {
         this.active = active;
     }
 
-    public int getPresenter_id() {
+    public String getPresenter_id() {
         return presenter_id;
     }
 
-    public void setPresenter_id(int presenter_id) {
+    public void setPresenter_id(String presenter_id) {
         this.presenter_id = presenter_id;
     }
 
@@ -144,6 +144,9 @@ public class User implements Parcelable {
         this.updated_at = updated_at;
     }
 
+    public User() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -161,13 +164,10 @@ public class User implements Parcelable {
         dest.writeInt(this.city_id);
         dest.writeInt(this.role_id);
         dest.writeInt(this.active);
-        dest.writeInt(this.presenter_id);
+        dest.writeString(this.presenter_id);
         dest.writeString(this.code);
         dest.writeString(this.created_at);
         dest.writeString(this.updated_at);
-    }
-
-    public User() {
     }
 
     protected User(Parcel in) {
@@ -181,13 +181,13 @@ public class User implements Parcelable {
         this.city_id = in.readInt();
         this.role_id = in.readInt();
         this.active = in.readInt();
-        this.presenter_id = in.readInt();
+        this.presenter_id = in.readString();
         this.code = in.readString();
         this.created_at = in.readString();
         this.updated_at = in.readString();
     }
 
-    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+    public static final Creator<User> CREATOR = new Creator<User>() {
         @Override
         public User createFromParcel(Parcel source) {
             return new User(source);

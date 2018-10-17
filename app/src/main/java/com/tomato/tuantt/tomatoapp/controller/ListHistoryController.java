@@ -114,7 +114,7 @@ public class ListHistoryController {
                             user.setCity_id(jsonObjectUser.getInt("city_id"));
                             user.setRole_id(jsonObjectUser.getInt("role_id"));
                             user.setActive(jsonObjectUser.getInt("active"));
-                            user.setPresenter_id(jsonObjectUser.getInt("presenter_id"));
+                            user.setPresenter_id(jsonObjectUser.getString("presenter_id"));
                             user.setCode(jsonObjectUser.getString("code"));
                             user.setCreated_at(jsonObjectUser.getString("created_at"));
                             user.setUpdated_at(jsonObjectUser.getString("updated_at"));
