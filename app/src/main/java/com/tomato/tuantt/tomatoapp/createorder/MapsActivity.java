@@ -20,6 +20,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -75,7 +76,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, EasyPermissions.PermissionCallbacks {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener, EasyPermissions.PermissionCallbacks {
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 100;
     private static final int REQUEST_CHECK_SETTINGS = 102;
