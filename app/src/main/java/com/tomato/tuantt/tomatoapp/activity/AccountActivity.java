@@ -193,7 +193,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                         mUser.setPresenter_id(presentId);
 
                         usernameLbl.setText(username);
-                        Picasso.with(AccountActivity.this).load(defaultUrlImage + userimage).error(R.drawable.ic_avatar_default).fit().centerInside().into(userimageImg);
+                        Picasso.with(AccountActivity.this).load(defaultUrlImage + userimage).error(R.drawable.ic_avatar).fit().centerInside().into(userimageImg);
                     }
                     isReloadData = false;
                 } catch (JSONException e) {

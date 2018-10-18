@@ -112,7 +112,7 @@ public class InviteActivity extends AppCompatActivity {
         }
 
         if (!TextUtils.isEmpty(userimage)) {
-            Picasso.with(InviteActivity.this).load(defaultUrlImage + userimage).error(R.drawable.ic_avatar_default).fit().centerInside().into(userimageImg);
+            Picasso.with(InviteActivity.this).load(defaultUrlImage + userimage).error(R.drawable.ic_avatar).fit().centerInside().into(userimageImg);
         }
         shareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,7 +154,7 @@ public class InviteActivity extends AppCompatActivity {
                             if (TextUtils.isEmpty(userimage) && !TextUtils.isEmpty(tmpImage)) {
                                 userimage  = tmpImage;
                                 config.saveAvatarLink(userimage);
-                                Picasso.with(InviteActivity.this).load(defaultUrlImage + userimage).error(R.drawable.ic_avatar_default).fit().centerInside().into(userimageImg);
+                                Picasso.with(InviteActivity.this).load(defaultUrlImage + userimage).error(R.drawable.ic_avatar).fit().centerInside().into(userimageImg);
                             }
                         }
 

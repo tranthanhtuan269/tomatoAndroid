@@ -74,6 +74,7 @@ public class ListHistoryController {
             mCallback.showProgress();
         }
         final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        final String finalUrl = url;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
 
             @Override
@@ -81,6 +82,8 @@ public class ListHistoryController {
                 if (TextUtils.isEmpty(response)) {
                     return;
                 }
+                Log.d(ListHistoryController.class.getSimpleName(), finalUrl);
+                Log.d(ListHistoryController.class.getSimpleName(), response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONObject joOrder = jsonObject.getJSONObject("orders");

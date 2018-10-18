@@ -99,7 +99,7 @@ public class ProfileActivity extends AppCompatActivity {
         edtPresentId.setText(SharedPreferenceConfig.getInstance(this).getPresentId());
         edtEmail.setText(SharedPreferenceConfig.getInstance(this).getEmail());
         edtUserName.setText(SharedPreferenceConfig.getInstance(this).getUserName());
-        Picasso.with(this).load(SharedPreferenceConfig.getInstance(this).getAvatarLink()).error(R.drawable.ic_avatar_default).fit().centerInside().into(civAvatar);
+        Picasso.with(this).load(SharedPreferenceConfig.getInstance(this).getAvatarLink()).error(R.drawable.ic_avatar).fit().centerInside().into(civAvatar);
     }
 
     private void setLayoutData(User user) {
@@ -112,7 +112,7 @@ public class ProfileActivity extends AppCompatActivity {
         edtUserName.setText(user.getName());
         edtEmail.setText(user.getEmail());
         edtPresentId.setText(user.getPresenter_id());
-        Picasso.with(this).load(mUser.getAvatar()).error(R.drawable.ic_avatar_default).fit().centerInside().into(civAvatar);
+        Picasso.with(this).load(mUser.getAvatar()).error(R.drawable.ic_avatar).fit().centerInside().into(civAvatar);
     }
 
     @Override
