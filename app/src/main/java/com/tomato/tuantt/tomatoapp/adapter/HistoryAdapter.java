@@ -155,12 +155,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     private String getStartTime(String startTime) {
         Date date = new Date(Long.parseLong(startTime));
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/mm/yyy", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyy", Locale.getDefault());
         return sdf.format(date);
     }
 
     private String getStartTime(Date startTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/mm/yyy", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyy", Locale.getDefault());
         return sdf.format(startTime);
     }
 
