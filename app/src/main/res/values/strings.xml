@@ -72,7 +72,7 @@
     <string name="txt_change_time">Thay đổi ngày giờ</string>
     <string name="title_waite">Chờ làm</string>
     <string name="title_done">Đã làm</string>
-    <string name="txt_status">Hệ thống sẽ chọn người nhận việc đầu tiên\nChưa có ai nhận việc</string>
+    <string name="txt_status">Hệ thống sẽ chọn người nhận việc đầu tiên</string>
     <string name="msg_delete_order">Bạn có chắc sẽ xóa công việc này chứ?</string>
     <string name="cancel">Hủy</string>
     <string name="txt_sure">Có</string>
