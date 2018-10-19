@@ -89,4 +89,6 @@
     <string name="txt_present">Mã giới thiệu</string>
     <string name="txt_save">Lưu</string>
     <string name="msg_alert_code">Vui lòng nhập mã giới thiệu</string>
+
+    <string name="msg_wait_create_order">Đang tạo đơn...</string>
 </resources>

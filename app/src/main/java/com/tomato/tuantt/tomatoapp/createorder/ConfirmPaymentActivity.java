@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -53,7 +54,9 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
     }
 
     private ProgressDialog dialog;
-
+    private boolean isAllowClick = true;
+    private View btnCreateOrder;
+    private static final String TAG = "CREATE_ORDER";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,6 +148,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         TextView tvMoneyPay = findViewById(R.id.tvMoneyPay);
         tvMoneyPay.setText(OrderWorking.paymentOrderInfor.namePaymentType);
 
+        btnCreateOrder = findViewById(R.id.tvConfirm);
         findViewById(R.id.tvConfirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,11 +158,20 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
         if (dialog == null) {
             dialog = new ProgressDialog(ConfirmPaymentActivity.this);
-            dialog.setMessage(getString(R.string.msg_wait_load_data));
+            dialog.setMessage(getString(R.string.msg_wait_create_order));
+            dialog.setCancelable(false);
         }
+
+        isAllowClick = true;
+        btnCreateOrder.setEnabled(true);
     }
     CreateOrder order;
     private void createOrder() {
+        if (!isAllowClick) {
+            return;
+        }
+        btnCreateOrder.setEnabled(false);
+        isAllowClick = false;
         List<PackageOrder> packageOrders = new ArrayList<>();
         for (Package p : OrderWorking.currentOrder.values()) {
             PackageOrder tmp = new PackageOrder();
@@ -198,10 +211,18 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                         Toast.makeText(ConfirmPaymentActivity.this,R.string.msg_create_order_success,Toast.LENGTH_SHORT).show();
                         finishOrder();
                     } else {
+                        isAllowClick = true;
+                        btnCreateOrder.setEnabled(true);
                         Toast.makeText(ConfirmPaymentActivity.this,R.string.msg_create_order_fail_server,Toast.LENGTH_SHORT).show();
+                        requestQueue.stop();
+                        requestQueue.cancelAll(TAG);
                     }
                 } catch (JSONException e) {
+                    isAllowClick = true;
+                    btnCreateOrder.setEnabled(true);
                     Toast.makeText(ConfirmPaymentActivity.this,R.string.msg_create_order_fail_server,Toast.LENGTH_SHORT).show();
+                    requestQueue.stop();
+                    requestQueue.cancelAll(TAG);
                 }
             }
         }, new Response.ErrorListener() {
@@ -210,14 +231,16 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                 if (dialog.isShowing()) {
                     dialog.dismiss();
                 }
-                Log.d("Error", "Error");
                 error.printStackTrace();
                 requestQueue.stop();
+                requestQueue.cancelAll(TAG);
                 if (error instanceof NoConnectionError) {
                     Toast.makeText(ConfirmPaymentActivity.this,R.string.msg_create_order_fail,Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(ConfirmPaymentActivity.this,R.string.msg_create_order_fail_server,Toast.LENGTH_SHORT).show();
                 }
+                isAllowClick = true;
+                btnCreateOrder.setEnabled(true);
             }
         }){
             @Override
@@ -252,6 +275,11 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
             }
         };
 
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        stringRequest.setTag(TAG);
         dialog.show();
         requestQueue.add(stringRequest);
     }
