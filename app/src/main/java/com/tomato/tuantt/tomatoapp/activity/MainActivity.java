@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder =
                 new AccountKitConfiguration.AccountKitConfigurationBuilder(LoginType.PHONE,
                         AccountKitActivity.ResponseType.TOKEN);
+        configurationBuilder.setDefaultCountryCode("VN");
         intent.putExtra(AccountKitActivity.ACCOUNT_KIT_ACTIVITY_CONFIGURATION, configurationBuilder.build());
         startActivityForResult(intent, REQUEST_CODE);
     }
