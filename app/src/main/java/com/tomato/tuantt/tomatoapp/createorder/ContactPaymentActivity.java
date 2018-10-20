@@ -183,6 +183,11 @@ public class ContactPaymentActivity extends AppCompatActivity implements View.On
         findViewById(R.id.llNext).setOnClickListener(this);
 
         String phoneNumber = SharedPreferenceConfig.getInstance(getApplicationContext()).getPhoneNumber();
+        String userName = SharedPreferenceConfig.getInstance(getApplicationContext()).getUserName();
+        String userEmail = SharedPreferenceConfig.getInstance(getApplicationContext()).getEmail();
+        edtName.setText(userName);
+        edtEmail.setText(userEmail);
+
         if (!TextUtils.isEmpty(phoneNumber)) {
             if (phoneNumber.startsWith("0")) {
                 phoneNumber = phoneNumber.substring(1);
