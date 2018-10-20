@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tomato.tuantt.tomatoapp.R;
+import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -180,6 +181,39 @@ public class ContactPaymentActivity extends AppCompatActivity implements View.On
         price = price.replace(",",".");
         tvMoney.setText(price +" VNĐ");
         findViewById(R.id.llNext).setOnClickListener(this);
+
+        String phoneNumber = SharedPreferenceConfig.getInstance(getApplicationContext()).getPhoneNumber();
+        if (!TextUtils.isEmpty(phoneNumber)) {
+            if (phoneNumber.startsWith("0")) {
+                phoneNumber = phoneNumber.substring(1);
+            }else {
+                int i = -1;
+                try {
+                    for (String type : phoneType) {
+                        i++;
+                        int index = type.indexOf("+");
+                        String tmpType = type.substring(index);
+                        String tmpType2 = tmpType.substring(1);
+                        boolean isBreak = false;
+                        if (phoneNumber.startsWith(tmpType)) {
+                            phoneNumber  = phoneNumber.substring(tmpType.length());
+                            isBreak =true;
+                        }else if (phoneNumber.startsWith(tmpType2)) {
+                            phoneNumber = phoneNumber.substring(tmpType2.length());
+                            isBreak = true;
+                        }
+                        if (isBreak) {
+                            break;
+                        }
+                    }
+                    if (i >=0 && i < phoneType.length) {
+                        spPhoneType.setSelection(i);
+                    }
+                }catch (Exception e) {
+                }
+            }
+            edtPhone.setText(phoneNumber);
+        }
     }
 
     @Override
