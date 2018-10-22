@@ -68,7 +68,11 @@ public class OrderData {
     }
 
     public void setStart_time(String start_time) {
-        this.start_time = start_time;
+        if(start_time.length() > 13) {
+            this.start_time = start_time.substring(0,13);
+        }else{
+            this.start_time = start_time;
+        }
     }
 
     public String getEnd_time() {
@@ -76,7 +80,11 @@ public class OrderData {
     }
 
     public void setEnd_time(String end_time) {
-        this.end_time = end_time;
+        if(end_time.length() > 13) {
+            this.end_time = end_time.substring(0,13);
+        }else{
+            this.end_time = end_time;
+        }
     }
 
     public int getState() {
