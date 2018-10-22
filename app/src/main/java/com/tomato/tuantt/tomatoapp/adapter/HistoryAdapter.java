@@ -198,12 +198,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             DatePickerDialog dialog = new DatePickerDialog(mContext, R.style.MyDatePickerStyle, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    Calendar tmp = Calendar.getInstance();
-                    tmp.set(year, month, dayOfMonth, mTime.get(Calendar.HOUR_OF_DAY), mTime.get(Calendar.MINUTE), 0);
-                    if (!isTmp && (calendar.getTimeInMillis() > tmp.getTimeInMillis())) {
-                        Toast.makeText(mContext, R.string.msg_alert_time_bigger, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
                     isTmp = false;
                     mTime.set(year, month, dayOfMonth);
                     showTimePicker(startTime, tvStartTime, position);
@@ -228,12 +222,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             TimePickerDialog dialog = new TimePickerDialog(mContext, R.style.MyDatePickerStyle, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    Calendar tmp = Calendar.getInstance();
-                    tmp.set(mTime.get(Calendar.YEAR), mTime.get(Calendar.MONTH), mTime.get(Calendar.DAY_OF_MONTH), hourOfDay, minute, 0);
-                    if (calendar.getTimeInMillis() > tmp.getTimeInMillis()) {
-                        Toast.makeText(mContext, R.string.msg_alert_time_bigger, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
                     isTmp = false;
                     mTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     mTime.set(Calendar.MINUTE, minute);

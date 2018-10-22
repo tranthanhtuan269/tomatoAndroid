@@ -150,10 +150,24 @@ public class ListHistoryFragment extends Fragment implements ListHistoryControll
         if (messageEvent != null) {
             switch (messageEvent.getEvent()) {
                 case DELETE_ORDER:
-                    mController.deleteOrder(messageEvent.getId(), messageEvent.getPhoneNumber());
+                    if (!Utils.isEmptyList(mList)) {
+                        for (OrderData data : mList) {
+                            if (data != null && data.getId() == messageEvent.getId()) {
+                                mController.deleteOrder(messageEvent.getId(), messageEvent.getPhoneNumber());
+                                return;
+                            }
+                        }
+                    }
                     break;
                 case UPDATE_ORDER:
-                    mController.updateOrder(messageEvent.getId(), messageEvent.getHashMap());
+                    if (!Utils.isEmptyList(mList)) {
+                        for (OrderData data : mList) {
+                            if (data != null && data.getId() == messageEvent.getId()) {
+                                mController.updateOrder(messageEvent.getId(), messageEvent.getHashMap());
+                                return;
+                            }
+                        }
+                    }
                     break;
                 default:
                     break;

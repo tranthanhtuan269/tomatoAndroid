@@ -14,7 +14,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.tomato.tuantt.tomatoapp.BuildConfig;
 import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
@@ -224,11 +223,13 @@ public class ListHistoryController {
         if (mCallback != null) {
             mCallback.showProgress();
         }
-        String url = Constant.BASE_URL + "api/orders/" + id;
+        final String url = Constant.BASE_URL + "api/orders/" + id + "/update";
         final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
         JsonObjectRequest req = new JsonObjectRequest(url, new JSONObject(hashMap), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                Log.d(TAG, url);
+                Log.d(TAG, response.toString());
                 if (mCallback != null) {
                     mCallback.saveTimeChanged(id);
                     mCallback.hideProgress();
