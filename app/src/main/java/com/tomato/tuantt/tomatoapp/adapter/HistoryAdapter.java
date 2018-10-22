@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -104,43 +105,47 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         holder.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mType == HistoryPagerAdapter.TAB_TODO) {
-                    mTime = Calendar.getInstance();
-                    mTime.setTime(new Date(Long.parseLong(orderData.getStart_time())));
-                    //creating a popup menu
-                    PopupMenu popup = new PopupMenu(mContext, holder.ivMore);
-                    //inflating menu from xml resource
-                    popup.inflate(R.menu.menu_option_history);
-                    //adding click listener
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            switch (item.getItemId()) {
-                                case R.id.action_change_time:
-                                    showDatePicker(orderData.getStart_time(), holder.tvStartTime, position);
-                                    return true;
-                                case R.id.action_delete:
-                                    DialogUtils.showDialogConfirmDeleteOrder(mContext, new MaterialDialog.SingleButtonCallback() {
-                                        @Override
-                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                            EventBus.getDefault().post(new MessageEvent(Event.DELETE_ORDER, orderData.getId(), orderData.getUser() != null ? orderData.getUser().getPhone() : ""));
-                                        }
-                                    });
-                                    return true;
-                                default:
-                                    return false;
+                try {
+                    if (mType == HistoryPagerAdapter.TAB_TODO) {
+                        mTime = Calendar.getInstance();
+                        mTime.setTime(new Date(Long.parseLong(orderData.getStart_time())));
+                        //creating a popup menu
+                        PopupMenu popup = new PopupMenu(mContext, holder.ivMore);
+                        //inflating menu from xml resource
+                        popup.inflate(R.menu.menu_option_history);
+                        //adding click listener
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()) {
+                                    case R.id.action_change_time:
+                                        showDatePicker(orderData.getStart_time(), holder.tvStartTime, position);
+                                        return true;
+                                    case R.id.action_delete:
+                                        DialogUtils.showDialogConfirmDeleteOrder(mContext, new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                EventBus.getDefault().post(new MessageEvent(Event.DELETE_ORDER, orderData.getId(), orderData.getUser() != null ? orderData.getUser().getPhone() : ""));
+                                            }
+                                        });
+                                        return true;
+                                    default:
+                                        return false;
+                                }
                             }
-                        }
-                    });
-                    //displaying the popup
-                    popup.show();
-                } else {
-                    DialogUtils.showDialogConfirmDeleteOrder(mContext, new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            EventBus.getDefault().post(new MessageEvent(Event.DELETE_ORDER, orderData.getId(), orderData.getUser() != null ? orderData.getUser().getPhone() : ""));
-                        }
-                    });
+                        });
+                        //displaying the popup
+                        popup.show();
+                    } else {
+                        DialogUtils.showDialogConfirmDeleteOrder(mContext, new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                EventBus.getDefault().post(new MessageEvent(Event.DELETE_ORDER, orderData.getId(), orderData.getUser() != null ? orderData.getUser().getPhone() : ""));
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, Log.getStackTraceString(e));
                 }
             }
         });
@@ -154,9 +159,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     }
 
     private String getStartTime(String startTime) {
-        Date date = new Date(Long.parseLong(startTime));
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyy", Locale.getDefault());
-        return sdf.format(date);
+        try {
+            Date date = new Date(Long.parseLong(startTime));
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM/yyy", Locale.getDefault());
+            return sdf.format(date);
+        } catch (NumberFormatException ne) {
+            android.util.Log.e(TAG, android.util.Log.getStackTraceString(ne));
+        }
+        return "";
     }
 
     private String getStartTime(Date startTime) {
@@ -181,59 +191,66 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     }
 
     private void showDatePicker(final String startTime, final TextView tvStartTime, final int position) {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date(Long.parseLong(startTime)));
-        Locale.setDefault(new Locale("vi"));
-        DatePickerDialog dialog = new DatePickerDialog(mContext, R.style.MyDatePickerStyle, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                Calendar tmp = Calendar.getInstance();
-                tmp.set(year, month, dayOfMonth, mTime.get(Calendar.HOUR_OF_DAY), mTime.get(Calendar.MINUTE), 0);
-                if (!isTmp && (calendar.getTimeInMillis() > tmp.getTimeInMillis())) {
-                    Toast.makeText(mContext, R.string.msg_alert_time_bigger, Toast.LENGTH_SHORT).show();
-                    return;
+        try {
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date(Long.parseLong(startTime)));
+            Locale.setDefault(new Locale("vi"));
+            DatePickerDialog dialog = new DatePickerDialog(mContext, R.style.MyDatePickerStyle, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    Calendar tmp = Calendar.getInstance();
+                    tmp.set(year, month, dayOfMonth, mTime.get(Calendar.HOUR_OF_DAY), mTime.get(Calendar.MINUTE), 0);
+                    if (!isTmp && (calendar.getTimeInMillis() > tmp.getTimeInMillis())) {
+                        Toast.makeText(mContext, R.string.msg_alert_time_bigger, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    isTmp = false;
+                    mTime.set(year, month, dayOfMonth);
+                    showTimePicker(startTime, tvStartTime, position);
                 }
-                isTmp = false;
-                mTime.set(year, month, dayOfMonth);
-                showTimePicker(startTime, tvStartTime, position);
-            }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        Calendar calendar1 = (Calendar) Calendar.getInstance().clone();
-        calendar1.add(Calendar.DAY_OF_YEAR, 7);
-        dialog.getDatePicker().setMaxDate(calendar1.getTimeInMillis());
-        calendar1.add(Calendar.DAY_OF_YEAR, -7);
-        dialog.getDatePicker().setMinDate(calendar1.getTimeInMillis());
-        dialog.setTitle("");
-        dialog.show();
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            Calendar calendar1 = (Calendar) Calendar.getInstance().clone();
+            calendar1.add(Calendar.DAY_OF_YEAR, 7);
+            dialog.getDatePicker().setMaxDate(calendar1.getTimeInMillis());
+            calendar1.add(Calendar.DAY_OF_YEAR, -7);
+            dialog.getDatePicker().setMinDate(calendar1.getTimeInMillis());
+            dialog.setTitle("");
+            dialog.show();
+        } catch (Exception e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
     }
 
     private void showTimePicker(String startTime, final TextView tvStartTime, final int position) {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date(Long.parseLong(startTime)));
-        TimePickerDialog dialog = new TimePickerDialog(mContext, R.style.MyDatePickerStyle, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                Calendar tmp = Calendar.getInstance();
-                tmp.set(mTime.get(Calendar.YEAR), mTime.get(Calendar.MONTH), mTime.get(Calendar.DAY_OF_MONTH), hourOfDay, minute, 0);
-                if (calendar.getTimeInMillis() > tmp.getTimeInMillis()) {
-                    Toast.makeText(mContext, R.string.msg_alert_time_bigger, Toast.LENGTH_SHORT).show();
-                    return;
+        try {
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date(Long.parseLong(startTime)));
+            TimePickerDialog dialog = new TimePickerDialog(mContext, R.style.MyDatePickerStyle, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    Calendar tmp = Calendar.getInstance();
+                    tmp.set(mTime.get(Calendar.YEAR), mTime.get(Calendar.MONTH), mTime.get(Calendar.DAY_OF_MONTH), hourOfDay, minute, 0);
+                    if (calendar.getTimeInMillis() > tmp.getTimeInMillis()) {
+                        Toast.makeText(mContext, R.string.msg_alert_time_bigger, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    isTmp = false;
+                    mTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    mTime.set(Calendar.MINUTE, minute);
+                    updateTimeData(tvStartTime, position);
                 }
-                isTmp = false;
-                mTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                mTime.set(Calendar.MINUTE, minute);
-                updateTimeData(tvStartTime, position);
-            }
-        }, mTime.get(Calendar.HOUR_OF_DAY), mTime.get(Calendar.MINUTE), true);
-        dialog.setTitle("");
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                updateTimeData(tvStartTime, position);
-            }
-        });
-        dialog.show();
-
+            }, mTime.get(Calendar.HOUR_OF_DAY), mTime.get(Calendar.MINUTE), true);
+            dialog.setTitle("");
+            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialogInterface) {
+                    updateTimeData(tvStartTime, position);
+                }
+            });
+            dialog.show();
+        } catch (Exception e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
     }
 
     private void updateTimeData(TextView tvStartTime, int position) {
