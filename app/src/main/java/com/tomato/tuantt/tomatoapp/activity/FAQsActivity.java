@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
@@ -65,6 +66,7 @@ public class FAQsActivity extends AppCompatActivity {
 
 
         contentLbl = (TextView) findViewById(R.id.whyuseLbl);
+        contentLbl.setMovementMethod(new ScrollingMovementMethod());
 
         final RequestQueue requestQueue = Volley.newRequestQueue(FAQsActivity.this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url_service, new Response.Listener<String>() {
