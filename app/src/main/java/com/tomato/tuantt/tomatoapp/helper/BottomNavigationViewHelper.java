@@ -20,7 +20,6 @@ public class BottomNavigationViewHelper {
             for (int i = 0; i < menuView.getChildCount(); i++) {
                 BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
                 item.setShiftingMode(false);
-//                item.setShifting(false);
                 // set once again checked value, so view will be updated
                 item.setChecked(item.getItemData().isChecked());
             }
