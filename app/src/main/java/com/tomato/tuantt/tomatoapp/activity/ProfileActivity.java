@@ -1,8 +1,12 @@
 package com.tomato.tuantt.tomatoapp.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -10,6 +14,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -31,6 +36,8 @@ import com.tomato.tuantt.tomatoapp.model.Event;
 import com.tomato.tuantt.tomatoapp.model.User;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,6 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Unbinder mUnbinder;
     private User mUser;
     private String mUrl;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,7 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
         edtUserName.addTextChangedListener(textWatcher);
         edtPresentId.addTextChangedListener(textWatcher);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         if (intent != null && intent.hasExtra(Constant.USER_INFO)) {
             mUser = intent.getParcelableExtra(Constant.USER_INFO);
             if (mUser != null && mUser.getId() != -1) {
@@ -100,6 +108,36 @@ public class ProfileActivity extends AppCompatActivity {
         edtEmail.setText(SharedPreferenceConfig.getInstance(this).getEmail());
         edtUserName.setText(SharedPreferenceConfig.getInstance(this).getUserName());
         Picasso.with(this).load(SharedPreferenceConfig.getInstance(this).getAvatarLink()).error(R.drawable.ic_avatar).fit().centerInside().into(civAvatar);
+
+        Button changeAvt = (Button) findViewById(R.id.changeAvatarBtn);
+
+        changeAvt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(ProfileActivity.this,"Clicked",Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent();
+                intent1.setType("image/*");
+                intent1.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, 1);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null){
+            Uri path = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
+                civAvatar.setImageBitmap(bitmap);
+                civAvatar.setVisibility(View.VISIBLE);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void setLayoutData(User user) {
