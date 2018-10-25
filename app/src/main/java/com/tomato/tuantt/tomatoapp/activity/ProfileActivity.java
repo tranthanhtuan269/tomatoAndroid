@@ -1,17 +1,22 @@
 package com.tomato.tuantt.tomatoapp.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -37,7 +43,10 @@ import com.tomato.tuantt.tomatoapp.model.User;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +56,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    private static final int CODE_GALLERY_REQUEST = 999;
     @BindView(R.id.titleBarTxt)
     TextView tvTitle;
     @BindView(R.id.ivGift)
@@ -95,6 +105,21 @@ public class ProfileActivity extends AppCompatActivity {
         edtUserName.addTextChangedListener(textWatcher);
         edtPresentId.addTextChangedListener(textWatcher);
 
+        Button changeAvt = (Button) findViewById(R.id.changeAvatarBtn);
+
+        changeAvt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityCompat.requestPermissions(
+                        ProfileActivity.this,
+                        new String[]{
+                                Manifest.permission.READ_EXTERNAL_STORAGE
+                        },
+                        CODE_GALLERY_REQUEST
+                );
+            }
+        });
+
         final Intent intent = getIntent();
         if (intent != null && intent.hasExtra(Constant.USER_INFO)) {
             mUser = intent.getParcelableExtra(Constant.USER_INFO);
@@ -108,19 +133,23 @@ public class ProfileActivity extends AppCompatActivity {
         edtEmail.setText(SharedPreferenceConfig.getInstance(this).getEmail());
         edtUserName.setText(SharedPreferenceConfig.getInstance(this).getUserName());
         Picasso.with(this).load(SharedPreferenceConfig.getInstance(this).getAvatarLink()).error(R.drawable.ic_avatar).fit().centerInside().into(civAvatar);
+    }
 
-        Button changeAvt = (Button) findViewById(R.id.changeAvatarBtn);
-
-        changeAvt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(ProfileActivity.this,"Clicked",Toast.LENGTH_SHORT).show();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == CODE_GALLERY_REQUEST){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 Intent intent1 = new Intent();
                 intent1.setType("image/*");
                 intent1.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent1, 1);
+            }else{
+                Toast.makeText(ProfileActivity.this,"Bạn không có quyền truy cập vào thư viện ảnh",Toast.LENGTH_SHORT).show();
             }
-        });
+            return;
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
@@ -218,18 +247,20 @@ public class ProfileActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.msg_alert_email_fail, Toast.LENGTH_SHORT).show();
             return;
         }
+        final String phone = SharedPreferenceConfig.getInstance(this).getPhoneNumber();
+        final String access_token = SharedPreferenceConfig.getInstance(this).getToken();
 
         progressBar.setVisibility(View.VISIBLE);
 
-        StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(mUrl)
-                .append("?name=").append(fullName)
-                .append("&email=").append(email)
-                .append("&presenter_id=").append(presentId)
-                .append("&phone=").append(SharedPreferenceConfig.getInstance(this).getPhoneNumber())
-                .append("&access_token=").append(SharedPreferenceConfig.getInstance(this).getToken());
+//        StringBuilder urlBuilder = new StringBuilder();
+//        urlBuilder.append(mUrl)
+//                .append("?name=").append(fullName)
+//                .append("&email=").append(email)
+//                .append("&presenter_id=").append(presentId)
+//                .append("&phone=").append(phone)
+//                .append("&access_token=").append(access_token);
         final RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest req = new StringRequest(Request.Method.POST, urlBuilder.toString(), new Response.Listener<String>() {
+        StringRequest req = new StringRequest(Request.Method.POST, mUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Toast.makeText(ProfileActivity.this, R.string.msg_update_success, Toast.LENGTH_SHORT).show();
@@ -251,7 +282,30 @@ public class ProfileActivity extends AppCompatActivity {
                     Toast.makeText(ProfileActivity.this, R.string.msg_delete_fail, Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                String imageData = imageToString(bitmap);
+                params.put("name", fullName);
+                params.put("email", email);
+                params.put("presenter_id", presentId);
+                params.put("phone", phone);
+                params.put("access_token", access_token);
+                params.put("avatar", imageData);
+                return params;
+            }
+        };
+
         requestQueue.add(req);
+    }
+
+    private String imageToString(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        byte[] imageBytes = outputStream.toByteArray();
+
+        String encodeImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodeImage;
     }
 }
