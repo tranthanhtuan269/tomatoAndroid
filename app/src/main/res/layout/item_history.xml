@@ -39,15 +39,28 @@
             android:layout_alignParentEnd="true"
             app:srcCompat="@drawable/ic_more_vert_gray_24dp" />
 
+        <ImageView
+            android:id="@+id/iv_camera"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/spacing_tiny"
+            android:layout_marginEnd="29dp"
+            android:layout_toStartOf="@id/iv_more"
+            app:srcCompat="@drawable/photo" />
+
         <TextView
             android:id="@+id/tv_job_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_tiny"
-            android:layout_toStartOf="@id/iv_more"
+            android:layout_marginEnd="7dp"
+            android:layout_toStartOf="@id/iv_camera"
             android:textColor="@color/text_color_black"
             android:textSize="@dimen/font_small"
             tools:text="Xac nhan" />
+
+
     </RelativeLayout>
 
     <View

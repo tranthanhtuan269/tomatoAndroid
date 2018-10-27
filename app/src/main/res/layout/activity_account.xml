@@ -71,7 +71,8 @@
                 android:layout_marginTop="36dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/userAvatarImg"
-                app:srcCompat="@drawable/hspiconenable" />
+                app:srcCompat="@drawable/hspiconenable"
+                android:contentDescription="TODO" />
 
             <TextView
                 android:id="@+id/faqLbl"
@@ -95,7 +96,8 @@
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/faqImg"
-                app:srcCompat="@drawable/userplus" />
+                app:srcCompat="@drawable/userplus"
+                android:contentDescription="TODO" />
 
             <TextView
                 android:id="@+id/reportLbl"
@@ -117,6 +119,7 @@
                 android:layout_height="21dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
+                android:contentDescription="TODO"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/reportImg"
                 app:srcCompat="@drawable/gift" />
@@ -143,7 +146,8 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/contactImg"
-                app:srcCompat="@drawable/settings" />
+                app:srcCompat="@drawable/settings"
+                android:contentDescription="TODO" />
 
             <TextView
                 android:id="@+id/configLbl"

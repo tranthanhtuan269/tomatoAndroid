@@ -65,10 +65,6 @@ public class CouponActivity extends AppCompatActivity {
             }
         });
 
-
-        contentLbl = (TextView) findViewById(R.id.whyuseLbl);
-        contentLbl.setMovementMethod(new ScrollingMovementMethod());
-
         couponTxt = (EditText) findViewById(R.id.couponCodeTxt);
         couponTxt.setFocusable(false);
         couponTxt.setClickable(false);

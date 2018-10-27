@@ -81,6 +81,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         holder.tvPrice.setText(getPrice(orderData));
         holder.tvStartTime.setText(getStartTime(orderData.getStart_time()));
         holder.tvHouseNumber.setText(getHouseNumber(orderData.getNumber_address()));
+        holder.ivCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("Click Camera", "click camera");
+            }
+        });
+
         Service service = orderData.getService();
         if (service != null) {
             holder.tvJobName.setText(service.getName());
@@ -283,6 +290,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         @BindView(R.id.iv_type)
         ImageView ivType;
+        @BindView(R.id.iv_camera)
+        ImageView ivCamera;
         @BindView(R.id.tv_job_name)
         TextView tvJobName;
         @BindView(R.id.iv_more)

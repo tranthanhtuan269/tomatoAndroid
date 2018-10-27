@@ -57,6 +57,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ProfileActivity extends AppCompatActivity {
 
     private static final int CODE_GALLERY_REQUEST = 999;
+
     @BindView(R.id.titleBarTxt)
     TextView tvTitle;
     @BindView(R.id.ivGift)
@@ -82,6 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
     private User mUser;
     private String mUrl;
     private Bitmap bitmap;
+    private int change_avatar = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,6 +112,7 @@ public class ProfileActivity extends AppCompatActivity {
         changeAvt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                change_avatar = 1;
                 ActivityCompat.requestPermissions(
                         ProfileActivity.this,
                         new String[]{
@@ -286,13 +289,18 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                String imageData = imageToString(bitmap);
+                String imageData = "";
+                if(change_avatar == 1){
+                    imageData = imageToString(bitmap);
+                }
                 params.put("name", fullName);
                 params.put("email", email);
                 params.put("presenter_id", presentId);
                 params.put("phone", phone);
                 params.put("access_token", access_token);
-                params.put("avatar", imageData);
+                if(change_avatar == 1){
+                    params.put("avatar", imageData);
+                }
                 return params;
             }
         };
