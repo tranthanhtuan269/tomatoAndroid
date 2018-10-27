@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -58,11 +57,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     private Calendar mTime;
     private boolean isTmp;
     private int mType;
+    private ItemListener mItemListener;
 
-    public HistoryAdapter(Context context, List<OrderData> list, int type) {
+    public HistoryAdapter(Context context, List<OrderData> list, int type, ItemListener itemListener) {
         this.mList = list;
         this.mContext = context;
         this.mType = type;
+        this.mItemListener = itemListener;
     }
 
     @Override
@@ -86,8 +87,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         holder.ivCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                mContext.startActivity(intent);
+                if (mItemListener != null) {
+                    mItemListener.onClickCamera(position);
+                }
             }
         });
 
@@ -320,5 +322,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public interface ItemListener {
+        void onClickCamera(int position);
     }
 }

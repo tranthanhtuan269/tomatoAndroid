@@ -1,8 +1,16 @@
 package com.tomato.tuantt.tomatoapp.view;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,9 +37,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ListHistoryFragment extends Fragment implements ListHistoryController.ListHistoryCallback {
+import static android.app.Activity.RESULT_OK;
+
+public class ListHistoryFragment extends Fragment implements ListHistoryController.ListHistoryCallback, HistoryAdapter.ItemListener {
 
     public static final String TYPE = "TYPE";
+    private static final int REQUEST_IMAGE_CAPTURE = 1010;
+    private static final int REQUEST_CAMERA = 1011;
 
     @BindView(R.id.rv_history)
     RecyclerView rvHistory;
@@ -60,7 +72,7 @@ public class ListHistoryFragment extends Fragment implements ListHistoryControll
         if (getArguments() != null && getArguments().containsKey(ListHistoryFragment.TYPE)) {
             type = getArguments().getInt(ListHistoryFragment.TYPE);
         }
-        mAdapter = new HistoryAdapter(getActivity(), mList, type);
+        mAdapter = new HistoryAdapter(getActivity(), mList, type, this);
 
         EventBus.getDefault().register(this);
     }
@@ -172,6 +184,39 @@ public class ListHistoryFragment extends Fragment implements ListHistoryControll
                 default:
                     break;
             }
+        }
+    }
+
+    @Override
+    public void onClickCamera(int position) {
+        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
+        } else {
+            dispatchTakePictureIntent();
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CAMERA) {
+            dispatchTakePictureIntent();
         }
     }
 }
