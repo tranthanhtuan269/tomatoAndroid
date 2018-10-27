@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -115,6 +116,7 @@
         <activity android:name=".activity.LegalActivity" />
         <activity android:name=".activity.AboutActivity" />
         <activity android:name=".activity.ProfileActivity" />
+        <activity android:name=".activity.AddOrderActivity" />
 
         <provider
             android:name="com.facebook.FacebookContentProvider"

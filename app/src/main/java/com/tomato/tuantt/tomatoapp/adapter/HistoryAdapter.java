@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
@@ -84,7 +86,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         holder.ivCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("Click Camera", "click camera");
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                mContext.startActivity(intent);
             }
         });
 
@@ -157,6 +160,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             }
         });
     }
+
+
 
     private String getHouseNumber(String houseNumber) {
         if (!TextUtils.isEmpty(houseNumber) && !"null".equals(houseNumber)) {
