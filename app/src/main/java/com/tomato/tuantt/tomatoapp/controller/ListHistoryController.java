@@ -1,11 +1,14 @@
 package com.tomato.tuantt.tomatoapp.controller;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,9 +32,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ListHistoryController {
 
@@ -253,6 +259,74 @@ public class ListHistoryController {
             }
         });
         requestQueue.add(req);
+    }
+
+    public void onHandlerActivityResult(Bundle extras, OrderData orderData) {
+        if (orderData != null) {
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            if (imageBitmap == null) {
+                Toast.makeText(mContext, R.string.msg_delete_fail, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            byte[] bArray = null;
+            try {
+                bos.flush();
+                bArray = bos.toByteArray();
+                bos.close();
+            } catch (final IOException e) {
+                Toast.makeText(mContext, R.string.msg_delete_fail, Toast.LENGTH_SHORT).show();
+                Log.e(ListHistoryFragment.class.getSimpleName(), Log.getStackTraceString(e));
+            }
+            final String imgStr = Base64.encodeToString(bArray, Base64.NO_WRAP);
+            if (TextUtils.isEmpty(imgStr)) {
+                Toast.makeText(mContext, R.string.msg_delete_fail, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            StringBuilder urlBuilder = new StringBuilder();
+            urlBuilder.append(Constant.BASE_URL)
+                    .append("api/orders/")
+                    .append(orderData.getId())
+                    .append("/addImage");
+            final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+            final StringRequest stringRequest = new StringRequest(Request.Method.POST, urlBuilder.toString(), new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String response) {
+                    Log.d(TAG, response);
+                    if (mCallback != null) {
+                        mCallback.hideProgress();
+                    }
+                    Toast.makeText(mContext, R.string.msg_update_success, Toast.LENGTH_SHORT).show();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, Log.getStackTraceString(error));
+                    requestQueue.stop();
+                    if (error instanceof NoConnectionError) {
+                        Toast.makeText(mContext, R.string.msg_error_network_fail, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(mContext, R.string.msg_delete_fail, Toast.LENGTH_SHORT).show();
+                    }
+                    if (mCallback != null) {
+                        mCallback.hideProgress();
+                    }
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("phone", SharedPreferenceConfig.getInstance(mContext).getPhoneNumber());
+                    params.put("access_token", SharedPreferenceConfig.getInstance(mContext).getToken());
+                    params.put("image", imgStr);
+                    return params;
+                }
+            };
+            requestQueue.add(stringRequest);
+        }
     }
 
     public interface ListHistoryCallback {

@@ -3,7 +3,6 @@ package com.tomato.tuantt.tomatoapp.view;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -17,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.adapter.HistoryAdapter;
@@ -54,6 +54,7 @@ public class ListHistoryFragment extends Fragment implements ListHistoryControll
     private HistoryAdapter mAdapter;
     private List<OrderData> mList = new ArrayList<>();
     private ListHistoryController mController;
+    private int mPositionSelected;
 
     public static ListHistoryFragment newInstance(int historyType) {
 
@@ -192,6 +193,7 @@ public class ListHistoryFragment extends Fragment implements ListHistoryControll
         if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
         } else {
+            this.mPositionSelected = position;
             dispatchTakePictureIntent();
         }
     }
@@ -206,9 +208,8 @@ public class ListHistoryFragment extends Fragment implements ListHistoryControll
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data.getExtras() != null) {
+            mController.onHandlerActivityResult(data.getExtras(), mList.get(mPositionSelected));
         }
     }
 
@@ -219,7 +220,7 @@ public class ListHistoryFragment extends Fragment implements ListHistoryControll
             if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                 dispatchTakePictureIntent();
             } else {
-                // TODO permission denied
+                Toast.makeText(getActivity(), "Ứng dụng cần quyền truy cập camera để thực hiện thao tác này.", Toast.LENGTH_SHORT).show();
             }
         }
     }
