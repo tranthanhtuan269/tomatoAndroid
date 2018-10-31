@@ -99,7 +99,12 @@ public class ProfileActivity extends AppCompatActivity {
         edtPresentId.setText(SharedPreferenceConfig.getInstance(this).getPresentId());
         edtEmail.setText(SharedPreferenceConfig.getInstance(this).getEmail());
         edtUserName.setText(SharedPreferenceConfig.getInstance(this).getUserName());
-        Picasso.with(this).load(SharedPreferenceConfig.getInstance(this).getAvatarLink()).error(R.drawable.ic_avatar).fit().centerInside().into(civAvatar);
+        String avatar = SharedPreferenceConfig.getInstance(this).getAvatarLink();
+        if (TextUtils.isEmpty(avatar)) {
+            civAvatar.setImageResource(R.drawable.ic_avatar);
+        } else {
+            Picasso.with(this).load(avatar).error(R.drawable.ic_avatar).fit().centerInside().into(civAvatar);
+        }
     }
 
     private void setLayoutData(User user) {
