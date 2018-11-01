@@ -28,6 +28,10 @@ public class ViewTwoAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         View view = viewOnes.get(position);
+        if (view.getParent() !=null) {
+            ViewGroup viewGroup = (ViewGroup) view.getParent();
+            viewGroup.removeView(view);
+        }
         container.addView(viewOnes.get(position));
         return view;
     }
