@@ -3,7 +3,8 @@
     package="com.tomato.tuantt.tomatoapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -13,6 +14,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:name=".Application"
@@ -53,8 +58,9 @@
         </activity>
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.ForgotPasswordActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.ForgotPasswordActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ServiceActivity"
             android:screenOrientation="portrait" />
@@ -115,6 +121,7 @@
         <activity android:name=".activity.LegalActivity" />
         <activity android:name=".activity.AboutActivity" />
         <activity android:name=".activity.ProfileActivity" />
+        <activity android:name=".activity.AddOrderActivity" />
 
         <provider
             android:name="com.facebook.FacebookContentProvider"

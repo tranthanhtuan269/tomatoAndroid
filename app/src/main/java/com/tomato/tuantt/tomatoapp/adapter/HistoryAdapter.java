@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -56,11 +55,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     private Calendar mTime;
     private boolean isTmp;
     private int mType;
+    private ItemListener mItemListener;
 
-    public HistoryAdapter(Context context, List<OrderData> list, int type) {
+    public HistoryAdapter(Context context, List<OrderData> list, int type, ItemListener itemListener) {
         this.mList = list;
         this.mContext = context;
         this.mType = type;
+        this.mItemListener = itemListener;
     }
 
     @Override
@@ -81,6 +82,20 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         holder.tvPrice.setText(getPrice(orderData));
         holder.tvStartTime.setText(getStartTime(orderData.getStart_time()));
         holder.tvHouseNumber.setText(getHouseNumber(orderData.getNumber_address()));
+        if (mType == HistoryPagerAdapter.TAB_DONE) {
+            holder.ivCamera.setVisibility(View.VISIBLE);
+            holder.ivCamera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mItemListener != null) {
+                        mItemListener.onClickCamera(position);
+                    }
+                }
+            });
+        } else {
+            holder.ivCamera.setVisibility(View.GONE);
+        }
+
         Service service = orderData.getService();
         if (service != null) {
             holder.tvJobName.setText(service.getName());
@@ -150,6 +165,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             }
         });
     }
+
 
     private String getHouseNumber(String houseNumber) {
         if (!TextUtils.isEmpty(houseNumber) && !"null".equals(houseNumber)) {
@@ -283,6 +299,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         @BindView(R.id.iv_type)
         ImageView ivType;
+        @BindView(R.id.iv_camera)
+        ImageView ivCamera;
         @BindView(R.id.tv_job_name)
         TextView tvJobName;
         @BindView(R.id.iv_more)
@@ -306,5 +324,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public interface ItemListener {
+        void onClickCamera(int position);
     }
 }

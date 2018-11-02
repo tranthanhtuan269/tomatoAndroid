@@ -1,14 +1,22 @@
 package com.tomato.tuantt.tomatoapp.view;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.adapter.HistoryAdapter;
@@ -29,9 +37,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ListHistoryFragment extends Fragment implements ListHistoryController.ListHistoryCallback {
+import static android.app.Activity.RESULT_OK;
+
+public class ListHistoryFragment extends Fragment implements ListHistoryController.ListHistoryCallback, HistoryAdapter.ItemListener {
 
     public static final String TYPE = "TYPE";
+    private static final int REQUEST_IMAGE_CAPTURE = 1010;
+    private static final int REQUEST_CAMERA = 1011;
 
     @BindView(R.id.rv_history)
     RecyclerView rvHistory;
@@ -42,6 +54,7 @@ public class ListHistoryFragment extends Fragment implements ListHistoryControll
     private HistoryAdapter mAdapter;
     private List<OrderData> mList = new ArrayList<>();
     private ListHistoryController mController;
+    private int mPositionSelected;
 
     public static ListHistoryFragment newInstance(int historyType) {
 
@@ -60,7 +73,7 @@ public class ListHistoryFragment extends Fragment implements ListHistoryControll
         if (getArguments() != null && getArguments().containsKey(ListHistoryFragment.TYPE)) {
             type = getArguments().getInt(ListHistoryFragment.TYPE);
         }
-        mAdapter = new HistoryAdapter(getActivity(), mList, type);
+        mAdapter = new HistoryAdapter(getActivity(), mList, type, this);
 
         EventBus.getDefault().register(this);
     }
@@ -171,6 +184,43 @@ public class ListHistoryFragment extends Fragment implements ListHistoryControll
                     break;
                 default:
                     break;
+            }
+        }
+    }
+
+    @Override
+    public void onClickCamera(int position) {
+        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
+        } else {
+            this.mPositionSelected = position;
+            dispatchTakePictureIntent();
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data.getExtras() != null) {
+            mController.onHandlerActivityResult(data.getExtras(), mList.get(mPositionSelected));
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CAMERA) {
+            if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                dispatchTakePictureIntent();
+            } else {
+                Toast.makeText(getActivity(), "Ứng dụng cần quyền truy cập camera để thực hiện thao tác này.", Toast.LENGTH_SHORT).show();
             }
         }
     }
