@@ -190,7 +190,7 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
 
     private void createTmpTime(){
         time = Calendar.getInstance();
-        time.add(Calendar.HOUR_OF_DAY,2);
+        time.add(Calendar.HOUR_OF_DAY,3);
         time.set(Calendar.MINUTE,0);
         time.set(Calendar.MILLISECOND,0);
         isTmp = true;
@@ -244,8 +244,8 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar tmp = Calendar.getInstance();
-                tmp.set(year,month,dayOfMonth,time.get(Calendar.HOUR_OF_DAY),time.get(Calendar.MINUTE),0);
-                if (!isTmp && (calendar.getTimeInMillis() > tmp.getTimeInMillis())) {
+                tmp.set(year,month,dayOfMonth,time.get(Calendar.HOUR_OF_DAY) - 3,time.get(Calendar.MINUTE),0);
+                if (!isTmp && (calendar.getTimeInMillis()> tmp.getTimeInMillis())) {
                     Toast.makeText(EditOrderActivity.this,R.string.msg_alert_time_bigger,Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -269,7 +269,7 @@ public class EditOrderActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 Calendar tmp = Calendar.getInstance();
-                tmp.set(time.get(Calendar.YEAR),time.get(Calendar.MONTH),time.get(Calendar.DAY_OF_MONTH),hourOfDay,minute,0);
+                tmp.set(time.get(Calendar.YEAR),time.get(Calendar.MONTH) - 3,time.get(Calendar.DAY_OF_MONTH),hourOfDay,minute,0);
                 if (calendar.getTimeInMillis() > tmp.getTimeInMillis()) {
                     Toast.makeText(EditOrderActivity.this,R.string.msg_alert_time_bigger,Toast.LENGTH_SHORT).show();
                     return;

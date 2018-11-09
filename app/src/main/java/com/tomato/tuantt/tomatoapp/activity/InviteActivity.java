@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -50,14 +51,16 @@ import java.util.ArrayList;
 
 public class InviteActivity extends AppCompatActivity {
 
-    private String url_service = "http://api.timtruyen.online/api/users?phone=+84973619398";
+    private String url_service = "http://api.timtruyen.online/api/get-content?type=invite&phone=";
     private String defaultUrlImage = "http://api.timtruyen.online/public/images/";
 
     private int userid;
     private String userimage;
     private String usercode;
+    private String userphone;
 
     private TextView userlinkLbl;
+    private TextView textView2;
     private ImageView userimageImg;
     private Button shareBtn;
 
@@ -97,6 +100,7 @@ public class InviteActivity extends AppCompatActivity {
 
         // main
         userlinkLbl = (TextView) findViewById(R.id.userLinkLbl);
+        textView2 = (TextView) findViewById(R.id.textView2);
         userimageImg = (ImageView) findViewById(R.id.userAvatarImg);
         shareBtn = (Button) findViewById(R.id.shareBtn);
 
@@ -106,6 +110,7 @@ public class InviteActivity extends AppCompatActivity {
         config = SharedPreferenceConfig.getInstance(getApplicationContext());
         usercode = config.getUserCode();
         userimage = config.getAvatarLink();
+        userphone = config.getPhoneNumber();
 
         if (!TextUtils.isEmpty(usercode)) {
             userlinkLbl.setText(usercode);
@@ -132,30 +137,15 @@ public class InviteActivity extends AppCompatActivity {
         });
 
 
-        if (TextUtils.isEmpty(usercode) || TextUtils.isEmpty(userimage)) {
             final RequestQueue requestQueue = Volley.newRequestQueue(InviteActivity.this);
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, url_service, new Response.Listener<String>() {
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url_service + userphone, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         if(jsonObject.getInt("status_code") == 200){
-                            JSONObject jsonObject2 = jsonObject.getJSONObject("users").getJSONObject("data");
-                            userid = jsonObject2.getInt("id");
-                            String tmpImage = jsonObject2.getString("avatar");;
-                            String tmpCode = jsonObject2.getString("code");;
-
-                            if (TextUtils.isEmpty(usercode) && !TextUtils.isEmpty(tmpCode)) {
-                                usercode = tmpCode;
-                                config.saveUserCode(usercode);
-                                userlinkLbl.setText(usercode);
-                            }
-
-                            if (TextUtils.isEmpty(userimage) && !TextUtils.isEmpty(tmpImage)) {
-                                userimage  = tmpImage;
-                                config.saveAvatarLink(userimage);
-                                Picasso.with(InviteActivity.this).load(defaultUrlImage + userimage).error(R.drawable.ic_avatar).fit().centerInside().into(userimageImg);
-                            }
+                            String content2 = jsonObject.getString("content2");
+                            textView2.setText(Html.fromHtml(content2));
                         }
 
                     } catch (JSONException e) {
@@ -172,7 +162,6 @@ public class InviteActivity extends AppCompatActivity {
             });
 
             requestQueue.add(stringRequest);
-        }
     }
 
 

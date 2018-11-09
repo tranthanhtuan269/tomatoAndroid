@@ -36,7 +36,8 @@ import org.json.JSONObject;
 public class CouponActivity extends AppCompatActivity {
 
     private TextView contentLbl;
-    private String url_service = Constant.BASE_URL + "api/coupon";
+    private TextView contentCoupon;
+    private String url_service = "http://api.timtruyen.online/api/get-content?type=coupon&type2=rewards";
     private EditText couponTxt;
 
     @Override
@@ -66,6 +67,7 @@ public class CouponActivity extends AppCompatActivity {
         });
 
         couponTxt = (EditText) findViewById(R.id.couponCodeTxt);
+        contentCoupon = (TextView) findViewById(R.id.contentCoupon);
         couponTxt.setFocusable(false);
         couponTxt.setClickable(false);
 
@@ -75,8 +77,10 @@ public class CouponActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    String jo = jsonObject.getString("content");
-                    couponTxt.setText(jo);
+                    String content1 = jsonObject.getString("content");
+                    String content2 = jsonObject.getString("content2");
+                    couponTxt.setText(content1);
+                    contentCoupon.setText(Html.fromHtml(content2));
 
                 } catch (JSONException e) {
                     e.printStackTrace();

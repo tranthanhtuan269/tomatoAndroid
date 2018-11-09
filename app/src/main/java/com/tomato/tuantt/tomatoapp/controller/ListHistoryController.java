@@ -97,6 +97,7 @@ public class ListHistoryController {
                         List<OrderData> list = new ArrayList<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject object = jsonArray.getJSONObject(i);
+                            Log.d("DATAAAA",object.toString());
                             OrderData model = new OrderData();
                             model.setId(object.getInt("id"));
                             model.setAddress(object.getString("address"));

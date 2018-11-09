@@ -17,7 +17,7 @@
     <string name="next">Tiếp theo</string>
     <string name="today">Hôm nay</string>
     <string name="tomorrow">Ngày mai</string>
-    <string name="msg_alert_time_bigger">Vui lòng chọn mốc thời gian sau thời điểm hiện tại!</string>
+    <string name="msg_alert_time_bigger">Vui lòng chọn mốc thời gian 3 giờ sau thời điểm hiện tại!</string>
     <string name="msg_load_fail">Lỗi khi lấy dữ liệu, bạn vui lòng kiểm tra lại kết nối mạng.</string>
     <string name="msg_load_fail_server">Lỗi khi lấy dữ liệu, chúng tôi đang xử lý hệ thống.</string>
     <string name="msg_get_address_error">Không lấy được địa chỉ bạn vừa chọn, vui lòng kiểm tra lại kết nối mạng !</string>
