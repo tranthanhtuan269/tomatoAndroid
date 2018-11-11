@@ -38,7 +38,7 @@
             android:name="com.facebook.accountkit.ClientToken"
             android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
 
-        <activity android:name="com.facebook.accountkit.ui.AccountKitActivity"></activity>
+        <activity android:name="com.facebook.accountkit.ui.AccountKitActivity" />
         <activity android:name="com.facebook.accountkit.ui.AccountKitEmailRedirectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -131,10 +131,10 @@
         <activity
             android:name=".createorder.ContactPaymentActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".createorder.ConfirmPaymentActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.ConfirmActivity"></activity>
     </application>
 
 </manifest>

@@ -25,12 +25,14 @@ import com.squareup.picasso.Picasso;
 import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
+import com.tomato.tuantt.tomatoapp.activity.ConfirmActivity;
 import com.tomato.tuantt.tomatoapp.activity.MainActivity;
 import com.tomato.tuantt.tomatoapp.activity.ServiceActivity;
 import com.tomato.tuantt.tomatoapp.model.CreateOrder;
 import com.tomato.tuantt.tomatoapp.model.Package;
 import com.tomato.tuantt.tomatoapp.model.PackageOrder;
 import com.tomato.tuantt.tomatoapp.model.PaymentOrderInfor;
+import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -132,12 +134,15 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
         TextView tvName = findViewById(R.id.tvName);
         tvName.setText(OrderWorking.paymentOrderInfor.name);
+        SharedPreferenceConfig.getInstance(this).setUserName(OrderWorking.paymentOrderInfor.name);
 
         TextView tvPhoneNumber = findViewById(R.id.tvPhoneNumber);
         tvPhoneNumber.setText(OrderWorking.paymentOrderInfor.phone);
+        SharedPreferenceConfig.getInstance(this).setPhoneNumber(OrderWorking.paymentOrderInfor.phone);
 
         TextView tvEmail = findViewById(R.id.tvEmail);
         tvEmail.setText(OrderWorking.paymentOrderInfor.email);
+        SharedPreferenceConfig.getInstance(this).setEmail(OrderWorking.paymentOrderInfor.email);
 
         TextView tvMoney = findViewById(R.id.tvMoney);
         DecimalFormat formatter = new DecimalFormat("#,###,###");
@@ -285,7 +290,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
     }
 
     private void finishOrder(){
-        Intent intent = new Intent(ConfirmPaymentActivity.this, MainActivity.class);
+        Intent intent = new Intent(ConfirmPaymentActivity.this, ConfirmActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
