@@ -11,6 +11,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
@@ -111,6 +112,7 @@ public class InviteActivity extends AppCompatActivity {
         usercode = config.getUserCode();
         userimage = config.getAvatarLink();
         userphone = config.getPhoneNumber();
+        textView2.setMovementMethod(new ScrollingMovementMethod());
 
         if (!TextUtils.isEmpty(usercode)) {
             userlinkLbl.setText(usercode);

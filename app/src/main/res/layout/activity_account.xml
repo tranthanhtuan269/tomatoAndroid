@@ -131,7 +131,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="20dp"
-                android:text="Khuyến mại và quà tặng"
+                android:text="Quà tặng"
                 android:textColor="#272727"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

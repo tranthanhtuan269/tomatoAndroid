@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
@@ -32,6 +33,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ReportActivity extends AppCompatActivity {
+
+    private TextView userLinkLbl;
+    private String url_service = "http://api.timtruyen.online/api/get-content?type=report";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,46 @@ public class ReportActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        userLinkLbl = (TextView) findViewById(R.id.userLinkLbl);
+        userLinkLbl.setMovementMethod(new ScrollingMovementMethod());
+
+        final RequestQueue requestQueue = Volley.newRequestQueue(ReportActivity.this);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url_service, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String content = jsonObject.getString("content");
+                    userLinkLbl.setText(Html.fromHtml(content));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.d("Error", "Error");
+                error.printStackTrace();
+                requestQueue.stop();
+                if (error instanceof NoConnectionError) {
+                    Toast.makeText(ReportActivity.this,R.string.msg_load_fail,Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ReportActivity.this,R.string.msg_load_fail_server,Toast.LENGTH_SHORT).show();
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        onBackAction();
+                    }
+                },2000);
+
+            }
+        });
+
+        requestQueue.add(stringRequest);
     }
 
     @Override

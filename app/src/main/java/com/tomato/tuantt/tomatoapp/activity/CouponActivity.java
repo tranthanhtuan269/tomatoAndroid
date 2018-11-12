@@ -35,9 +35,8 @@ import org.json.JSONObject;
 
 public class CouponActivity extends AppCompatActivity {
 
-    private TextView contentLbl;
     private TextView contentCoupon;
-    private String url_service = "http://api.timtruyen.online/api/get-content?type=coupon&type2=rewards";
+    private String url_service = "http://api.timtruyen.online/api/get-content?type=rewards";
     private EditText couponTxt;
 
     @Override
@@ -58,7 +57,7 @@ public class CouponActivity extends AppCompatActivity {
 
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         TextView title = (TextView) toolbar.findViewById(R.id.titleBarTxt);
-        title.setText("Khuyến mại và quà tặng");
+        title.setText("Quà tặng");
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,10 +65,8 @@ public class CouponActivity extends AppCompatActivity {
             }
         });
 
-        couponTxt = (EditText) findViewById(R.id.couponCodeTxt);
         contentCoupon = (TextView) findViewById(R.id.contentCoupon);
-        couponTxt.setFocusable(false);
-        couponTxt.setClickable(false);
+        contentCoupon.setMovementMethod(new ScrollingMovementMethod());
 
         final RequestQueue requestQueue = Volley.newRequestQueue(CouponActivity.this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url_service, new Response.Listener<String>() {
@@ -77,10 +74,8 @@ public class CouponActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    String content1 = jsonObject.getString("content");
-                    String content2 = jsonObject.getString("content2");
-                    couponTxt.setText(content1);
-                    contentCoupon.setText(Html.fromHtml(content2));
+                    String content = jsonObject.getString("content");
+                    contentCoupon.setText(Html.fromHtml(content));
 
                 } catch (JSONException e) {
                     e.printStackTrace();

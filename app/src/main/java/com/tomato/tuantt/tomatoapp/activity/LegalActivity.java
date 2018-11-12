@@ -54,7 +54,7 @@ public class LegalActivity extends AppCompatActivity {
 
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.backicon));
         TextView title = (TextView) toolbar.findViewById(R.id.titleBarTxt);
-        title.setText("Pháp lý");
+        title.setText("Điều khoản sử dụng");
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
