@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,9 +15,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +36,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
@@ -42,6 +46,8 @@ import com.tomato.tuantt.tomatoapp.model.Event;
 import com.tomato.tuantt.tomatoapp.model.User;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -123,6 +129,25 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        String present_code = SharedPreferenceConfig.getInstance(this).getPresentId();
+        edtPresentId.setText(present_code);
+        if(!"0".equals(present_code)){
+
+            edtPresentId.setFocusable(false);
+            edtPresentId.setEnabled(false);
+            edtPresentId.setCursorVisible(false);
+            edtPresentId.setKeyListener(null);
+            edtPresentId.setBackgroundColor(Color.TRANSPARENT);
+        }
+        edtEmail.setText(SharedPreferenceConfig.getInstance(this).getEmail());
+        edtUserName.setText(SharedPreferenceConfig.getInstance(this).getUserName());
+        String avatar = SharedPreferenceConfig.getInstance(this).getAvatarLink();
+        if (TextUtils.isEmpty(avatar)) {
+            civAvatar.setImageResource(R.drawable.ic_avatar);
+        } else {
+            Picasso.with(this).load(avatar).error(R.drawable.ic_avatar).fit().centerInside().into(civAvatar);
+        }
+
         final Intent intent = getIntent();
         if (intent != null && intent.hasExtra(Constant.USER_INFO)) {
             mUser = intent.getParcelableExtra(Constant.USER_INFO);
@@ -131,15 +156,6 @@ public class ProfileActivity extends AppCompatActivity {
                 mUrl = Constant.BASE_URL + "api/users/" + mUser.getId();
                 return;
             }
-        }
-        edtPresentId.setText(SharedPreferenceConfig.getInstance(this).getPresentId());
-        edtEmail.setText(SharedPreferenceConfig.getInstance(this).getEmail());
-        edtUserName.setText(SharedPreferenceConfig.getInstance(this).getUserName());
-        String avatar = SharedPreferenceConfig.getInstance(this).getAvatarLink();
-        if (TextUtils.isEmpty(avatar)) {
-            civAvatar.setImageResource(R.drawable.ic_avatar);
-        } else {
-            Picasso.with(this).load(avatar).error(R.drawable.ic_avatar).fit().centerInside().into(civAvatar);
         }
     }
 
@@ -271,12 +287,35 @@ public class ProfileActivity extends AppCompatActivity {
         StringRequest req = new StringRequest(Request.Method.POST, mUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(ProfileActivity.this, R.string.msg_update_success, Toast.LENGTH_SHORT).show();
-                mUser.setName(fullName);
-                mUser.setEmail(email);
-                mUser.setPresenter_id(presentId);
-                EventBus.getDefault().post(Event.CHANGED_USER_INFO);
-                progressBar.setVisibility(View.GONE);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    String presenter = jsonObject.getJSONObject("user").getJSONObject("data").getString("presenter_id");
+                    if("0".equals(presenter)){
+                        Toast.makeText(ProfileActivity.this, R.string.msg_error_presenter, Toast.LENGTH_SHORT).show();
+                        EventBus.getDefault().post(Event.CHANGED_USER_INFO);
+                        progressBar.setVisibility(View.GONE);
+                    }else{
+                        Toast.makeText(ProfileActivity.this, R.string.msg_update_success, Toast.LENGTH_SHORT).show();
+                        mUser.setName(fullName);
+                        mUser.setEmail(email);
+                        mUser.setPresenter_id(presentId);
+
+                        SharedPreferenceConfig.getInstance(getApplicationContext()).setPresentId(presentId);
+                        SharedPreferenceConfig.getInstance(getApplicationContext()).setEmail(email);
+                        SharedPreferenceConfig.getInstance(getApplicationContext()).setUserName(fullName);
+
+                        edtPresentId.setFocusable(false);
+                        edtPresentId.setEnabled(false);
+                        edtPresentId.setCursorVisible(false);
+                        edtPresentId.setKeyListener(null);
+                        edtPresentId.setBackgroundColor(Color.TRANSPARENT);
+                        EventBus.getDefault().post(Event.CHANGED_USER_INFO);
+                        progressBar.setVisibility(View.GONE);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }, new Response.ErrorListener() {
             @Override

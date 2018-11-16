@@ -80,6 +80,7 @@
     <string name="txt_accepted">Đã duyệt</string>
     <string name="txt_vnd">VNĐ</string>
     <string name="msg_delete_success">Đã hủy thành công</string>
+    <string name="msg_error_presenter">Mã giới thiệu không tồn tại</string>
     <string name="msg_update_success">Thay đổi dữ liệu thành công</string>
     <string name="msg_delete_fail">Đã có lỗi xảy ra. Vui lòng thử lại sau</string>
     <string name="msg_error_network_fail">Đã có lỗi xảy ra. Vui lòng kiểm tra lại kết nối</string>
