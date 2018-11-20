@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">HSP</string>
     <string name="FACEBOOK_APP_ID">732455713785142</string>
@@ -41,13 +42,13 @@
     <string name="textview">TextView</string>
     <string name="invite_code">Mã giới thiệu của bạn</string>
     <string name="practices">Để có sự trải nghiệm tốt</string>
-    <string name="questions">Câu hỏi thường gặp</string>
+    <string name="questions">よくある質問</string>
     <string name="benefits">Lợi ích khi sử dụng HSP</string>
     <string name="legal">Điều khoản sử dụng</string>
     <string name="app_info">Thông tin ứng dụng</string>
     <string name="contact">Liên hệ</string>
     <string name="todo">TODO</string>
-    <string name="comments">Góp ý, báo lỗi</string>
+    <string name="comments">コメント、エラー報告</string>
     <string name="user_info">Xem thông tin tài khoản</string>
     <string name="share_text">Chia sẻ mã giới thiệu cho bạn bè. Bạn và ban của bạn sẽ được tặng 50,000 VND vào tài khoản. Khuyến mãi được áp dụng khi công việc đầu tiên hoàn thành.</string>
     <string name="share_now">Chia sẻ ngay</string>

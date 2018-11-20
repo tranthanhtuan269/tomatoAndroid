@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
@@ -81,6 +83,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         }
         holder.tvAddress.setText(orderData.getAddress());
         holder.tvPrice.setText(getPrice(orderData));
+        if(orderData.getCoupon_value() > 0) {
+            holder.tvPrice2.setText(getPrice2(orderData));
+            holder.tvPrice.setPaintFlags(holder.tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.tvPrice.setTextColor(Color.parseColor("#9e9e9e"));
+        }
         holder.tvStartTime.setText(getStartTime(orderData.getStart_time()));
         holder.tvHouseNumber.setText(getHouseNumber(orderData.getNumber_address()));
         if (mType == HistoryPagerAdapter.TAB_DONE) {
@@ -204,7 +211,15 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             return "";
         }
         DecimalFormat formatter = new DecimalFormat("###,###,###");
-        return formatter.format(Long.valueOf(model.getPrice())) + " " + mContext.getString(R.string.txt_vnd);
+        return formatter.format(Long.valueOf(model.getPrice()));
+    }
+
+    private String getPrice2(OrderData model) {
+        if (model == null) {
+            return "";
+        }
+        DecimalFormat formatter = new DecimalFormat("###,###,###");
+        return " - " + formatter.format(Long.valueOf(Integer.parseInt(model.getPrice()) * (100 - model.getCoupon_value()) / 100));
     }
 
     private void showDatePicker(final String startTime, final TextView tvStartTime, final int position) {
@@ -328,6 +343,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         TextView tvHouseNumber;
         @BindView(R.id.tv_price)
         TextView tvPrice;
+        @BindView(R.id.tv_price2)
+        TextView tvPrice2;
         @BindView(R.id.tv_payments)
         TextView tvPayments;
         @BindView(R.id.lnl_status_worker)

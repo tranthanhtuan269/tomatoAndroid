@@ -107,6 +107,7 @@ public class ListHistoryController {
                             model.setEnd_time(object.getString("end_time"));
                             model.setState(object.getInt("state"));
                             model.setPrice(object.getString("price"));
+                            model.setCoupon_value(object.getInt("coupon_value"));
                             model.setPay_type(object.getInt("pay_type"));
                             model.setUsername(object.getString("username"));
                             model.setNumber_address(object.getString("number_address"));

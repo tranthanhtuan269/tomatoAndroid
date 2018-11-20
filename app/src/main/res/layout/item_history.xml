@@ -181,7 +181,16 @@
                     android:textColor="@color/text_color_black"
                     android:textSize="@dimen/font_normal"
                     android:textStyle="bold"
-                    tools:text="165.000 VND / 3h" />
+                    tools:text="165.000" />
+
+                <TextView
+                    android:id="@+id/tv_price2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="@dimen/font_normal"
+                    android:textStyle="bold"
+                    tools:text="165.000" />
 
                 <TextView
                     android:id="@+id/tv_payments"

@@ -35,6 +35,24 @@ public class OrderData {
 
     private String promotion_code;
 
+    private int coupon_value;
+
+    public List<Package> getmPackage() {
+        return mPackage;
+    }
+
+    public void setmPackage(List<Package> mPackage) {
+        this.mPackage = mPackage;
+    }
+
+    public int getCoupon_value() {
+        return coupon_value;
+    }
+
+    public void setCoupon_value(int coupon_value) {
+        this.coupon_value = coupon_value;
+    }
+
     private String list_package;
 
     private Service service;

@@ -34,6 +34,7 @@ import com.tomato.tuantt.tomatoapp.createorder.OrderWorking;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Locale;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
@@ -49,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Locale locale = getApplicationContext().getResources().getConfiguration().locale;
+        Log.e("COUNTRY", locale.getCountry());
 
         if (OrderWorking.serviceHeight == 0 ) {
             calcuServiceHeight();
