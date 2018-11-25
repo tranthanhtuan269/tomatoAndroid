@@ -51,6 +51,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,6 +79,8 @@ public class ProfileActivity extends AppCompatActivity {
     CustomEditText edtEmail;
     @BindView(R.id.edt_present)
     CustomEditText edtPresentId;
+    @BindView(R.id.edt_coin)
+    CustomEditText edtCoin;
     @BindView(R.id.tv_save)
     TextView tvSave;
     @BindView(R.id.progressBar)
@@ -112,6 +115,7 @@ public class ProfileActivity extends AppCompatActivity {
         edtEmail.addTextChangedListener(textWatcher);
         edtUserName.addTextChangedListener(textWatcher);
         edtPresentId.addTextChangedListener(textWatcher);
+        edtCoin.addTextChangedListener(textWatcher);
 
         Button changeAvt = (Button) findViewById(R.id.changeAvatarBtn);
 
@@ -132,13 +136,23 @@ public class ProfileActivity extends AppCompatActivity {
         String present_code = SharedPreferenceConfig.getInstance(this).getPresentId();
         edtPresentId.setText(present_code);
         if(!"0".equals(present_code)){
-
             edtPresentId.setFocusable(false);
             edtPresentId.setEnabled(false);
             edtPresentId.setCursorVisible(false);
             edtPresentId.setKeyListener(null);
             edtPresentId.setBackgroundColor(Color.TRANSPARENT);
         }
+
+        String coin = SharedPreferenceConfig.getInstance(this).getCoin();
+        Log.d("USerCoin", coin);
+        DecimalFormat formatter = new DecimalFormat("###,###,###");
+        edtCoin.setText(formatter.format(Long.valueOf(coin)));
+        edtCoin.setFocusable(false);
+        edtCoin.setEnabled(false);
+        edtCoin.setCursorVisible(false);
+        edtCoin.setKeyListener(null);
+        edtCoin.setBackgroundColor(Color.TRANSPARENT);
+
         edtEmail.setText(SharedPreferenceConfig.getInstance(this).getEmail());
         edtUserName.setText(SharedPreferenceConfig.getInstance(this).getUserName());
         String avatar = SharedPreferenceConfig.getInstance(this).getAvatarLink();
@@ -203,6 +217,7 @@ public class ProfileActivity extends AppCompatActivity {
         edtUserName.setText(user.getName());
         edtEmail.setText(user.getEmail());
         edtPresentId.setText(user.getPresenter_id());
+//        edtCoin.setText(user.getCoin());
         Picasso.with(this).load(mUser.getAvatar()).error(R.drawable.ic_avatar).fit().centerInside().into(civAvatar);
     }
 
@@ -290,7 +305,9 @@ public class ProfileActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    String presenter = jsonObject.getJSONObject("user").getJSONObject("data").getString("presenter_id");
+                    String presenter = jsonObject.getJSONObject("users").getJSONObject("data").getString("presenter_id");
+                    String coin = jsonObject.getJSONObject("users").getJSONObject("data").getString("coin");
+
                     if("0".equals(presenter)){
                         Toast.makeText(ProfileActivity.this, R.string.msg_error_presenter, Toast.LENGTH_SHORT).show();
                         EventBus.getDefault().post(Event.CHANGED_USER_INFO);
@@ -300,7 +317,9 @@ public class ProfileActivity extends AppCompatActivity {
                         mUser.setName(fullName);
                         mUser.setEmail(email);
                         mUser.setPresenter_id(presentId);
+                        mUser.setCoin(coin);
 
+                        SharedPreferenceConfig.getInstance(getApplicationContext()).setCoin(coin);
                         SharedPreferenceConfig.getInstance(getApplicationContext()).setPresentId(presentId);
                         SharedPreferenceConfig.getInstance(getApplicationContext()).setEmail(email);
                         SharedPreferenceConfig.getInstance(getApplicationContext()).setUserName(fullName);
@@ -310,6 +329,7 @@ public class ProfileActivity extends AppCompatActivity {
                         edtPresentId.setCursorVisible(false);
                         edtPresentId.setKeyListener(null);
                         edtPresentId.setBackgroundColor(Color.TRANSPARENT);
+
                         EventBus.getDefault().post(Event.CHANGED_USER_INFO);
                         progressBar.setVisibility(View.GONE);
                     }

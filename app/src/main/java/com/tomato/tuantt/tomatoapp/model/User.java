@@ -28,6 +28,16 @@ public class User implements Parcelable {
 
     private String code;
 
+    private String coin;
+
+    public String getCoin() {
+        return coin;
+    }
+
+    public void setCoin(String coin) {
+        this.coin = coin;
+    }
+
     private String created_at;
 
     private String updated_at;

@@ -78,6 +78,7 @@
     <string name="txt_status">Hệ thống sẽ chọn người nhận việc đầu tiên</string>
     <string name="msg_delete_order">Bạn có chắc sẽ xóa công việc này chứ?</string>
     <string name="cancel">Hủy</string>
+    <string name="lbl_coin">Coin</string>
     <string name="txt_sure">Có</string>
     <string name="txt_new_post">Mới đăng</string>
     <string name="txt_accepted">Đã duyệt</string>

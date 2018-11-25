@@ -13,6 +13,7 @@ public class SharedPreferenceConfig {
     private static final String PHONE_NUMBER = "PHONE_NUMBER";
     private static final String USER_NAME = "USER_NAME";
     private static final String EMAIL = "EMAIL";
+    private static final String COIN = "COIN";
     private static final String PRESENT_ID = "PRESENT_ID";
     private SharedPreferences sharedPreferences;
     private static SharedPreferenceConfig config;
@@ -98,6 +99,15 @@ public class SharedPreferenceConfig {
 
     public String getPresentId() {
         return sharedPreferences.getString(PRESENT_ID, "");
+    }
+
+    public void setCoin(String coin) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(COIN, coin).apply();
+    }
+
+    public String getCoin() {
+        return sharedPreferences.getString(COIN, "");
     }
 }
 
