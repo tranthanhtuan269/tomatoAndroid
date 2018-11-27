@@ -163,9 +163,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     @AfterPermissionGranted(PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
     public boolean  requestPermission(){
-        String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION ,
-                Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.RECEIVE_SMS};
+        String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION };
         if (EasyPermissions.hasPermissions(this, perms)) {
             if (preferenceConfig.readLoginStatus()){
                 Intent intent = new Intent(MainActivity.this, MenuActivity.class);
