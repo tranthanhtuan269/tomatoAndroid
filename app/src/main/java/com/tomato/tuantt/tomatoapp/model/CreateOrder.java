@@ -9,11 +9,12 @@ public class CreateOrder {
     public String start_time;
     public String end_time;
     public String price;
+    public String username;
+    public String email;
+    public String promotion_code;
     public int pay_type;
     public List<PackageOrder> list_packages;
     public String phone;
     public String access_token;
-    public String promotion_code;
-    public String username;
-    public String email;
+    public int service_id;
 }

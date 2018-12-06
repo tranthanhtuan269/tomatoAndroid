@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,6 +26,7 @@ import com.squareup.picasso.Picasso;
 import com.tomato.tuantt.tomatoapp.Constant;
 import com.tomato.tuantt.tomatoapp.R;
 import com.tomato.tuantt.tomatoapp.SharedPreferenceConfig;
+import com.tomato.tuantt.tomatoapp.activity.AccountActivity;
 import com.tomato.tuantt.tomatoapp.activity.ConfirmActivity;
 import com.tomato.tuantt.tomatoapp.activity.MainActivity;
 import com.tomato.tuantt.tomatoapp.activity.ServiceActivity;
@@ -55,10 +57,14 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         return intent;
     }
 
+    private String url_service = "api.timtruyen.online/api/coupons/checkCoupon?";
+
     private ProgressDialog dialog;
     private boolean isAllowClick = true;
     private View btnCreateOrder;
     private static final String TAG = "CREATE_ORDER";
+    private int couponValue = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,7 +152,8 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
         TextView tvMoney = findViewById(R.id.tvMoney);
         DecimalFormat formatter = new DecimalFormat("#,###,###");
-        String price = formatter.format(OrderWorking.paymentOrderInfor.totalMoney);
+        Log.d("couponValue", String.valueOf(couponValue));
+        String price = formatter.format(OrderWorking.paymentOrderInfor.totalMoney * (100 - couponValue)/100);
         price = price.replace(",",".");
         tvMoney.setText(price +" VNĐ");
 
@@ -199,6 +206,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         order.promotion_code = infor.promotion;
         order.username = infor.name;
         order.email = infor.email;
+        order.service_id = infor.currentServiceId;
 
         String url = Constant.BASE_URL +"api/orders";
 
@@ -263,6 +271,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                 params.put("promotion_code",order.promotion_code);
                 params.put("username",order.username);
                 params.put("email",order.email);
+                params.put("service_id", ""+order.service_id);
                 JSONArray ja = new JSONArray();
                 for (PackageOrder p : order.list_packages) {
                     JSONObject jo = new JSONObject();
@@ -294,5 +303,43 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("promotion", OrderWorking.paymentOrderInfor.promotion);
+        if(OrderWorking.paymentOrderInfor.promotion.length() > 0) {
+            checkCoupon();
+        }
+    }
+
+    private void checkCoupon() {
+        String url = url_service + "service_id="+ String.valueOf(OrderWorking.paymentOrderInfor.currentServiceId) +"&coupon=" + OrderWorking.paymentOrderInfor.promotion;
+        final RequestQueue requestQueue = Volley.newRequestQueue(ConfirmPaymentActivity.this);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getInt("code") == 200) {
+                        couponValue = jsonObject.getInt("value");
+                        Log.d("couponValue", "" + couponValue);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error", "Error");
+                error.printStackTrace();
+                requestQueue.stop();
+            }
+        });
+
+        requestQueue.add(stringRequest);
     }
 }

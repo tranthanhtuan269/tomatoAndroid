@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
@@ -37,7 +38,13 @@ import com.tomato.tuantt.tomatoapp.utils.Utils;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -81,15 +88,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         if (holder == null || orderData == null) {
             return;
         }
+
         holder.tvAddress.setText(orderData.getAddress());
         holder.tvPrice.setText(getPrice(orderData));
-        if(orderData.getCoupon_value() > 0) {
-            holder.tvPrice2.setText(getPrice2(orderData));
-            holder.tvPrice.setPaintFlags(holder.tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.tvPrice.setTextColor(Color.parseColor("#9e9e9e"));
-        }
         holder.tvStartTime.setText(getStartTime(orderData.getStart_time()));
         holder.tvHouseNumber.setText(getHouseNumber(orderData.getNumber_address()));
+
         if (mType == HistoryPagerAdapter.TAB_DONE) {
             holder.ivCamera.setVisibility(View.VISIBLE);
             holder.ivCamera.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +115,21 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             if (drawableId == 0) {
                 drawableId = R.drawable.donvesinh;
             }
-            holder.ivType.setImageResource(drawableId);
+            URL myUrl = null;
+            try {
+                myUrl = new URL("http://api.timtruyen.online/public/images/" + service.getIcon());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            InputStream inputStream = null;
+            try {
+                inputStream = (InputStream)myUrl.getContent();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Drawable drawable = Drawable.createFromStream(inputStream, null);
+            holder.ivType.setImageDrawable(drawable);
+//            holder.ivType.setImageResource(drawableId);
         }
         if (mType == HistoryPagerAdapter.TAB_TODO) {
             holder.ivMore.setImageResource(R.drawable.ic_more_vert_gray_24dp);
@@ -210,16 +228,31 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         if (model == null) {
             return "";
         }
-        DecimalFormat formatter = new DecimalFormat("###,###,###");
-        return formatter.format(Long.valueOf(model.getPrice()));
+//        DecimalFormat formatter = new DecimalFormat("###,###,###");
+
+        String input = NumberFormat.getNumberInstance(Locale.FRANCE).format(Long.valueOf(model.getPrice()));
+
+        DecimalFormat df = (DecimalFormat) NumberFormat.getNumberInstance(Locale.FRANCE);
+        DecimalFormatSymbols symbols = df.getDecimalFormatSymbols();
+        char thousandSep = symbols.getGroupingSeparator();
+
+        return input.replace(thousandSep, '.');
     }
 
     private String getPrice2(OrderData model) {
         if (model == null) {
             return "";
         }
-        DecimalFormat formatter = new DecimalFormat("###,###,###");
-        return " - " + formatter.format(Long.valueOf(Integer.parseInt(model.getPrice()) * (100 - model.getCoupon_value()) / 100));
+//        DecimalFormat formatter = new DecimalFormat("###,###,###");
+        String price = (Integer.parseInt(model.getPrice()) * (100 - model.getCoupon_value()) / 100) + "";
+        String input = NumberFormat.getNumberInstance(Locale.FRANCE).format(Long.valueOf(price));
+
+        DecimalFormat df = (DecimalFormat) NumberFormat.getNumberInstance(Locale.FRANCE);
+        DecimalFormatSymbols symbols = df.getDecimalFormatSymbols();
+        char thousandSep = symbols.getGroupingSeparator();
+
+//        return " - " + formatter.format(Long.valueOf(Integer.parseInt(model.getPrice()) * (100 - model.getCoupon_value()) / 100));
+        return input;
     }
 
     private void showDatePicker(final String startTime, final TextView tvStartTime, final int position) {
@@ -343,8 +376,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         TextView tvHouseNumber;
         @BindView(R.id.tv_price)
         TextView tvPrice;
-        @BindView(R.id.tv_price2)
-        TextView tvPrice2;
         @BindView(R.id.tv_payments)
         TextView tvPayments;
         @BindView(R.id.lnl_status_worker)
